@@ -22,16 +22,16 @@ W ramach projektu będziemy potrzebować bazy danych z ok. kilkunastoma encjami.
 
 Prawdopodobnie w trakcie tworzenia modelu ER zostanie dodatkowo kilka encji.
 ## Opis funkcjonalny
-Użytkownik po włączeniu aplikacji będzie poproszony o zalogowanie/zarejestrowanie się. 
-Po zweryfikowaniu użytkownika będzie miał on możliwość dodania nowego treningu do swojego kalendarza. 
-Użytkownik będzie mógł dodać trening do kalendarza spośród istniejących lub stworzyć nowy trening.
-W przypadku wyboru istniejącego treningu użytkownik wybierze następnie datę i godzinę oraz ew. doda notatkę na temat treningu.
-W przypadku chęci stworzenia nowego treningu użytkownik zostanie poproszony o podanie jego nazwy i opisu. 
-Po utworzeniu treningu użytkownik będzie mógł dodać do niego wybrane przez siebie ćwiczenia wraz z ilością serii oraz ilością powtórzeń w ramach jednej serii. Jeżeli ćwiczenie jest czasowe to użytkownik będzie mógł wybrać czas wykonywania ćwiczenia.
-Użytkownik będzie miał możliwość stworzenia ćwiczenia wraz z nazwą, opisem, partiami ciała oraz zdjęciami/filmami.
-Użytkownik będzie miał możliwość edycji lub usunięcia stworzonych przez siebie ćwiczeń i treningów.
-Użytkownik ma możliwość udostępnienia swojego ćwiczenia/treningu innym użytkownikom.
-Użytkownik ma możliwość skopiowania treningu/ćwiczenia udostępnionego przez innych użytkowników do swoich treningów/ćwiczeń.
+- Użytkownik po włączeniu aplikacji będzie poproszony o zalogowanie/zarejestrowanie się. 
+- Po zweryfikowaniu użytkownika będzie miał on możliwość dodania nowego treningu do swojego kalendarza. 
+- Użytkownik będzie mógł dodać trening do kalendarza spośród istniejących lub stworzyć nowy trening.
+- W przypadku wyboru istniejącego treningu użytkownik wybierze następnie datę i godzinę oraz ew. doda notatkę na temat treningu.
+- W przypadku chęci stworzenia nowego treningu użytkownik zostanie poproszony o podanie jego nazwy i opisu. 
+- Po utworzeniu treningu użytkownik będzie mógł dodać do niego wybrane przez siebie ćwiczenia wraz z ilością serii oraz ilością powtórzeń w ramach jednej serii. Jeżeli ćwiczenie jest czasowe to użytkownik będzie mógł wybrać czas wykonywania ćwiczenia.
+- Użytkownik będzie miał możliwość stworzenia ćwiczenia wraz z nazwą, opisem, partiami ciała oraz zdjęciami/filmami.
+- Użytkownik będzie miał możliwość edycji lub usunięcia stworzonych przez siebie ćwiczeń i treningów.
+- Użytkownik ma możliwość udostępnienia swojego ćwiczenia/treningu innym użytkownikom.
+- Użytkownik ma możliwość skopiowania treningu/ćwiczenia udostępnionego przez innych użytkowników do swoich treningów/ćwiczeń.
 
 ## Wykorzystanie AI
 W ramach projektu planujemy wykorzystać AI między innymi do tworzenia danych testowych, wyszukiwania niespójności/problemów w projekcie, researchowania rozwiązań.
