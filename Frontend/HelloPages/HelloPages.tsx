@@ -42,7 +42,7 @@ function PageLayout({ title, buttonText }: PageLayoutProps) {
 
 export function Onboarding1() {
     return <PageLayout
-        title="nigger"
-        buttonText="nigger"
+        title=""
+        buttonText=""
     />
 }
