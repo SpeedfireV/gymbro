@@ -47,3 +47,14 @@ class exercises(models.Model):
     difficulty = models.CharField(max_length=50, choices=DifficultyLevels.choices)
     instructions = models.TextField()
     safety_info = models.TextField()
+
+
+class exercises_history(models.Model):
+    user = models.ForeignKey('users', on_delete=models.CASCADE)
+    workout_history = models.ForeignKey('workout_history', on_delete=models.CASCADE)
+    index = models.IntegerField()
+    exercise = models.ForeignKey('exercises', on_delete=models.CASCADE)
+    weight = models.FloatField()
+    reps = models.FloatField()
+    duration = models.TimeField()
+    utc_time = models.DateTimeField()
