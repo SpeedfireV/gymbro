@@ -63,7 +63,7 @@ class exercises_history(models.Model):
     exercise = models.ForeignKey('exercises', on_delete=models.CASCADE)
     weight = models.FloatField()
     reps = models.FloatField()
-    duration = models.TimeField()
+    duration = models.DurationField()
     utc_time = models.DateTimeField()
 
 
@@ -83,3 +83,14 @@ class media(models.Model):
     type = models.CharField(max_length=50, choices=MediaTypes.choices)
     name = models.TextField()
     url = models.TextField()
+
+
+class workout_exercises(models.Model):
+    workout = models.ForeignKey('workouts', on_delete=models.CASCADE)
+    exercise = models.ForeignKey('exercises', on_delete=models.CASCADE)
+    index = models.IntegerField()
+    sets = models.IntegerField()
+    reps = models.IntegerField()
+    duration = models.DurationField()
+    break_between = models.DurationField()
+    break_after = models.DurationField()
