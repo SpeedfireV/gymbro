@@ -1,8 +1,9 @@
 from django.db import models
 
-# TO DO - dostosować enumy do potrzeb naszych tabel
 
+# TODO - dostosować enumy do potrzeb naszych tabel
 
+# --- ENUMY ---
 class EventTypes(models.TextChoices):
     WORKOUT = 'workout'
     REST = 'rest'
@@ -23,6 +24,12 @@ class DifficultyLevels(models.TextChoices):
     ADVANCED = 'advanced'
 
 
+class MediaTypes(models.TextChoices):
+    IMAGE = 'image'
+    VIDEO = 'video'
+
+
+# --- TABELE ---
 class users(models.Model):
     username = models.TextField(unique=True)
     email = models.TextField(unique=True)
@@ -70,3 +77,9 @@ class workout_history(models.Model):
 class workouts(models.Model):
     user = models.ForeignKey('users', on_delete=models.CASCADE)
     created_at = models.DateTimeField()
+
+
+class media(models.Model):
+    type = models.CharField(max_length=50, choices=MediaTypes.choices)
+    name = models.TextField()
+    url = models.TextField()
