@@ -8,9 +8,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   titleBox:{
-    flex: 9,
     paddingTop: 80,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   conteceBox:{
@@ -22,12 +21,12 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    paddingBottom: 10,
+    paddingBottom: 30,
   },
 
   title: {
     fontFamily: 'SairaStencil-reg',
-    color: '#FFB700',
+    color: '#E03616',
     fontSize: 40,
     transform: [
       { scaleY: 1.5 },
@@ -91,5 +90,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     fontFamily: 'Michroma-reg',
     fontSize: 12,
+  },
+
+  informationText: {
+    color: '#ffffff',
+    fontSize: 32,
+    fontFamily: 'Antonio',
+    textAlign: 'center',
   }
 });

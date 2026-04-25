@@ -3,13 +3,16 @@ import { styles } from "../AppStyle"
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import React, { useCallback } from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParamList } from "../App";
 
 interface PageLayoutProps {
     title: string
     buttonText: string
+    onClick: () => void
 }
 
-function PageLayout({ title, buttonText }: PageLayoutProps) {
+function PageLayout({ title, buttonText, onClick }: PageLayoutProps) {
     const [fontsLoaded, fontError] = useFonts({
         'SairaStencil-reg': require('../assets/fonts/Saira_Stencil_One/SairaStencilOne-Regular.ttf'),
         'Impact': require('../assets/fonts/impact/impact.ttf'),
@@ -30,19 +33,43 @@ function PageLayout({ title, buttonText }: PageLayoutProps) {
                 <Text style={styles.title}>GymBro</Text>
             </View>
 
-            <TouchableOpacity
-                style={styles.button}
-                activeOpacity={0.7}
-            >
-                <Text style={styles.buttonText}>{buttonText}</Text>
-            </TouchableOpacity>
+            <View style={styles.titleBox}>
+                <Text style={styles.informationText}>{title}</Text>
+            </View>
+
+            <View style={styles.bottomBox}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={onClick}
+                    activeOpacity={0.7}
+                >
+                    <Text style={styles.buttonText}>{buttonText}</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
 
-export function Onboarding1() {
+export function Onboarding1({ navigation }: StackScreenProps<RootStackParamList, 'Onboarding1'>) {
     return <PageLayout
-        title=""
-        buttonText=""
+        title="Witamy w aplikacji GYMBRO..."
+        buttonText="kontynuuj"
+        onClick={() => navigation.navigate('Onboarding2')}
+    />
+}
+
+export function Onboarding2({ navigation }: StackScreenProps<RootStackParamList, 'Onboarding2'>) {
+    return <PageLayout
+        title="Aplikacja oferuje liczne funkcje..."
+        buttonText="Rozumiem"
+        onClick={() => navigation.navigate('Onboarding3')}
+    />
+}
+
+export function Onboarding3({ navigation }: StackScreenProps<RootStackParamList, 'Onboarding3'>) {
+    return <PageLayout
+        title="Życzymy przyjemnych wrażeń..."
+        buttonText="Zaczynajmy"
+        onClick={() => navigation.navigate('Login')}
     />
 }
