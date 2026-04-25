@@ -117,3 +117,9 @@ class comments_ratings(models.Model):
     comment = models.ForeignKey('comments', on_delete=models.CASCADE)
     user = models.ForeignKey('users', on_delete=models.CASCADE)
     is_like = models.BooleanField()
+
+
+class ratings(models.Model):
+    post = models.ForeignKey('posts', on_delete=models.CASCADE)
+    user = models.ForeignKey('users', on_delete=models.CASCADE)
+    is_like = models.BooleanField()
