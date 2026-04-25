@@ -3,9 +3,24 @@ from django.db import models
 # TO DO - dostosować enumy do potrzeb naszych tabel
 
 
-class EventTypes(models.choices):
+class EventTypes(models.TextChoices):
     WORKOUT = 'workout'
     REST = 'rest'
+
+
+class ExerciseTypes(models.TextChoices):
+    STRENGTH = 'strength'
+    CARDIO = 'cardio'
+
+
+class MuscleGroups(models.TextChoices):
+    ARMS = 'arms'
+    LEGS = 'legs'
+
+
+class DifficultyLevels(models.TextChoices):
+    BEGINNER = 'beginner'
+    ADVANCED = 'advanced'
 
 
 class users(models.Model):
@@ -23,3 +38,12 @@ class calendar_events(models.Model):
     event_type = models.CharField(max_length=50, choices=EventTypes.choices)
     title = models.TextField()
     description = models.TextField()
+
+
+class exercises(models.Model):
+    name = models.TextField()
+    type = models.CharField(max_length=50, choices=ExerciseTypes.choices)
+    muscle = models.CharField(max_length=50, choices=MuscleGroups.choices)
+    difficulty = models.CharField(max_length=50, choices=DifficultyLevels.choices)
+    instructions = models.TextField()
+    safety_info = models.TextField()
