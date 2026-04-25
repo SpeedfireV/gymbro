@@ -111,3 +111,9 @@ class comments(models.Model):
     content = models.TextField()
     like_count = models.IntegerField()
     dislike_count = models.IntegerField()
+
+
+class comments_ratings(models.Model):
+    comment = models.ForeignKey('comments', on_delete=models.CASCADE)
+    user = models.ForeignKey('users', on_delete=models.CASCADE)
+    is_like = models.BooleanField()
