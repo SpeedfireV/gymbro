@@ -103,3 +103,11 @@ class posts(models.Model):
     workout = models.ForeignKey('workouts', on_delete=models.CASCADE)
     like_count = models.IntegerField()
     dislike_count = models.IntegerField()
+
+
+class comments(models.Model):
+    post = models.ForeignKey('posts', on_delete=models.CASCADE)
+    user = models.ForeignKey('users', on_delete=models.CASCADE)
+    content = models.TextField()
+    like_count = models.IntegerField()
+    dislike_count = models.IntegerField()
