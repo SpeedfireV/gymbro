@@ -4,7 +4,14 @@ module.exports = {
   content: ["./App.tsx", "./components/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        stencil: ['SairaStencil-reg'],
+        impact: ['Impact'],
+        michroma: ['Michroma-reg'],
+        antonio: ['Antonio'],
+      }
+    },
   },
   plugins: [],
 }
