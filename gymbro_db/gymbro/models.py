@@ -65,3 +65,8 @@ class workout_history(models.Model):
     workout = models.ForeignKey('workouts', on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     total_time = models.TimeField()
+
+
+class workouts(models.Model):
+    user = models.ForeignKey('users', on_delete=models.CASCADE)
+    created_at = models.DateTimeField()
