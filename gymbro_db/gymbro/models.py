@@ -58,3 +58,10 @@ class exercises_history(models.Model):
     reps = models.FloatField()
     duration = models.TimeField()
     utc_time = models.DateTimeField()
+
+
+class workout_history(models.Model):
+    user = models.ForeignKey('users', on_delete=models.CASCADE)
+    workout = models.ForeignKey('workouts', on_delete=models.CASCADE)
+    start_time = models.DateTimeField()
+    total_time = models.TimeField()
