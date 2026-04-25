@@ -1,10 +1,10 @@
 import { View, Text, TouchableOpacity } from "react-native"
-import { styles } from "../AppStyle"
+import { styles } from "../../AppStyle"
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import React, { JSX, useCallback } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from "../App";
+import { RootStackParamList } from "../../App";
 
 interface PageLayoutProps {
     title: JSX.Element

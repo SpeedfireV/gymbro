@@ -73,7 +73,6 @@ export function HomeScreen() {
   if (!fontsLoaded && !fontError) return null;
 
   return (
-
     <View style={styles.container} onLayout={onLayoutRootView}>
       <View style={styles.titleBox}>
         <Text style={styles.title}>LOGIN</Text>
@@ -135,7 +134,7 @@ export function HomeScreen() {
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Onboarding1, Onboarding2, Onboarding3 } from './HelloPages/HelloPages';
+import { Onboarding1, Onboarding2, Onboarding3 } from './components/HelloPages/HelloPages';
 
 export type RootStackParamList = {
   Onboarding1: undefined;
