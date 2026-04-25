@@ -69,7 +69,9 @@ export function Onboarding1({ navigation }: StackScreenProps<RootStackParamList,
 
 export function Onboarding2({ navigation }: StackScreenProps<RootStackParamList, 'Onboarding2'>) {
     return <PageLayout
-        title={<Text style={styles.title}>PLAN SUITED JUST FOR YOU</Text>}
+        title={<Text style={styles.title}>
+            PLAN SUITED JUST FOR <Text style={{ color: '#E83C15' }}>YOU</Text>
+        </Text>}
         pageText={<Text style={styles.informationText}>The app is centered around providing that your training style needs. With our highly customizable pre-made training schemas you can achieve your goals faster & with better performance</Text>}
         icon={
             <svg width="71" height="65" viewBox="0 0 71 45" fill="none" xmlns="http://www.w3.org/2000/svg">
