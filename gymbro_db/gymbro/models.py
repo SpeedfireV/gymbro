@@ -94,3 +94,12 @@ class workout_exercises(models.Model):
     duration = models.DurationField()
     break_between = models.DurationField()
     break_after = models.DurationField()
+
+
+class posts(models.Model):
+    user = models.ForeignKey('users', on_delete=models.CASCADE)
+    title = models.TextField()
+    description = models.TextField()
+    workout = models.ForeignKey('workouts', on_delete=models.CASCADE)
+    like_count = models.IntegerField()
+    dislike_count = models.IntegerField()
