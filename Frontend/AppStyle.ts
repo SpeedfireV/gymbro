@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
   },
   titleBox:{
     paddingTop: 80,
+    marginBottom: 80,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -26,8 +27,10 @@ export const styles = StyleSheet.create({
 
   title: {
     fontFamily: 'SairaStencil-reg',
-    color: '#E03616',
+    color: '#FBAF00',
+    textAlign: 'center',
     fontSize: 40,
+    lineHeight: 40,
     transform: [
       { scaleY: 1.5 },
       { scaleX: 0.9 }
@@ -56,7 +59,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#FFB700',
     borderRadius: 10,
     width: '100%',
-    height: 60,
+    height: 90,
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 10,
@@ -93,9 +96,15 @@ export const styles = StyleSheet.create({
   },
 
   informationText: {
-    color: '#ffffff',
+    color: '#EFF1F3',
     fontSize: 32,
     fontFamily: 'Antonio',
     textAlign: 'center',
+  },
+
+  iconBox: {
+    marginBottom: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
