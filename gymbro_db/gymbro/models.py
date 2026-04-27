@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
 
 
 # TODO - dostosować enumy do potrzeb naszych tabel
@@ -34,9 +35,17 @@ class users(models.Model):
     username = models.TextField(unique=True)
     email = models.TextField(unique=True)
     password = models.TextField()
-    first_name = models.TextField()
-    last_name = models.TextField()
-    created_at = models.DateTimeField()
+    first_name = models.TextField(null=True, blank=True)
+    last_name = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.password.startswith('pbkdf2_'):
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
+
+    def verify_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
 
 class calendar_events(models.Model):
