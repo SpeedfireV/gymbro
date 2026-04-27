@@ -20,10 +20,10 @@ class LoginSerializer(serializers.Serializer):
             user = users.objects.get(email=email)
         except users.DoesNotExist:
             raise serializers.ValidationError({"error": "Wrong email or password"})
-        
+
         if not user.verify_password(password):
             raise serializers.ValidationError({"error": "Wrong email or password"})
-        
+
         return user
 
 
