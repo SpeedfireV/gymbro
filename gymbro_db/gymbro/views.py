@@ -33,7 +33,7 @@ class RegisterView(APIView):
                 "message": "Registration finished successfully",
                 "user": user_dto.data,
                 "tokens": tokens
-            }, statur=status.HTTP_201_CREATED)
+            }, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
