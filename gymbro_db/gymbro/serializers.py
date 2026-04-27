@@ -12,6 +12,20 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
 
+    def validate(self, data):
+        email = data.get('email')
+        password = data.get('password')
+
+        try:
+            user = users.objects.get(email=email)
+        except users.DoesNotExist:
+            raise serializers.ValidationError({"error": "Wrong email or password"})
+        
+        if not user.verify_password(password):
+            raise serializers.ValidationError({"error": "Wrong email or password"})
+        
+        return user
+
 
 class RegisterSerializer(serializers.Serializer):
     nickname = serializers.CharField(required=True)
