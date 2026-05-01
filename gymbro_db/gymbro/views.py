@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import users
-from .serializers import RegisterSerializer, LoginSerializer, UserDTOSerializer
+from .models import users, workout_exercises
+from .serializers import RegisterSerializer, LoginSerializer, UserDTOSerializer, WorkoutExerciseSerializer
 
 
 def get_tokens_for_user(user):
@@ -54,3 +54,26 @@ class LoginView(APIView):
             }, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class WorkoutExerciseAddView(APIView):
+    def post(self, request):
+        serializer = WorkoutExerciseSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class WorkoutExerciseDeleteView(APIView):
+    def delete(self, request, pk):
+        try:
+            exercise_to_delete = workout_exercises.objects.get(pk=pk)
+            exercise_to_delete.delete()
+
+            return Response({"message": "Workout exercise deleted"}, status=status.HTTP_204_NO_CONTENT)
+        
+        except workout_exercises.DoesNotExist:
+            return Response({"error": "Workout exercise not found"}, status=status.HTTP_404_NOT_FOUND)
