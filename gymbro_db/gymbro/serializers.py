@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import users
+from .models import users, workout_exercises
 
 
 class UserDTOSerializer(serializers.ModelSerializer):
@@ -44,3 +44,9 @@ class RegisterSerializer(serializers.Serializer):
             raise serializers.ValidationError({"nickname": "User with this nickname already exists"})
 
         return data
+
+
+class WorkoutExerciseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = workout_exercises
+        fields = '__all__'
