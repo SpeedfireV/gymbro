@@ -1,6 +1,8 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
-from .models import users
+from django.utils import timezone
+from datetime import timedelta
+from .models import users, workouts, exercises, workout_exercises
 
 
 class AuthEndpointsTest(APITestCase):
@@ -75,3 +77,49 @@ class AuthEndpointsTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('error', response.data)
+
+
+class WorkoutExercisesEndpointsTest(APITestCase):
+
+    def setUp(self):
+        self.url_add = '/api/workout-exercises/'
+        self.user = users.objects.create(username="XYZ", email="xyz@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+
+        self.exercise = exercises.objects.create(
+            name="Wyciskanie", type="Strength", muscle="chest",
+            difficulty="beginner", instructions="...", safety_info="..."
+        )
+
+        self.valid_payload = {
+            "workout": self.workout.id,
+            "exercise": self.exercise.id,
+            "index": 1,
+            "sets": 4,
+            "reps": 10,
+            "duration": "00:00:00",
+            "break_between": "00:01:30",
+            "break_after": "00:02:00"
+        }
+
+    def test_add_workout_exercise_successful(self):
+        response = self.client.post(self.url_add, self.valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(workout_exercises.objects.count(), 1)
+
+    def test_delete_workout_exercise_successful(self):
+        we_to_delete = workout_exercises.objects.create(
+            workout=self.workout, exercise=self.exercise, index=1, sets=4, reps=10,
+            duration=timedelta(seconds=0), break_between=timedelta(seconds=90), break_after=timedelta(seconds=120)
+        )
+        url_delete = f'/api/workout-exercises/{we_to_delete.id}/'
+        response = self.client.delete(url_delete)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(workout_exercises.objects.count(), 0)
+
+    def test_delete_non_existent_Exercise(self):
+        url_delete = '/api/workout-exercises/999/'
+        response = self.client.delete(url_delete)
+        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
