@@ -123,3 +123,34 @@ class WorkoutExercisesEndpointsTest(APITestCase):
         response = self.client.delete(url_delete)
         
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class WorkoutsEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_workouts = '/api/workouts/'
+        self.user = users.objects.create(username="Ludwig", email="ludwig@mail.com", password="123")
+
+        self.valid_payload = {
+            "user": self.user.id,
+            "created_at": "2026-05-03T12:00:00Z"
+        }
+
+    def test_create_workout_successfyl(self):
+        response = self.client.post(self.url_workouts, self.valid_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(workouts.objects.count(), 1)
+
+    def test_delete_workout_successful(self):
+        workout_to_delete = workouts.objects.create(user=self.user, created_at=timezone.now())
+        url_delete = f'/api/workouts/{workout_to_delete.id}/'
+        response = self.client.delete(url_delete)
+        
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(workouts.objects.count(), 0)
+
+    def test_delete_non_existent_workout(self):
+        url_delete = '/api/workouts/999/'
+        response = self.client.delete(url_delete)
+        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
