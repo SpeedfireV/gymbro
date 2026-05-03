@@ -4,9 +4,9 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAdminUser
 
-from .models import users, workout_exercises, workouts, exercises
+from .models import users, workout_exercises, workouts, exercises, workout_history
 from .serializers import RegisterSerializer, LoginSerializer, UserDTOSerializer, WorkoutExerciseSerializer, WorkoutSerializer
-from .serializers import ExerciseSerializer
+from .serializers import ExerciseSerializer, WorkoutHistorySerializer
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -124,3 +124,23 @@ class ExerciseDeleteView(APIView):
             return Response({"message": "exercise deleted"}, status=status.HTTP_204_NO_CONTENT)
         except exercises.DoesNotExist:
             return Response({"error": "exercise not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class WorkoutHistoryCreateView(APIView):
+    def post(self, request):
+        serializer = WorkoutHistorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class WorkoutHistoryDeleteView(APIView):
+    def delete(self, request, pk):
+        try:
+            history_to_delete = workout_history.objects.get(pk=pk)
+            history_to_delete.delete()
+            return Response({"message": "Historia treningu usunięta."}, status=status.HTTP_204_NO_CONTENT)
+        except workout_history.DoesNotExist:
+            return Response({"error": "Nie znaleziono takiego wpisu."}, status=status.HTTP_404_NOT_FOUND)
