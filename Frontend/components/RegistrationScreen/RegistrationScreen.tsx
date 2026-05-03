@@ -21,38 +21,38 @@ export function RegistrationScreen({ navigation }: StackScreenProps<RootStackPar
 	// Email
 	if (!emailRegex.test(emailText)) {
 	  console.log('Email Fail');
-	  alert('Niepoprawny Email');
+	  alert('Wrong Email');
 	  return;
 	}
 
 	// PassCap
 	if (!/[A-Z]/.test(passwrodText)) {
 	  console.log('Pass capitalization Fail');
-	  alert('Błędne hasło(Brak dużej litery))');
+	  alert('Wrong password(No capitalized letter)');
 	  return;
 	}
 
 	// PassSmall
 	if (!/[a-z]/.test(passwrodText)) {
 	  console.log('Pass small letter Fail');
-	  alert('Błędne hasło(Brak małej litery))');
+	  alert('Wrong password(No small letter)');
 	  return;
 	}
 
 	// PassLength
 	if (passwrodText.length < 8) {
 	  console.log('Pass length fail');
-	  alert('Błędne hasło(Za mało znaków))');
+	  alert('Wrong password, too short. Must be longer than eight characters');
 	  return;
 	}
 
     if (passwrodText != passwrodRepText) {
 	  console.log('Pass length fail');
-	  alert('Hasło powtórzone nie zgadza się z hasłem podanym');
+	  alert('Repeated password is diffrent, than provided password.');
 	  return;
 	}
 
-	console.log('Próba logowania');
+	console.log('Registration attempt');
   };
 
   const handleLogin = () => {
