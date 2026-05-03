@@ -7,16 +7,17 @@ import { useFonts } from 'expo-font';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../App";
 
-
 SplashScreen.preventAutoHideAsync();
 
-export function LoginScreen({ navigation }: StackScreenProps<RootStackParamList, 'Login'>) {
+export function RegistrationScreen({ navigation }: StackScreenProps<RootStackParamList, 'Registration'>){
 
   const [emailText, setEmailText] = useState('');
   const [passwrodText, setPasswordText] = useState('');
+  const [passwrodRepText, setPasswordRepText] = useState('');
   const [isPasswordVis, setPasswordVis] = useState(false);
+  const [isRepPasswordVis, setRepPasswordVis] = useState(false);
 
-  const handleLogin = () => {
+  const handleRegistration = () => {
 	console.log('AttemptLogEmail: ', emailText);
 	console.log('AttemptLogPass: ', passwrodText);
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -49,22 +50,32 @@ export function LoginScreen({ navigation }: StackScreenProps<RootStackParamList,
 	  return;
 	}
 
+    if (passwrodText != passwrodRepText) {
+	  console.log('Pass length fail');
+	  alert('Hasło powtórzone nie zgadza się z hasłem podanym');
+	  return;
+	}
+
 	console.log('Próba logowania');
   };
 
-  const handleRegistration = () => {
-	navigation.navigate('Registration');
+  const handleLogin = () => {
+	navigation.navigate('Login');
   }
 
   const changePassVis = () =>{
 	setPasswordVis(!isPasswordVis);
   }
 
+  const changeRepPassVis = () =>{
+	setRepPasswordVis(!isRepPasswordVis);
+  }
+
 
   return (
 	<View style={styles.container}>
 	  <View style={styles.titleBox}>
-		<Text style={styles.title}>LOGIN</Text>
+		<Text style={styles.title}>REGISTER</Text>
 	  </View>
 	  <View style={styles.conteceBox}>
 		<Text style={styles.textBold}>Email</Text>
@@ -102,19 +113,41 @@ export function LoginScreen({ navigation }: StackScreenProps<RootStackParamList,
 
 
 		</View>
+        <Text style={styles.textBold}>Repeat Password</Text>
+        <View style={styles.frameContainer}>
+		  <TextInput
+			style={styles.frameText}
+			placeholder="Repeat your super ULTRA secure pasword"
+			placeholderTextColor="#777777"
+			value={passwrodRepText}
+			onChangeText={setPasswordRepText}
+			autoCapitalize="none"
+			secureTextEntry={!isRepPasswordVis}
+		  />
+		  <TouchableOpacity
+			onPress={changeRepPassVis}>
+			<Ionicons
+			  name={isRepPasswordVis ? "eye-off" : "eye"}
+			  size={30}
+			  color="#aaa"
+			/>
+		  </TouchableOpacity>
+
+
+		</View>
 		<TouchableOpacity
 		  style={styles.button}
-		  onPress={handleLogin}
+		  onPress={handleRegistration}
 		  activeOpacity={0.7}
 		>
-		  <Text style={styles.buttonText}>LOGIN</Text>
+		  <Text style={styles.buttonText}>REGISTER</Text>
 		</TouchableOpacity>
 
 	  </View>
 	  <View style={styles.bottomBox}>
-		<Text style={styles.text}>Don't have an account?</Text>
-		<TouchableOpacity onPress={handleRegistration}>
-		  <Text style={styles.textGold}>Register</Text>
+		<Text style={styles.text}>Already have an account?</Text>
+		<TouchableOpacity onPress={handleLogin}>
+		  <Text style={styles.textGold}>LOGIN</Text>
 		</TouchableOpacity>
 	  </View>
 	</View>

@@ -5,12 +5,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Onboarding1, Onboarding2, Onboarding3 } from './components/HelloPages/HelloPages';
 import { LoginScreen } from './components/LoginScreen/LoginScreen';
+import { RegistrationScreen } from './components/RegistrationScreen/RegistrationScreen';
 
 export type RootStackParamList = {
   Onboarding1: undefined;
   Onboarding2: undefined;
   Onboarding3: undefined;
   Login: undefined;
+  Registration: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -42,6 +44,7 @@ function App() {
 		<Stack.Screen name="Onboarding2" component={Onboarding2} />
 		<Stack.Screen name="Onboarding3" component={Onboarding3} />
 		<Stack.Screen name="Login" component={LoginScreen} />
+		<Stack.Screen name="Registration" component={RegistrationScreen} />
 	  </Stack.Navigator>
 	</NavigationContainer>
   );
