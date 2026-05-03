@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import users, workout_exercises
+from .models import users, workout_exercises, workouts
 
 
 class UserDTOSerializer(serializers.ModelSerializer):
@@ -50,3 +50,9 @@ class WorkoutExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = workout_exercises
         fields = '__all__'
+
+
+class WorkoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = workouts
+        fields = "__all__"
