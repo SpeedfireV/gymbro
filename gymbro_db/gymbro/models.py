@@ -38,6 +38,7 @@ class users(models.Model):
     first_name = models.TextField(null=True, blank=True)
     last_name = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_staff = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.password.startswith('pbkdf2_'):
