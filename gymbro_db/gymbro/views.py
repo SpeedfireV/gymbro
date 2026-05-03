@@ -2,10 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAdminUser
 
-from .models import users, workout_exercises, workouts
+from .models import users, workout_exercises, workouts, exercises
 from .serializers import RegisterSerializer, LoginSerializer, UserDTOSerializer, WorkoutExerciseSerializer, WorkoutSerializer
-
+from .serializers import ExerciseSerializer
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -99,3 +100,27 @@ class WorkoutDeleteView(APIView):
             
         except workouts.DoesNotExist:
             return Response({"error": "Workout not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class ExerciseAddView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request):
+        serializer = ExerciseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class ExerciseDeleteView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def delete(self, request, pk):
+        try:
+            exercise = exercises.objects.get(pk=pk)
+            exercise.delete()
+            return Response({"message": "exercise deleted"}, status=status.HTTP_204_NO_CONTENT)
+        except exercises.DoesNotExist:
+            return Response({"error": "exercise not found"}, status=status.HTTP_404_NOT_FOUND)
