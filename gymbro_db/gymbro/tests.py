@@ -157,6 +157,19 @@ class WorkoutsEndpointsTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(workouts.objects.count(), 1)
 
+    def test_create_workout_invalid_data(self):
+        invalid_payload = {
+            "user": 999, 
+            "created_at": "to-w-ogole-nie-jest-data"
+        }
+        
+        response = self.client.post(self.url_workouts, invalid_payload, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('user', response.data)
+        self.assertIn('created_at', response.data)
+        self.assertEqual(workouts.objects.count(), 0)
+
     def test_delete_workout_successful(self):
         workout_to_delete = workouts.objects.create(user=self.user, created_at=timezone.now())
         url_delete = f'/api/workouts/{workout_to_delete.id}/'
