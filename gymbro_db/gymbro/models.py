@@ -18,6 +18,7 @@ class ExerciseTypes(models.TextChoices):
 class MuscleGroups(models.TextChoices):
     ARMS = 'arms'
     LEGS = 'legs'
+    CHEST = 'chest'
 
 
 class DifficultyLevels(models.TextChoices):
