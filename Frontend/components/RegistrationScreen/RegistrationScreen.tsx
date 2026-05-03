@@ -1,13 +1,9 @@
 import { View, Text, TouchableOpacity, TextInput} from 'react-native';
 import { styles } from "../../AppStyle"
-import * as SplashScreen from 'expo-splash-screen';
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState} from 'react';
 import { Ionicons } from '@expo/vector-icons'
-import { useFonts } from 'expo-font';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../App";
-
-SplashScreen.preventAutoHideAsync();
 
 export function RegistrationScreen({ navigation }: StackScreenProps<RootStackParamList, 'Registration'>){
 
