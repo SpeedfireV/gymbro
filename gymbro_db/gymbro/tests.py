@@ -107,6 +107,22 @@ class WorkoutExercisesEndpointsTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(workout_exercises.objects.count(), 1)
 
+    def test_add_workout_exercise_invalid_data_missing(self):
+        invalid_payload_missing = self.valid_payload.copy()
+        invalid_payload_missing.pop('exercise')
+        
+        response = self.client.post(self.url_add, invalid_payload_missing, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('exercise', response.data)
+
+    def test_add_workout_exercose_invalid_data_type(self):
+        invalid_payload_type = self.valid_payload.copy()
+        invalid_payload_type['sets'] = "dużo"
+        
+        response = self.client.post(self.url_add, invalid_payload_type, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('sets', response.data)
+
     def test_delete_workout_exercise_successful(self):
         we_to_delete = workout_exercises.objects.create(
             workout=self.workout, exercise=self.exercise, index=1, sets=4, reps=10,
