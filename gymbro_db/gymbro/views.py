@@ -126,7 +126,7 @@ class ExerciseDeleteView(APIView):
             return Response({"error": "exercise not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class WorkoutHistoryCreateView(APIView):
+class WorkoutHistoryAddView(APIView):
     def post(self, request):
         serializer = WorkoutHistorySerializer(data=request.data)
         if serializer.is_valid():
