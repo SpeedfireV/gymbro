@@ -183,3 +183,76 @@ class WorkoutsEndpointsTest(APITestCase):
         response = self.client.delete(url_delete)
         
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class ExercisesEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_exercises = '/api/exercises/'
+        self.normal_user = users.objects.create(username="zwykly", email="zwykly@mail.com", password="123")
+        self.admin_user = users.objects.create(username="Admin", email="admin@mail.com", password="123", is_staff=True)
+
+        self.valid_payload = {
+            "name": "Wyciskanie sztangi leżąc",
+            "type": "strength",
+            "muscle": "chest",
+            "difficulty": "beginner",
+            "instructions": "Opuść sztangę do klatki i wyciśnij.",
+            "safety_info": "Używaj asekuracji."
+        }
+
+    def test_create_exercise_as_admin_successful(self):
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.post(self.url_exercises, self.valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(exercises.objects.count(), 1)
+
+    def test_create_exercise_as_normal_user_forbidden(self):
+        self.client.force_authenticate(user=self.normal_user)
+        response = self.client.post(self.url_exercises, self.valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(exercises.objects.count(), 0)
+
+    def test_create_exercise_invalid_data_missing_field(self):
+        self.client.force_authenticate(user=self.admin_user)
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload.pop('name')
+        response = self.client.post(self.url_exercises, invalid_payload, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('name', response.data)
+        self.assertEqual(exercises.objects.count(), 0)
+
+    def test_create_exercise_invalid_choices(self):
+        self.client.force_authenticate(user=self.admin_user)
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload['difficulty'] = "impossible"
+        response = self.client.post(self.url_exercises, invalid_payload, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('difficulty', response.data)
+        self.assertEqual(exercises.objects.count(), 0)
+
+    def test_delete_exercise_as_admin_successful(self):
+        self.client.force_authenticate(user=self.admin_user)
+        ex_to_delete = exercises.objects.create(
+            name="Pompki", type="strength", muscle="chest", difficulty="beginner", instructions=".", safety_info="."
+        )
+        
+        response = self.client.delete(f'/api/exercises/{ex_to_delete.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(exercises.objects.count(), 0)
+
+    def test_delete_exercise_as_normal_user_forbidden(self):
+        self.client.force_authenticate(user=self.normal_user)
+        ex_to_delete = exercises.objects.create(
+            name="Pompki", type="strength", muscle="chest", difficulty="beginner", instructions=".", safety_info="."
+        )
+        
+        response = self.client.delete(f'/api/exercises/{ex_to_delete.id}/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(exercises.objects.count(), 1)
+
+    def test_delete_non_existent_exercise(self):
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.delete('/api/exercises/999/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
