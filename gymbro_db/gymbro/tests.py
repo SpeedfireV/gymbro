@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.utils import timezone
 from datetime import timedelta
-from .models import users, workouts, exercises, workout_exercises, workout_history
+from .models import users, workouts, exercises, workout_exercises, workout_history, exercises_history
 
 
 class AuthEndpointsTest(APITestCase):
@@ -305,3 +305,90 @@ class WorkoutHistoryEndpointsTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('total_time', response.data)
         self.assertEqual(workout_history.objects.count(), 0)
+
+
+class ExerciseHistoryEndpointsTest(APITestCase):
+    def setUp(self):
+        self.user = users.objects.create(username="Gohan", email="gohan@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.exercise = exercises.objects.create(
+            name="Pompki", type="strength", muscle="chest", difficulty="beginner", instructions=".", safety_info="."
+        )
+
+    def test_save_workout_with_exercises_successful(self):
+        payload = {
+            "user": self.user.id,
+            "workout": self.workout.id,
+            "start_time": "2026-05-03T18:00:00Z",
+            "total_time": "01:00:00",
+            "exercises": [
+                {
+                    "index": 1,
+                    "exercise": self.exercise.id,
+                    "weight": 20.5,
+                    "reps": 12.0,
+                    "duration": "00:01:00",
+                    "utc_time": "2026-05-03T18:05:00Z"
+                }
+            ]
+        }
+
+        response = self.client.post('/api/workout-history/', payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(workout_history.objects.count(), 1)
+        self.assertEqual(exercises_history.objects.count(), 1)
+
+    def test_modify_exercise_history_successful(self):
+        history = workout_history.objects.create(user=self.user, workout=self.workout, start_time=timezone.now(), total_time=timedelta(hours=1))
+        ex = exercises_history.objects.create(
+            user=self.user, workout_history=history, index=1, exercise=self.exercise,
+            weight=0.0, reps=10.0, duration=timedelta(minutes=1), utc_time=timezone.now()
+        )
+
+        response = self.client.patch(f'/api/exercise-history/{ex.id}/', {"reps": 50.0}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ex.refresh_from_db()
+        self.assertEqual(ex.reps, 50.0)
+
+    def test_delete_exercise_history_successful(self):
+        history = workout_history.objects.create(user=self.user, workout=self.workout, start_time=timezone.now(), total_time=timedelta(hours=1))
+        ex = exercises_history.objects.create(
+            user=self.user, workout_history=history, index=1, exercise=self.exercise,
+            weight=0.0, reps=10.0, duration=timedelta(minutes=1), utc_time=timezone.now()
+        )
+
+        response = self.client.delete(f'/api/exercise-history/{ex.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(exercises_history.objects.count(), 0)
+        self.assertEqual(workout_history.objects.count(), 1)
+
+    def test_save_workout_with_invalid_exercise_triggers_rollback(self):
+        payload = {
+            "user": self.user.id,
+            "workout": self.workout.id,
+            "start_time": "2026-05-03T18:00:00Z",
+            "total_time": "01:00:00",
+            "exercises": [
+                {
+                    "index": 1,
+                    "exercise": self.exercise.id,
+                    "weight": "to-nie-jest-liczba",
+                    "reps": 12.0,
+                    "duration": "00:01:00",
+                    "utc_time": "2026-05-03T18:05:00Z"
+                }
+            ]
+        }
+
+        response = self.client.post('/api/workout-history/', payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(workout_history.objects.count(), 0)
+        self.assertEqual(exercises_history.objects.count(), 0)
+
+    def test_modify_non_existent_exercise_history(self):
+        response = self.client.patch('/api/exercise-history/9999/', {"reps": 50.0}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_non_existent_exercise_history(self):
+        response = self.client.delete('/api/exercise-history/9999/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
