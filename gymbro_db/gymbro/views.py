@@ -3,10 +3,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAdminUser
+from django.db import transaction
 
-from .models import users, workout_exercises, workouts, exercises, workout_history
+from .models import users, workout_exercises, workouts, exercises, workout_history, exercises_history
 from .serializers import RegisterSerializer, LoginSerializer, UserDTOSerializer, WorkoutExerciseSerializer, WorkoutSerializer
-from .serializers import ExerciseSerializer, WorkoutHistorySerializer
+from .serializers import ExerciseSerializer, WorkoutHistorySerializer, ExerciseHistorySerializer
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -127,13 +128,32 @@ class ExerciseDeleteView(APIView):
 
 
 class WorkoutHistoryAddView(APIView):
+    @transaction.atomic
     def post(self, request):
-        serializer = WorkoutHistorySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        data = request.data.copy()
+        exercises_data = data.pop('exercises', [])
+        history_serializer = WorkoutHistorySerializer(data=data)
+
+        if history_serializer.is_valid():
+            history_obj = history_serializer.save()
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            for ex_data in exercises_data:
+                ex_data['workout_history'] = history_obj.id
+                ex_data['user'] = history_obj.user.id
+                ex_serializer = ExerciseHistorySerializer(data=ex_data)
+
+                if ex_serializer.is_valid():
+                    ex_serializer.save()
+                else:
+                    transaction.set_rollback(True)
+                    return Response({
+                        "error": "Validation error in exercise", 
+                        "details": ex_serializer.errors
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                    
+            return Response({"message": "Workout and exercises added successfully"}, status=status.HTTP_201_CREATED)
+            
+        return Response(history_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class WorkoutHistoryDeleteView(APIView):
@@ -141,6 +161,27 @@ class WorkoutHistoryDeleteView(APIView):
         try:
             history_to_delete = workout_history.objects.get(pk=pk)
             history_to_delete.delete()
-            return Response({"message": "Historia treningu usunięta."}, status=status.HTTP_204_NO_CONTENT)
+            return Response({"message": "Workout history deleted"}, status=status.HTTP_204_NO_CONTENT)
         except workout_history.DoesNotExist:
-            return Response({"error": "Nie znaleziono takiego wpisu."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Workout history not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class ExerciseHistoryDetailView(APIView):
+    def patch(self, request, pk):
+        try:
+            exercise = exercises_history.objects.get(pk=pk)
+            serializer = ExerciseHistorySerializer(exercise, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except exercises_history.DoesNotExist:
+            return Response({"error": "Exercise not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, pk):
+        try:
+            exercise = exercises_history.objects.get(pk=pk)
+            exercise.delete()
+            return Response({"message": "Exercise deleted"}, status=status.HTTP_204_NO_CONTENT)
+        except exercises_history.DoesNotExist:
+            return Response({"error": "Exercise not found"}, status=status.HTTP_404_NOT_FOUND)
