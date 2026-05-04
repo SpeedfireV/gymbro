@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import users, workout_exercises, workouts
-from .models import exercises, workout_history
+from .models import exercises, workout_history, exercises_history
 
 class UserDTOSerializer(serializers.ModelSerializer):
     class Meta:
@@ -67,4 +67,10 @@ class ExerciseSerializer(serializers.ModelSerializer):
 class WorkoutHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = workout_history
+        fields = '__all__'
+
+
+class ExerciseHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = exercises_history
         fields = '__all__'
