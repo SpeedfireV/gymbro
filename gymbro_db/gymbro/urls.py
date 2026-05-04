@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import RegisterView, LoginView, WorkoutExerciseAddView, WorkoutExerciseDeleteView
 from .views import WorkoutAddView, WorkoutDeleteView, ExerciseAddView, ExerciseDeleteView
-from .views import WorkoutHistoryAddView, WorkoutHistoryDeleteView
+from .views import WorkoutHistoryAddView, WorkoutHistoryDeleteView, ExerciseHistoryDetailView
 
 
 urlpatterns = [
@@ -15,4 +15,5 @@ urlpatterns = [
     path('exercises/<int:pk>/', ExerciseDeleteView.as_view(), name='delete-exercise'),
     path('workout-history/', WorkoutHistoryAddView.as_view(), name='add-workout-history'),
     path('workout-history/<int:pk>/', WorkoutHistoryDeleteView.as_view(), name='delete-workout-history'),
+    path('exercise-history/<int:pk>/', ExerciseHistoryDetailView.as_view(), name='detail-exercise-history'),
 ]
