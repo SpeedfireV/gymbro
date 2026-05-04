@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.utils import timezone
 from datetime import timedelta
-from .models import users, workouts, exercises, workout_exercises
+from .models import users, workouts, exercises, workout_exercises, workout_history
 
 
 class AuthEndpointsTest(APITestCase):
@@ -256,3 +256,52 @@ class ExercisesEndpointsTest(APITestCase):
         self.client.force_authenticate(user=self.admin_user)
         response = self.client.delete('/api/exercises/999/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class WorkoutHistoryEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_history = '/api/workout-history/'
+        self.user = users.objects.create(username="Vegeta", email="vegeta@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.valid_payload = {
+            "user": self.user.id,
+            "workout": self.workout.id,
+            "start_time": "2026-05-03T18:00:00Z",
+            "total_time": "01:30:00" 
+        }
+
+    def test_create_workout_history_successful(self):
+        response = self.client.post(self.url_history, self.valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(workout_history.objects.count(), 1)
+
+    def test_delete_workout_history_successful(self):
+        history = workout_history.objects.create(
+            user=self.user, workout=self.workout, start_time=timezone.now(), total_time=timedelta(hours=1, minutes=30)
+        )
+        
+        url_delete = f'/api/workout-history/{history.id}/'
+        response = self.client.delete(url_delete)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(workout_history.objects.count(), 0)
+
+    def test_delete_non_existent_workout_history(self):
+        url_delete = '/api/workout-history/999/'
+        response = self.client.delete(url_delete)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_workout_history_missing_data(self):
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload.pop('workout')
+        response = self.client.post(self.url_history, invalid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('workout', response.data)
+        self.assertEqual(workout_history.objects.count(), 0)
+
+    def test_create_workout_history_invalid_format(self):
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload['total_time'] = "bardzo-dlugo" 
+        response = self.client.post(self.url_history, invalid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('total_time', response.data)
+        self.assertEqual(workout_history.objects.count(), 0)
