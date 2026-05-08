@@ -26,7 +26,7 @@ export function LoginScreen({ navigation }: StackScreenProps<RootStackParamList,
 	// PassCap
 	if (!/[A-Z]/.test(passwrodText)) {
 	  console.log('Pass capitalization Fail');
-	  alert('Wrong password(No capitalized letter)');
+	  alert('Wrong password(No capitalized letter))');
 	  return;
 	}
 
@@ -44,7 +44,10 @@ export function LoginScreen({ navigation }: StackScreenProps<RootStackParamList,
 	  return;
 	}
 
-	console.log('Login attempt');
+	console.log('Try login');
+	navigation.navigate('Home');
+
+	console.log('Success');
   };
 
   const handleRegistration = () => {

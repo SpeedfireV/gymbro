@@ -6,6 +6,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Onboarding1, Onboarding2, Onboarding3 } from './components/HelloPages/HelloPages';
 import { LoginScreen } from './components/LoginScreen/LoginScreen';
 import { RegistrationScreen } from './components/RegistrationScreen/RegistrationScreen';
+import { TrainingPage } from './components/MainPages/TrainingPage';
+import { ExcercisesPage } from './components/MainPages/ExcercisesPage';
+import { HomePage } from './components/MainPages/HomePage';
 
 export type RootStackParamList = {
   Onboarding1: undefined;
@@ -13,6 +16,9 @@ export type RootStackParamList = {
   Onboarding3: undefined;
   Login: undefined;
   Registration: undefined;
+  Training: undefined;
+  Excercises: undefined;
+  Home: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -45,6 +51,9 @@ function App() {
 		<Stack.Screen name="Onboarding3" component={Onboarding3} />
 		<Stack.Screen name="Login" component={LoginScreen} />
 		<Stack.Screen name="Registration" component={RegistrationScreen} />
+		<Stack.Screen name="Training" component={TrainingPage} />
+		<Stack.Screen name="Home" component={HomePage} />
+		<Stack.Screen name="Excercises" component={ExcercisesPage} />
 	  </Stack.Navigator>
 	</NavigationContainer>
   );

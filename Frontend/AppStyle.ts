@@ -92,6 +92,7 @@ export const styles = StyleSheet.create({
   frameText: {
     flex: 1,
     fontFamily: 'Michroma-reg',
+    color: '#fff8e5',
     fontSize: 12,
   },
 
