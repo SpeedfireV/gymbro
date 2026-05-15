@@ -6,9 +6,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Onboarding1, Onboarding2, Onboarding3 } from './components/HelloPages/HelloPages';
 import { LoginScreen } from './components/LoginScreen/LoginScreen';
 import { RegistrationScreen } from './components/RegistrationScreen/RegistrationScreen';
-import { TrainingPage } from './components/MainPages/TrainingPage';
-import { ExcercisesPage } from './components/MainPages/ExcercisesPage';
-import { HomePage } from './components/MainPages/HomePage';
+import { TrainingPage } from './components/MainPages/TrainingPage/TrainingPage';
+import { ExcercisesPage } from './components/MainPages/ExcercisesPage/ExcercisesPage';
+import { HomePage } from './components/MainPages/HomePage/HomePage';
+import { TrainingSelector } from './components/MainPages/HomePage/TrainingSelector'
+import { DateSelector } from './components/MainPages/HomePage/DateSelector'
+import { TrainingItem } from './components/ReusableComponents/ComplexTypes'
 
 export type RootStackParamList = {
   Onboarding1: undefined;
@@ -19,6 +22,9 @@ export type RootStackParamList = {
   Training: undefined;
   Excercises: undefined;
   Home: undefined;
+  TrainingSelector: undefined;
+  DateSelector: { training: TrainingItem };
+  
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -29,7 +35,11 @@ function App() {
 	'SairaStencil-reg': require('./assets/fonts/Saira_Stencil_One/SairaStencilOne-Regular.ttf'),
 	'Impact': require('./assets/fonts/impact/impact.ttf'),
 	'Michroma-reg': require('./assets/fonts/Michroma/Michroma-Regular.ttf'),
-	'Antonio': require('./assets/fonts/Antonio/Antonio-VariableFont_wght.ttf')
+	'Antonio': require('./assets/fonts/Antonio/Antonio-VariableFont_wght.ttf'),
+	'ChakraPetch-ExtraLight': require('./assets/fonts/chakra-petch-2/ChakraPetch-ExtraLight.ttf'),
+	'ChakraPetch-SemiBold': require('./assets/fonts/chakra-petch-2/ChakraPetch-SemiBold.ttf'),
+	'ChakraPetch-Medium': require('./assets/fonts/chakra-petch-2/ChakraPetch-Medium.ttf'),
+	'BigShoulders_18pt-Black': require('./assets/fonts/static/BigShoulders_18pt-Black.ttf')
   });
 
   useEffect(() => {
@@ -54,6 +64,8 @@ function App() {
 		<Stack.Screen name="Training" component={TrainingPage} />
 		<Stack.Screen name="Home" component={HomePage} />
 		<Stack.Screen name="Excercises" component={ExcercisesPage} />
+		<Stack.Screen name="TrainingSelector" component = {TrainingSelector}/>
+		<Stack.Screen name="DateSelector" component = {DateSelector}/>
 	  </Stack.Navigator>
 	</NavigationContainer>
   );

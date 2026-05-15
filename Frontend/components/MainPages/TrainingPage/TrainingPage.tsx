@@ -1,20 +1,20 @@
 import React, {useState} from 'react';
 import { StyleSheet, View, SafeAreaView, Text } from 'react-native';
-import NavigationBar from '../ReusableComponents/NavigationBar';
+import NavigationBar from '../../ReusableComponents/NavigationBar';
 import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from "../../App";
+import { RootStackParamList } from "../../../App";
 
 export function TrainingPage({ navigation }: StackScreenProps<RootStackParamList, 'Training'>){
     const [activeTab, setActiveTab] = useState<keyof RootStackParamList>('Training');
     
     return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.headerText}>Training</Text>
       </View>
 
       <NavigationBar activeTab={activeTab} />
-    </SafeAreaView>
+    </View>
   );
     
 }
