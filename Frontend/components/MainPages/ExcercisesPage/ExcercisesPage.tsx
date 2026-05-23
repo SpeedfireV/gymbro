@@ -5,13 +5,14 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
 import NewTrainingButton from '../HomePage/HomePageFuncs/NewTraining';
 import { TabButton } from './components/TabButton';
+import { ExcerciseCard } from './components/ExcerciseCard';
 
 export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamList, 'Excercises'>) {
   const [activeTab] = useState<keyof RootStackParamList>('Excercises');
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
+      <View >
         <Text style={styles.headerText}>Excercises</Text>
       </View>
 
@@ -22,19 +23,17 @@ export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamLi
         <TabButton title={'Personal'} enabled={true}></TabButton>
         <TabButton title={'Bro Science'} enabled={false}></TabButton>
       </View>
+
+
+      <ExcerciseCard></ExcerciseCard>
+      <ExcerciseCard></ExcerciseCard>
       <NewTrainingButton
         onPress={() => {
           navigation.navigate('TrainingSelector');
         }}></NewTrainingButton>
-      <NavigationBar activeTab={activeTab} />
 
-      <View>
-        <View>
-          <Text className='bg-red-500'>Pull Ups</Text>
-          <Text>Triceps</Text>
-          <Text>Pull ups are one of the most effective training techniques that enchance...</Text>
-        </View>
-      </View>
+      <View style={styles.container}></View>
+      <NavigationBar activeTab={activeTab} />
     </View>
   );
 
@@ -56,6 +55,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000000',
+  },
+  mainCol: {
+    paddingHorizontal: 16,
   },
   content: {
     flex: 1,
