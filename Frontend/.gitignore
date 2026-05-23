@@ -185,3 +185,10 @@ __pycache__/
 /packages/react-native/**/api/codegen
 /packages/react-native/**/.doxygen.config.*.generated
 /scripts/cxx-api/codegen
+
+node_modules/
+.expo/
+
+# Ignore native directories if using Expo Managed Workflow (CNG)
+android/ 
+ios/

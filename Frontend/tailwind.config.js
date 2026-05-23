@@ -10,6 +10,18 @@ module.exports = {
         impact: ['Impact'],
         michroma: ['Michroma-reg'],
         antonio: ['Antonio'],
+      },
+      colors: {
+        fireRed: '#E03616',
+        activeYellow: '#FBAF00',
+        coffeeBackground: '#322214',
+        blueSlate: '#39393A',
+        platiniumWhite: '#EFF1F3',
+        background: '#111111',
+        onSurface: '#181818',
+        inputBackground: '#242423',
+        
+
       }
     },
   },

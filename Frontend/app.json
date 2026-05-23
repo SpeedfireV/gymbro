@@ -20,7 +20,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.bd2.Gymbro"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -28,6 +29,11 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "78313e45-710f-42ab-adcf-6d6c2f5cb49e"
+      }
+    }
   }
 }

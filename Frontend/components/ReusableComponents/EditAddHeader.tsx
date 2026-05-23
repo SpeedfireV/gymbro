@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 22,
         fontWeight: '900',
-        fontFamily: 'BigShoulders_18pt-Black'
+        fontFamily: 'BigShoulders18Black'
     },
     rightActionWrapper: {
         width: 45,

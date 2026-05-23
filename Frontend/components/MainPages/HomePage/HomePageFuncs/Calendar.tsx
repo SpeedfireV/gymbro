@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginLeft: 20,
         marginBottom: 15,
-        fontFamily: 'BigShoulders_18pt-Black'
+        fontFamily: 'BigShoulders18Black'
     },
     listContent: {
         paddingHorizontal: 10,

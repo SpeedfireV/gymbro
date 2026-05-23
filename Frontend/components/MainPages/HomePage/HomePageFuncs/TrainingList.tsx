@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         color: '#FF4500',
         fontSize: 32,
         marginBottom: 30,
-        fontFamily:  'BigShoulders_18pt-Black',
+        fontFamily:  'BigShoulders18Black',
         
     },
     emptyContainer: {
