@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
     monthTitle: {
         color: '#ff1e00',
         fontSize: 24,
-        fontWeight: 'bold',
         marginLeft: 20,
         marginBottom: 15,
-        fontFamily: 'BigShoulders18Black'
+        fontFamily: 'BigShoulders',
+        fontWeight: '900'
     },
     listContent: {
         paddingHorizontal: 10,

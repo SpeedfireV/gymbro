@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 12,
     marginBottom: 4,
-    fontFamily: 'BigShoulders18Black'
+    fontFamily: 'BigShoulders',
+    fontWeight: '900'
   },
   dateCircle: {
     width: 40,

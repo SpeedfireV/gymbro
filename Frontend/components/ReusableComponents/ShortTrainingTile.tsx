@@ -61,12 +61,14 @@ const styles = StyleSheet.create({
   title: {
       color: '#FFF',
       fontSize: 22,
-      fontFamily: 'BigShoulders18Black'
+      fontFamily: 'BigShoulders',
+      fontWeight: '900'
   },
   muscles: {
       color: '#FFF',
       fontSize: 14,
-      fontFamily: 'BigShoulders18Black',
+      fontFamily: 'BigShoulders',
+      fontWeight: '900',
   },
   description: {
       color: '#BBB',

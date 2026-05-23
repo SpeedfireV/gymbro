@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
         color: '#FF4500',
         fontSize: 32,
         marginBottom: 30,
-        fontFamily:  'BigShoulders18Black',
+        fontFamily:  'BigShoulders',
+        fontWeight: '900',
         
     },
     emptyContainer: {

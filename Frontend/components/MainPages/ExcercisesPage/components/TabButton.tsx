@@ -18,8 +18,8 @@ export function TabButton({ title, enabled }: TabButtonData) {
 const styles = StyleSheet.create({
   enabledTabButtonText: {
     fontSize: 24,
-    fontFamily: 'BigShoulders18Black',
-    fontWeight: 'bold',
+    fontFamily: 'BigShoulders',
+    fontWeight: '900',
     color: "#322214",
   },
   enabledTabButton: {
@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
   },
   disabledTabButtonText: {
     fontSize: 24,
-    fontWeight: 'medium',
+    fontFamily: 'BigShoulders',
+    fontWeight: '900',
     color: "#EFF1F3",
   },
   disabledTabButton: {
