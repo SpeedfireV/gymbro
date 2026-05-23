@@ -32,7 +32,7 @@ SplashScreen.preventAutoHideAsync();
 
 function App() {
   const [fontsLoaded, fontError] = useFonts({
-	BigShoulders: require('./assets/fonts/BigShoulders/BigShoulders-VariableFont_opsz,wght.ttf'),
+	BigShoulders: require('./assets/fonts/BigShoulders/BigShoulders-VariableFont.ttf'),
 	'SairaStencil-reg': require('./assets/fonts/Saira_Stencil_One/SairaStencilOne-Regular.ttf'),
 	'Impact': require('./assets/fonts/impact/impact.ttf'),
 	'Michroma-reg': require('./assets/fonts/Michroma/Michroma-Regular.ttf'),
