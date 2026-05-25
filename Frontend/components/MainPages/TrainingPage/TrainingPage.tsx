@@ -9,7 +9,6 @@ import ShortTrainingTile from "../../ReusableComponents/ShortTrainingTile"
 import { TabButton } from '../../ReusableComponents/TabButton';
 import NewActivityButton from "../../ReusableComponents/NewActivity"
 import { PageTitle } from '../../ReusableComponents/PageTitle';
-import { SearchBar } from 'react-native-screens';
 import { GBSearchBar } from '../../ReusableComponents/GBSearchBar';
 
 export function TrainingPage({ navigation }: StackScreenProps<RootStackParamList, 'Training'>) {
@@ -64,21 +63,26 @@ export function TrainingPage({ navigation }: StackScreenProps<RootStackParamList
   const dummyTrainingsEmpty: TrainingItem[] = []
 
   const renderItem = ({ item }: { item: TrainingItem }) => (
-    <ShortTrainingTile
-      item={item}
-      description={item.description}
-      onSelect={(training) => navigation.navigate('DateSelector', { training })}
-    />
+    <View style={{
+
+      paddingHorizontal: 20,
+
+    }}>
+      <ShortTrainingTile
+        item={item}
+        description={item.description}
+        onSelect={(training) => navigation.navigate('DateSelector', { training })}
+      /></View>
   );
 
   return (
     <View style={styles.container}>
-
-      <PageTitle title='TRAININGS' />
-      <GBSearchBar placeholderText='Find Training' searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <View style={styles.content}>
-
-
+        <PageTitle title='TRAININGS' />
+        <View style={{
+          paddingHorizontal: 20
+        }}><GBSearchBar placeholderText='Find Training' searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        </View>
         <View style={styles.doubleButtonContainer}>
           <TabButton title={'Personal'} enabled={PersonalActive} onSelect={() => setPersonalActive(true)}></TabButton>
           <TabButton title={'Bro Science'} enabled={!PersonalActive} onSelect={() => setPersonalActive(false)}></TabButton>
@@ -117,8 +121,7 @@ const styles = StyleSheet.create({
     flex: 0.15,
   },
   content: {
-    flex: 0.9,
-    paddingHorizontal: 20,
+    flex: 1,
   },
   pageTitleContainer: {
     flex: 0.15,
@@ -127,6 +130,7 @@ const styles = StyleSheet.create({
   doubleButtonContainer: {
     flexDirection: "row",
     marginBottom: 20,
+    paddingHorizontal: 20,
     width: '100%',
     gap: 10
   },
