@@ -22,5 +22,5 @@ urlpatterns = [
     path('comments/', CommentListCreateView.as_view(), name='comments-list-create'),
     path('comments/<int:pk>/', CommentDetailView.as_view(), name='comments-detail'),
     path('posts/<int:pk>/rate/', PostRateView.as_view(), name='post-rate'),
-    path('comment/<int:pk>/rate/', CommentRateView.as_view(), name='comment-rate'),
+    path('comments/<int:pk>/rate/', CommentRateView.as_view(), name='comment-rate'),
 ]
