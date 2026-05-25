@@ -5,7 +5,7 @@ import Calendar from './HomePageFuncs/Calendar';
 import TrainingsList from './HomePageFuncs/TrainingList'
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
-import NewTrainingButton from "./HomePageFuncs/NewTraining"
+import NewActivityButton from "../../ReusableComponents/NewActivity"
 
 
 export function HomePage({ navigation }: StackScreenProps<RootStackParamList, 'Home'>){
@@ -22,7 +22,8 @@ export function HomePage({ navigation }: StackScreenProps<RootStackParamList, 'H
         <TrainingsList selectedDate={selectedDate} />
       </View>
 
-      <NewTrainingButton 
+      <NewActivityButton
+        Title='PLAN NEW TRAINING'
         onPress={() => {
           navigation.navigate('TrainingSelector');
         }} 

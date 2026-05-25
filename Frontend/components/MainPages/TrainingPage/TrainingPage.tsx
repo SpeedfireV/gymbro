@@ -5,9 +5,9 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
 import { Ionicons } from '@expo/vector-icons';
 import { TrainingItem } from '../../ReusableComponents/ComplexTypes'
-import EditAddHeader from "../../ReusableComponents/EditAddHeader"
 import ShortTrainingTile from "../../ReusableComponents/ShortTrainingTile"
 import { TabButton } from '../../ReusableComponents/TabButton';
+import NewActivityButton from "../../ReusableComponents/NewActivity"
 
 export function TrainingPage({ navigation }: StackScreenProps<RootStackParamList, 'Training'>){
     const [searchQuery, setSearchQuery] = useState('');
@@ -106,6 +106,13 @@ export function TrainingPage({ navigation }: StackScreenProps<RootStackParamList
                 contentContainerStyle={{ paddingBottom: 30 }}
             />
         </View>
+
+        <NewActivityButton
+            Title='ADD NEW TRAINING'
+            onPress={() => {
+            navigation.navigate('TrainingSelector');
+            }} 
+        />
 
         <NavigationBar activeTab={activeTab} />
     </View>

@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, } from 'react-native';
 import NavigationBar from '../../ReusableComponents/NavigationBar';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
-import NewTrainingButton from '../HomePage/HomePageFuncs/NewTraining';
+import NewActivityButton from "../../ReusableComponents/NewActivity"
 import { TabButton } from '../../ReusableComponents/TabButton';
 import { ExcerciseCard } from './components/ExcerciseCard';
 
@@ -28,10 +28,12 @@ export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamLi
 
       <ExcerciseCard></ExcerciseCard>
       <ExcerciseCard></ExcerciseCard>
-      <NewTrainingButton
-        onPress={() => {
-          navigation.navigate('TrainingSelector');
-        }}></NewTrainingButton>
+      <NewActivityButton
+            Title='ADD NEW TRAINING'
+            onPress={() => {
+            navigation.navigate('TrainingSelector');
+            }} 
+        />
 
       <View style={styles.container}></View>
       <NavigationBar activeTab={activeTab} />
