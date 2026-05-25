@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
-import { TrainingItem } from '../../ReusableComponents/TrainingTile'
+import { TrainingItem } from '../../ReusableComponents/ComplexTypes'
 import EditAddHeader from "../../ReusableComponents/EditAddHeader"
 import ShortTrainingTile from "../../ReusableComponents/ShortTrainingTile"
 

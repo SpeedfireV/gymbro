@@ -4,11 +4,12 @@ import NavigationBar from '../../ReusableComponents/NavigationBar';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
 import NewTrainingButton from '../HomePage/HomePageFuncs/NewTraining';
-import { TabButton } from './components/TabButton';
+import { TabButton } from '../../ReusableComponents/TabButton';
 import { ExcerciseCard } from './components/ExcerciseCard';
 
 export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamList, 'Excercises'>) {
   const [activeTab] = useState<keyof RootStackParamList>('Excercises');
+  const [PersonalActive, setPersonalActive] = useState(true);
 
   return (
     <View style={styles.container}>
@@ -19,9 +20,9 @@ export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamLi
 
       <ExcercisesSearchBar></ExcercisesSearchBar>
 
-      <View className='flex flex-col'>
-        <TabButton title={'Personal'} enabled={true}></TabButton>
-        <TabButton title={'Bro Science'} enabled={false}></TabButton>
+      <View style={styles.doubleButtonContainer}>
+        <TabButton title={'Personal'} enabled={PersonalActive} onSelect={() => setPersonalActive(true)}></TabButton>
+        <TabButton title={'Bro Science'} enabled={!PersonalActive } onSelect={() => setPersonalActive(false)}></TabButton>
       </View>
 
 
@@ -55,6 +56,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000000',
+  },
+  doubleButtonContainer: {
+        flexDirection: "row",
+        marginBottom: 20,
+        width: '100%',
+        gap: 10,
   },
   mainCol: {
     paddingHorizontal: 16,
