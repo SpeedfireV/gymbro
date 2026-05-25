@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAdminUser
 from django.db import transaction
 
 from .models import users, workout_exercises, workouts, exercises, workout_history, exercises_history
-from .models import posts, comments
+from .models import posts, comments, ratings
 from .serializers import RegisterSerializer, LoginSerializer, UserDTOSerializer, WorkoutExerciseSerializer, WorkoutSerializer
 from .serializers import ExerciseSerializer, WorkoutHistorySerializer, ExerciseHistorySerializer, PostSerializer
 from .serializers import CommentSerializer
@@ -235,3 +235,53 @@ class CommentDetailView(APIView):
             return Response({"message": "Comment deleted"}, status=status.HTTP_204_NO_CONTENT)
         except comments.DoesNotExist:
             return Response({"error": "Comment not found"}, status=status.HTTP_404_NOT_FOUND)
+
+# switching Like / Dislike for posts
+class PostRateView(APIView):
+    @transaction.atomic
+    def post(self, request, pk):
+        user_id = request.data.get('user')
+        is_like = request.data.get('is_like')
+
+        if user_id is None or is_like is None:
+            return Response({"error": "No user or is_like data"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            post = posts.objects.get(pk=pk)
+        except posts.DoesNotExist:
+            return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        rating_obj = ratings.objects.filter(post=post, user_id=user_id).first()
+
+        if rating_obj:
+            if rating_obj.is_like == is_like:
+                rating_obj.delete()
+                if is_like:
+                    post.like_count -= 1
+                else:
+                    post.dislike_count -= 1
+                message = "Rating revoked"
+            else:
+                rating_obj.is_like = is_like
+                rating_obj.save()
+                if is_like:
+                    post.like_count += 1
+                    post.dislike_count -= 1
+                else:
+                    post.like_count -= 1
+                    post.dislike_count += 1
+                message = "Rating changed"
+        else:
+            ratings.objects.create(post=post, user_id=user_id, is_like=is_like)
+            if is_like:
+                post.like_count += 1
+            else:
+                post.dislike_count += 1
+            message = "Rating added"
+        
+        post.save()
+        return Response({
+            "message": message,
+            "like_Count": post.like_count,
+            "dislike_count": post.dislike_count
+        }, status=status.HTTP_200_OK)
