@@ -57,17 +57,17 @@ const styles = StyleSheet.create(
     excerciseTitle: {
       fontSize: 24,
       marginBottom: 4,
-      fontWeight: '800',
-      fontFamily: 'BigShoulders'
+      fontFamily: 'BigShoulders-ExtraBold'
     },
     excerciseBodyParts: {
       fontSize: 20,
       marginBottom: 12,
-      fontWeight: 'semibold'
+      fontFamily: 'ChakraPetch-SemiBold'
+
     },
     excerciseDesc: {
       fontSize: 12,
-      fontWeight: 'regular',
+      fontFamily: 'ChakraPetch-Regular'
     }
 
 

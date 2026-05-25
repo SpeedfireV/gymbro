@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, } from 'react-native';
+import { StyleSheet, View, Text, FlatList, ScrollView } from 'react-native';
 import NavigationBar from '../../ReusableComponents/NavigationBar';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
@@ -10,6 +10,37 @@ import { ExcerciseCard } from './components/ExcerciseCard';
 export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamList, 'Excercises'>) {
   const [activeTab] = useState<keyof RootStackParamList>('Excercises');
   const [PersonalActive, setPersonalActive] = useState(true);
+
+  const EXERCISES = [{
+    title: 'Pull Ups',
+    bodyParts: ["Triceps"],
+    desc: 'Pull ups are one of the most effective training techniques that enchance...',
+    isPublic: false,
+  }, {
+    title: 'Pull Ups',
+    bodyParts: ["Triceps"],
+    desc: 'Pull ups are one of the most effective training techniques that enchance...',
+    isPublic: false,
+  },
+  {
+    title: 'Pull Ups',
+    bodyParts: ["Triceps"],
+    desc: 'Pull ups are one of the most effective training techniques that enchance...',
+    isPublic: false,
+  },
+  {
+    title: 'Pull Ups',
+    bodyParts: ["Triceps"],
+    desc: 'Pull ups are one of the most effective training techniques that enchance...',
+    isPublic: false,
+  },
+  {
+    title: 'Pull Ups',
+    bodyParts: ["Triceps"],
+    desc: 'Pull ups are one of the most effective training techniques that enchance...',
+    isPublic: true
+  }
+  ]
 
   return (
     <View style={styles.container}>
@@ -22,9 +53,24 @@ export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamLi
         <TabButton title={'PERSONAL'} enabled={PersonalActive} onSelect={() => setPersonalActive(true)}></TabButton>
         <TabButton title={'BRO SCIENCE'} enabled={!PersonalActive} onSelect={() => setPersonalActive(false)}></TabButton>
       </View>
+      <View style={{ flex: 1 }}>
+        <FlatList
 
+          data={EXERCISES}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          ItemSeparatorComponent={() => <View style={{ height: 32 }} />}
+          renderItem={({ item }) => (
+            <ExcerciseCard
+              title={item.title}
+              bodyParts={item.bodyParts}
+              desc={item.desc}
+              isPublic={item.isPublic}
+            />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
 
-      <ExcerciseCard title='Pull Ups' bodyParts={["Triceps"]} desc='Pull ups are one of the most effective training techniques that enchance...' isPublic={false}></ExcerciseCard>
       <NewActivityButton Title='ADD NEW EXERCISE'
         onPress={() => {
           navigation.navigate('TrainingSelector');

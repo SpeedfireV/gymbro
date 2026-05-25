@@ -45,8 +45,17 @@ function App() {
 	'Michroma-reg': require('./assets/fonts/Michroma/Michroma-Regular.ttf'),
 	'Antonio': require('./assets/fonts/Antonio/Antonio-VariableFont_wght.ttf'),
 	'ChakraPetch-ExtraLight': require('./assets/fonts/chakra-petch-2/ChakraPetch-ExtraLight.ttf'),
-	'ChakraPetch-SemiBold': require('./assets/fonts/chakra-petch-2/ChakraPetch-SemiBold.ttf'),
+	'ChakraPetch-ExtraLightItalic': require('./assets/fonts/chakra-petch-2/ChakraPetch-ExtraLightItalic.ttf'),
+	'ChakraPetch-Light': require('./assets/fonts/chakra-petch-2/ChakraPetch-Light.ttf'),
+	'ChakraPetch-LightItalic': require('./assets/fonts/chakra-petch-2/ChakraPetch-LightItalic.ttf'),
+	'ChakraPetch-Regular': require('./assets/fonts/chakra-petch-2/ChakraPetch-Regular.ttf'),
+	'ChakraPetch-Italic': require('./assets/fonts/chakra-petch-2/ChakraPetch-Italic.ttf'),
 	'ChakraPetch-Medium': require('./assets/fonts/chakra-petch-2/ChakraPetch-Medium.ttf'),
+	'ChakraPetch-MediumItalic': require('./assets/fonts/chakra-petch-2/ChakraPetch-MediumItalic.ttf'),
+	'ChakraPetch-SemiBold': require('./assets/fonts/chakra-petch-2/ChakraPetch-SemiBold.ttf'),
+	'ChakraPetch-SemiBoldItalic': require('./assets/fonts/chakra-petch-2/ChakraPetch-SemiBoldItalic.ttf'),
+	'ChakraPetch-Bold': require('./assets/fonts/chakra-petch-2/ChakraPetch-Bold.ttf'),
+	'ChakraPetch-BoldItalic': require('./assets/fonts/chakra-petch-2/ChakraPetch-BoldItalic.ttf'),
   });
 
   useEffect(() => {
