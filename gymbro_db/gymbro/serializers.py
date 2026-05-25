@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import users, workout_exercises, workouts
 from .models import exercises, workout_history, exercises_history
-from .models import posts
+from .models import posts, comments
 
 class UserDTOSerializer(serializers.ModelSerializer):
     class Meta:
@@ -83,4 +83,13 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = posts
+        fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    like_count = serializers.IntegerField(default=0, read_only=True)
+    dislike_count = serializers.IntegerField(default=0, read_only=True)
+
+    class Meta:
+        model = comments
         fields = '__all__'
