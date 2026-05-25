@@ -3,7 +3,7 @@ from rest_framework import status
 from django.utils import timezone
 from datetime import timedelta
 from .models import users, workouts, exercises, workout_exercises, workout_history, exercises_history
-from .models import posts, comments, ratings
+from .models import posts, comments, ratings, comments_ratings
 
 class AuthEndpointsTest(APITestCase):
     def setUp(self):
@@ -537,4 +537,45 @@ class RatingsEndpointsTest(APITestCase):
 
     def test_rating_non_existent_post(self):
         response = self.client.post('/api/posts/999/rate/', {"user": self.user.id, "is_like": True}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class CommentRatingsEndpointsTest(APITestCase):
+    def setUp(self):
+        self.user = users.objects.create(username="Adrian", email="adrian@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.post = posts.objects.create(
+            user=self.user, title="Post do komentarza", description="...", workout=self.workout, like_count=0, dislike_count=0
+        )
+        self.comment = comments.objects.create(
+            post=self.post, user=self.user, content="Komentarz", like_count=0, dislike_count=0
+        )
+        self.url_rate = f'/api/comments/{self.comment.id}/rate/'
+
+    def test_comment_rating_toggle_mechanic(self):
+        payload_like = {"user": self.user.id, "is_like": True}
+        response1 = self.client.post(self.url_rate, payload_like, format='json')
+        self.assertEqual(response1.status_code, status.HTTP_200_OK)
+        self.assertEqual(response1.data['like_count'], 1)
+        self.assertEqual(comments_ratings.objects.count(), 1)
+
+        payload_dislike = {"user": self.user.id, "is_like": False}
+        response2 = self.client.post(self.url_rate, payload_dislike, format='json')
+        self.assertEqual(response2.status_code, status.HTTP_200_OK)
+        self.assertEqual(response2.data['like_count'], 0)
+        self.assertEqual(response2.data['dislike_count'], 1)
+        self.assertEqual(comments_ratings.objects.count(), 1)
+
+        response3 = self.client.post(self.url_rate, payload_dislike, format='json')
+        self.assertEqual(response3.status_code, status.HTTP_200_OK)
+        self.assertEqual(response3.data['like_count'], 0)
+        self.assertEqual(response3.data['dislike_count'], 0)
+        self.assertEqual(comments_ratings.objects.count(), 0)
+
+    def test_comment_rating_missing_data(self):
+        response = self.client.post(self.url_rate, {"user": self.user.id}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_comment_rating_non_existent_comment(self):
+        response = self.client.post('/api/comments/999/rate/', {"user": self.user.id, "is_like": True}, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
