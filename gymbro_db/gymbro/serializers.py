@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import users, workout_exercises, workouts
 from .models import exercises, workout_history, exercises_history
-from .models import posts, comments, ratings
+from .models import posts, comments, ratings, comments_ratings
 
 class UserDTOSerializer(serializers.ModelSerializer):
     class Meta:
@@ -98,4 +98,10 @@ class CommentSerializer(serializers.ModelSerializer):
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = ratings
+        fields = '__all__'
+
+
+class CommentRatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = comments_ratings
         fields = '__all__'
