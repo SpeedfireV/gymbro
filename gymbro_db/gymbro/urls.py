@@ -2,7 +2,7 @@ from django.urls import path
 from .views import RegisterView, LoginView, WorkoutExerciseAddView, WorkoutExerciseDeleteView
 from .views import WorkoutAddView, WorkoutDeleteView, ExerciseAddView, ExerciseDeleteView
 from .views import WorkoutHistoryAddView, WorkoutHistoryDeleteView, ExerciseHistoryDetailView
-
+from .views import PostListCreateView, PostDetailView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -16,4 +16,6 @@ urlpatterns = [
     path('workout-history/', WorkoutHistoryAddView.as_view(), name='add-workout-history'),
     path('workout-history/<int:pk>/', WorkoutHistoryDeleteView.as_view(), name='delete-workout-history'),
     path('exercise-history/<int:pk>/', ExerciseHistoryDetailView.as_view(), name='detail-exercise-history'),
+    path('posts/', PostListCreateView.as_view(), name='posts-list-create'),
+    path('posts/<int:pk>/', PostDetailView.as_view(), name='posts-detail')
 ]
