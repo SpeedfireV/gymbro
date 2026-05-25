@@ -2,11 +2,12 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-interface NewTrainingButtonProps {
+interface NewActivityButtonProps {
+  Title: string,
   onPress: () => void;
 }
 
-const NewTrainingButton = ({ onPress }: NewTrainingButtonProps) => {
+const NewActivityButton = ({ Title, onPress }: NewActivityButtonProps) => {
   return (
     <TouchableOpacity 
       style={styles.button} 
@@ -14,7 +15,7 @@ const NewTrainingButton = ({ onPress }: NewTrainingButtonProps) => {
       activeOpacity={0.8}
     >
       <Ionicons name="add-circle" size={30} color="#000" />
-      <Text style={styles.text}>PLAN NEW TRAINING</Text>
+      <Text style={styles.text}>{Title}</Text>
     </TouchableOpacity>
   );
 };
@@ -46,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewTrainingButton;
+export default NewActivityButton;

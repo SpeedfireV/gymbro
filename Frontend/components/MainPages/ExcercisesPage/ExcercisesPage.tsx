@@ -3,12 +3,13 @@ import { StyleSheet, View, Text, } from 'react-native';
 import NavigationBar from '../../ReusableComponents/NavigationBar';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
-import NewTrainingButton from '../HomePage/HomePageFuncs/NewTraining';
-import { TabButton } from './components/TabButton';
+import NewActivityButton from "../../ReusableComponents/NewActivity"
+import { TabButton } from '../../ReusableComponents/TabButton';
 import { ExcerciseCard } from './components/ExcerciseCard';
 
 export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamList, 'Excercises'>) {
   const [activeTab] = useState<keyof RootStackParamList>('Excercises');
+  const [PersonalActive, setPersonalActive] = useState(true);
 
   return (
     <View style={styles.container}>
@@ -17,17 +18,17 @@ export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamLi
       </View>
       <ExcercisesSearchBar></ExcercisesSearchBar>
 
-      <View className='flex flex-col'>
-        <TabButton title={'Personal'} enabled={true}></TabButton>
-        <TabButton title={'Bro Science'} enabled={false}></TabButton>
+      <View style={styles.doubleButtonContainer}>
+        <TabButton title={'Personal'} enabled={PersonalActive} onSelect={() => setPersonalActive(true)}></TabButton>
+        <TabButton title={'Bro Science'} enabled={!PersonalActive} onSelect={() => setPersonalActive(false)}></TabButton>
       </View>
 
 
       <ExcerciseCard title='Pull Ups' bodyParts={["Triceps"]} desc='Pull ups are one of the most effective training techniques that enchance...' isPublic={false}></ExcerciseCard>
-      <NewTrainingButton
+      <NewActivityButton Title='Pull'
         onPress={() => {
           navigation.navigate('TrainingSelector');
-        }}></NewTrainingButton>
+        }}></NewActivityButton>
 
       <View style={styles.container}></View>
       <NavigationBar activeTab={activeTab} />
@@ -52,6 +53,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000000',
+  },
+  doubleButtonContainer: {
+    flexDirection: "row",
+    marginBottom: 20,
+    width: '100%',
+    gap: 10,
   },
   mainCol: {
     paddingHorizontal: 16,
