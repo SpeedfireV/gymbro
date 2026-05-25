@@ -6,6 +6,7 @@ import { RootStackParamList } from "../../../App";
 import NewActivityButton from "../../ReusableComponents/NewActivity"
 import { TabButton } from '../../ReusableComponents/TabButton';
 import { ExcerciseCard } from './components/ExcerciseCard';
+import { PageTitle } from '../../ReusableComponents/PageTitle';
 
 export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamList, 'Excercises'>) {
   const [activeTab] = useState<keyof RootStackParamList>('Excercises');
@@ -44,9 +45,7 @@ export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamLi
 
   return (
     <View style={styles.container}>
-      <View >
-        <Text style={styles.headerText}>Excercises</Text>
-      </View>
+      <PageTitle title='EXERCISES' />
       <ExcercisesSearchBar></ExcercisesSearchBar>
 
       <View style={styles.doubleButtonContainer}>
