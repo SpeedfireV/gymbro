@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native"
 import Personal from '../../../../assets/icons/personal.svg'
-
+import Public from '../../../../assets/icons/public.svg'
 interface ExcerciseInfo {
   mainImage?: ImageBitmap,
   title: string,
@@ -13,13 +13,14 @@ export function ExcerciseCard({ mainImage, title, bodyParts, desc, isPublic }: E
 
   return (
     <View style={styles.card}>
-      <View style={styles.contentPadding}>
-
-        {(isPublic) ? <Personal width={32} height={32} /> : <Personal width={32} height={32} />}
-        <Text style={[styles.excerciseTitle, styles.anyText]}>{title}</Text>
-        <Text style={[styles.excerciseBodyParts, styles.anyText]}>{bodyParts.join(' ')}</Text>
-        <Text style={[styles.excerciseDesc, styles.anyText]}>{desc}</Text>
-
+      <View>
+        <View style={styles.iconPosition}>
+          {(isPublic) ? <Public width={24} height={24} /> : <Personal width={24} height={24} />}</View>
+        <View style={styles.contentPadding}>
+          <Text style={[styles.excerciseTitle, styles.anyText]}>{title}</Text>
+          <Text style={[styles.excerciseBodyParts, styles.anyText]}>{bodyParts.join(' ')}</Text>
+          <Text style={[styles.excerciseDesc, styles.anyText]}>{desc}</Text>
+        </View>
       </View>
     </View>
   )
@@ -30,32 +31,38 @@ export function ExcerciseCard({ mainImage, title, bodyParts, desc, isPublic }: E
 const styles = StyleSheet.create(
   {
     card: {
-      shadowColor: '#FBAF00',
-      shadowOpacity: 127,
-      shadowRadius: 8,
-      shadowOffset: { width: 12, height: 12 },
-      backgroundColor: '#181818',
+
+      backgroundColor: '#111',
       borderRadius: 12,
+      borderWidth: 1,
+      borderColor: '#332b00',
+      shadowColor: '#FFA500',
+      shadowOpacity: 0.2,
+      shadowRadius: 10,
+      elevation: 8,
 
     },
     iconPosition: {
       position: 'absolute',
-      top: 8,
-      right: 8
+      top: 16,
+      right: 16,
+      zIndex: 1
     },
     contentPadding: {
-      padding: 16
+      padding: 16,
     },
     anyText: {
       color: '#EFF1F3'
     },
     excerciseTitle: {
       fontSize: 24,
+      marginBottom: 4,
       fontWeight: '800',
       fontFamily: 'BigShoulders'
     },
     excerciseBodyParts: {
       fontSize: 20,
+      marginBottom: 12,
       fontWeight: 'semibold'
     },
     excerciseDesc: {

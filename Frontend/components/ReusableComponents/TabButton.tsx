@@ -17,13 +17,13 @@ export function TabButton({ title, enabled, onSelect }: TabButtonData) {
 }
 
 const styles = StyleSheet.create({
-  buttonContainer:{
+  buttonContainer: {
     flex: 1,
   },
   enabledTabButtonText: {
     fontSize: 24,
     fontFamily: 'BigShoulders',
-    fontWeight: '900',
+    fontWeight: '700',
     color: "#322214",
   },
   enabledTabButton: {
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   disabledTabButtonText: {
     fontSize: 24,
     fontFamily: 'BigShoulders',
-    fontWeight: '900',
+    fontWeight: 'medium',
     color: "#EFF1F3",
   },
   disabledTabButton: {

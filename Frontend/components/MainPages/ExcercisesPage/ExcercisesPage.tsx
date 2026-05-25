@@ -19,18 +19,19 @@ export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamLi
       <ExcercisesSearchBar></ExcercisesSearchBar>
 
       <View style={styles.doubleButtonContainer}>
-        <TabButton title={'Personal'} enabled={PersonalActive} onSelect={() => setPersonalActive(true)}></TabButton>
-        <TabButton title={'Bro Science'} enabled={!PersonalActive} onSelect={() => setPersonalActive(false)}></TabButton>
+        <TabButton title={'PERSONAL'} enabled={PersonalActive} onSelect={() => setPersonalActive(true)}></TabButton>
+        <TabButton title={'BRO SCIENCE'} enabled={!PersonalActive} onSelect={() => setPersonalActive(false)}></TabButton>
       </View>
 
 
       <ExcerciseCard title='Pull Ups' bodyParts={["Triceps"]} desc='Pull ups are one of the most effective training techniques that enchance...' isPublic={false}></ExcerciseCard>
-      <NewActivityButton Title='Pull'
+      <NewActivityButton Title='ADD NEW EXERCISE'
         onPress={() => {
           navigation.navigate('TrainingSelector');
         }}></NewActivityButton>
 
-      <View style={styles.container}></View>
+
+
       <NavigationBar activeTab={activeTab} />
     </View>
   );
