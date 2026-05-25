@@ -9,6 +9,8 @@ import ShortTrainingTile from "../../ReusableComponents/ShortTrainingTile"
 import { TabButton } from '../../ReusableComponents/TabButton';
 import NewActivityButton from "../../ReusableComponents/NewActivity"
 import { PageTitle } from '../../ReusableComponents/PageTitle';
+import { SearchBar } from 'react-native-screens';
+import { GBSearchBar } from '../../ReusableComponents/GBSearchBar';
 
 export function TrainingPage({ navigation }: StackScreenProps<RootStackParamList, 'Training'>) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -71,23 +73,11 @@ export function TrainingPage({ navigation }: StackScreenProps<RootStackParamList
 
   return (
     <View style={styles.container}>
+
       <PageTitle title='TRAININGS' />
+      <GBSearchBar placeholderText='Find Training' searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <View style={styles.content}>
-        <View style={styles.searchSection}>
-          <TextInput
-            style={styles.input}
-            placeholder="Find Training"
-            placeholderTextColor="#747373"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          <Ionicons
-            name="search-outline"
-            size={24}
-            color="#FFF"
-            style={styles.searchIcon}
-          />
-        </View>
+
 
         <View style={styles.doubleButtonContainer}>
           <TabButton title={'Personal'} enabled={PersonalActive} onSelect={() => setPersonalActive(true)}></TabButton>

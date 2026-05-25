@@ -16,14 +16,14 @@ export function PageTitle({ title }: PageTitleData) {
 
 const styles = StyleSheet.create({
   pageTitleContainer: {
-    flex: 0.15,
-    padding: 20,
+    paddingTop: 24,
   },
   pageTitle: {
+    marginLeft: 20,
     marginTop: 20,
     color: '#FF4500',
     fontSize: 36,
-    marginBottom: 30,
+    marginBottom: 16,
     fontFamily: 'BigShoulders-ExtraBold',
   },
 })
