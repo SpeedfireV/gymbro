@@ -3,6 +3,7 @@ from .views import RegisterView, LoginView, WorkoutExerciseAddView, WorkoutExerc
 from .views import WorkoutAddView, WorkoutDeleteView, ExerciseAddView, ExerciseDeleteView
 from .views import WorkoutHistoryAddView, WorkoutHistoryDeleteView, ExerciseHistoryDetailView
 from .views import PostListCreateView, PostDetailView, CommentListCreateView, CommentDetailView
+from .views import PostRateView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -20,4 +21,5 @@ urlpatterns = [
     path('posts/<int:pk>/', PostDetailView.as_view(), name='posts-detail'),
     path('comments/', CommentListCreateView.as_view(), name='comments-list-create'),
     path('comments/<int:pk>/', CommentDetailView.as_view(), name='comments-detail'),
+    path('posts/<int:pk>/rate/', PostRateView.as_view(), name='post-rate'),
 ]
