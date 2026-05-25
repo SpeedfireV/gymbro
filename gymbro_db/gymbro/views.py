@@ -6,8 +6,9 @@ from rest_framework.permissions import IsAdminUser
 from django.db import transaction
 
 from .models import users, workout_exercises, workouts, exercises, workout_history, exercises_history
+from .models import posts
 from .serializers import RegisterSerializer, LoginSerializer, UserDTOSerializer, WorkoutExerciseSerializer, WorkoutSerializer
-from .serializers import ExerciseSerializer, WorkoutHistorySerializer, ExerciseHistorySerializer
+from .serializers import ExerciseSerializer, WorkoutHistorySerializer, ExerciseHistorySerializer, PostSerializer
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -185,3 +186,28 @@ class ExerciseHistoryDetailView(APIView):
             return Response({"message": "Exercise deleted"}, status=status.HTTP_204_NO_CONTENT)
         except exercises_history.DoesNotExist:
             return Response({"error": "Exercise not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class PostListCreateView(APIView):
+    def get(self, request):
+        all_posts = posts.objects.all().order_by('-id')
+        serializer = PostSerializer(all_posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(like_count=0, dislike_count=0)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PostDetailView(APIView):
+    def delete(self, request, pk):
+        try:
+            post_to_delete = posts.objects.get(pk=pk)
+            post_to_delete.delete()
+            return Response({"message": "Post deleted"}, status=status.HTTP_204_NO_CONTENT)
+        except posts.DoesNotExist:
+            return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
+   
