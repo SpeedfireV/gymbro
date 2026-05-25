@@ -3,7 +3,7 @@ from rest_framework import status
 from django.utils import timezone
 from datetime import timedelta
 from .models import users, workouts, exercises, workout_exercises, workout_history, exercises_history
-from .models import posts
+from .models import posts, comments
 
 class AuthEndpointsTest(APITestCase):
     def setUp(self):
@@ -439,3 +439,61 @@ class PostsEndpointsTest(APITestCase):
         url_delete = '/api/posts/9999/'
         response = self.client.delete(url_delete)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class CommentsEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_comments = '/api/comments/'
+        self.user = users.objects.create(username="Adrian", email="adrian@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.post = posts.objects.create(
+            user=self.user, title="Moja forma", description="Jest git", workout=self.workout, like_count=0, dislike_count=0
+        )
+
+        self.valid_payload = {
+            "post": self.post.id,
+            "user": self.user.id,
+            "content": "Super trening"
+        }
+
+    def test_create_comment_successful(self):
+        response = self.client.post(self.url_comments, self.valid_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(comments.objects.count(), 1)
+        self.assertEqual(response.data['like_count'], 0)
+        self.assertEqual(response.data['dislike_count'], 0)
+
+    def test_get_all_comments_successful(self):
+        comments.objects.create(post=self.post, user=self.user, content="Komentarz 1", like_count=0, dislike_count=0)
+        comments.objects.create(post=self.post, user=self.user, content="Komentarz 2", like_count=0, dislike_count=0)
+        response = self.client.get(self.url_comments)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+    def test_delete_comment_successful(self):
+        comment = comments.objects.create(post=self.post, user=self.user, content="Do usunięcia", like_count=0, dislike_count=0)
+        url_delete = f'/api/comments/{comment.id}/'
+        response = self.client.delete(url_delete)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(comments.objects.count(), 0)
+
+    def test_create_comment_missing_field(self):
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload.pop('content')
+        response = self.client.post(self.url_comments, invalid_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('content', response.data)
+        self.assertEqual(comments.objects.count(), 0)
+
+    def test_create_comment_non_existent_post(self):
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload['post'] = 9999
+        response = self.client.post(self.url_comments, invalid_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('post', response.data)
+        self.assertEqual(comments.objects.count(), 0)
