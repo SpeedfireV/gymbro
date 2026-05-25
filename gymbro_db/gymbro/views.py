@@ -282,6 +282,6 @@ class PostRateView(APIView):
         post.save()
         return Response({
             "message": message,
-            "like_Count": post.like_count,
+            "like_count": post.like_count,
             "dislike_count": post.dislike_count
         }, status=status.HTTP_200_OK)
