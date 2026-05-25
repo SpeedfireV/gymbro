@@ -15,8 +15,6 @@ export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamLi
       <View >
         <Text style={styles.headerText}>Excercises</Text>
       </View>
-
-
       <ExcercisesSearchBar></ExcercisesSearchBar>
 
       <View className='flex flex-col'>
@@ -25,8 +23,7 @@ export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamLi
       </View>
 
 
-      <ExcerciseCard></ExcerciseCard>
-      <ExcerciseCard></ExcerciseCard>
+      <ExcerciseCard title='Pull Ups' bodyParts={["Triceps"]} desc='Pull ups are one of the most effective training techniques that enchance...' isPublic={false}></ExcerciseCard>
       <NewTrainingButton
         onPress={() => {
           navigation.navigate('TrainingSelector');
