@@ -32,7 +32,14 @@ SplashScreen.preventAutoHideAsync();
 
 function App() {
   const [fontsLoaded, fontError] = useFonts({
-	BigShoulders: require('./assets/fonts/BigShoulders/BigShoulders-VariableFont.ttf'),
+	'BigShoulders-Thin': require('./assets/fonts/BigShoulders/big-shoulders-display.thin.ttf'),
+	'BigShoulders-Light': require('./assets/fonts/BigShoulders/big-shoulders-display.light.ttf'),
+	'BigShoulders-Regular': require('./assets/fonts/BigShoulders/big-shoulders-display.regular.ttf'),
+	'BigShoulders-Medium': require('./assets/fonts/BigShoulders/big-shoulders-display.medium.ttf'),
+	'BigShoulders-SemiBold': require('./assets/fonts/BigShoulders/big-shoulders-display.semibold.ttf'),
+	'BigShoulders-Bold': require('./assets/fonts/BigShoulders/big-shoulders-display.bold.ttf'),
+	'BigShoulders-ExtraBold': require('./assets/fonts/BigShoulders/big-shoulders-display.extrabold.ttf'),
+	'BigShoulders-Black': require('./assets/fonts/BigShoulders/big-shoulders-display.black.ttf'),
 	'SairaStencil-reg': require('./assets/fonts/Saira_Stencil_One/SairaStencilOne-Regular.ttf'),
 	'Impact': require('./assets/fonts/impact/impact.ttf'),
 	'Michroma-reg': require('./assets/fonts/Michroma/Michroma-Regular.ttf'),

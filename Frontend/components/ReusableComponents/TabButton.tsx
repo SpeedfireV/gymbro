@@ -22,8 +22,7 @@ const styles = StyleSheet.create({
   },
   enabledTabButtonText: {
     fontSize: 24,
-    fontFamily: 'BigShoulders',
-    fontWeight: '700',
+    fontFamily: 'BigShoulders-Bold',
     color: "#322214",
   },
   enabledTabButton: {
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
   },
   disabledTabButtonText: {
     fontSize: 24,
-    fontFamily: 'BigShoulders',
+    fontFamily: 'BigShoulders-Medium',
     fontWeight: 'medium',
     color: "#EFF1F3",
   },
