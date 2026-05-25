@@ -6,9 +6,10 @@ from rest_framework.permissions import IsAdminUser
 from django.db import transaction
 
 from .models import users, workout_exercises, workouts, exercises, workout_history, exercises_history
-from .models import posts
+from .models import posts, comments
 from .serializers import RegisterSerializer, LoginSerializer, UserDTOSerializer, WorkoutExerciseSerializer, WorkoutSerializer
 from .serializers import ExerciseSerializer, WorkoutHistorySerializer, ExerciseHistorySerializer, PostSerializer
+from .serializers import CommentSerializer
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -210,4 +211,27 @@ class PostDetailView(APIView):
             return Response({"message": "Post deleted"}, status=status.HTTP_204_NO_CONTENT)
         except posts.DoesNotExist:
             return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
-   
+
+
+class CommentListCreateView(APIView):
+    def get(self, request):
+        all_comments = comments.objects.all().order_by('-id')
+        serializer = CommentSerializer(all_comments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(like_count=0, dislike_count=0)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentDetailView(APIView):
+    def delete(self, request, pk):
+        try:
+            comment_to_delete = comments.objects.get(pk=pk)
+            comment_to_delete.delete()
+            return Response({"message": "Comment deleted"}, status=status.HTTP_204_NO_CONTENT)
+        except comments.DoesNotExist:
+            return Response({"error": "Comment not found"}, status=status.HTTP_404_NOT_FOUND)
