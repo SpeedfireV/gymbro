@@ -3,7 +3,7 @@ from rest_framework import status
 from django.utils import timezone
 from datetime import timedelta
 from .models import users, workouts, exercises, workout_exercises, workout_history, exercises_history
-
+from .models import posts
 
 class AuthEndpointsTest(APITestCase):
     def setUp(self):
@@ -391,4 +391,51 @@ class ExerciseHistoryEndpointsTest(APITestCase):
 
     def test_delete_non_existent_exercise_history(self):
         response = self.client.delete('/api/exercise-history/9999/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class PostsEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_posts = '/api/posts/'
+        self.user = users.objects.create(username="Adrian", email="adrian@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.valid_payload = {
+            "user": self.user.id,
+            "title": "Trening klatki",
+            "description": "Zrobiłem dzisiaj 5 serii wyciskania.",
+            "workout": self.workout.id
+        }
+
+    def test_create_post_successful(self):
+        response = self.client.post(self.url_posts, self.valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(posts.objects.count(), 1)
+        self.assertEqual(response.data['like_count'], 0)
+        self.assertEqual(response.data['dislike_count'], 0)
+
+    def test_get_all_posts_successful(self):
+        posts.objects.create(user=self.user, title="Post 1", description="...", workout=self.workout, like_count=0, dislike_count=0)
+        posts.objects.create(user=self.user, title="Post 2", description="...", workout=self.workout, like_count=0, dislike_count=0)
+        response = self.client.get(self.url_posts)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+    def test_delete_post_successful(self):
+        post = posts.objects.create(user=self.user, title="Do usunięcia", description="...", workout=self.workout, like_count=0, dislike_count=0)
+        url_delete = f'/api/posts/{post.id}/'
+        response = self.client.delete(url_delete)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(posts.objects.count(), 0)
+
+    def test_create_post_missing_field(self):
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload.pop('title')
+        response = self.client.post(self.url_posts, invalid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('title', response.data)
+        self.assertEqual(posts.objects.count(), 0)
+
+    def test_delete_non_existent_post(self):
+        url_delete = '/api/posts/9999/'
+        response = self.client.delete(url_delete)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
