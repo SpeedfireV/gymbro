@@ -16,7 +16,7 @@ export function TrainingDetail({ route, navigation }: StackScreenProps<RootStack
     const renderItem = ({ item }: { item: Exercise }) => (
         <ExerciseSimpleTile
             name={item.name} 
-            muscule={item.muscule}
+            muscule={item.muscle}
             detail = {item.detail}
             order = {item.order}
             editable = {false}

@@ -1,9 +1,12 @@
 export interface Exercise {
   id: string;
   name: string;
-  muscule: string;
-  detail: string;
   type: string;
+  muscle: string;
+  detail: string;
+  difficulty?: string;
+  instructions?: string;
+  safetyInfo?: string;
   order: number;
 }
 

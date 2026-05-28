@@ -34,7 +34,7 @@ export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootS
             type: 'break',
             detail: totalDurationString,
             order: -1,
-            muscule: "none",
+            muscle: "none",
             name: 'Break',
         };
 
@@ -49,7 +49,7 @@ export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootS
         item.type === 'excercise' ? (
             <ExerciseSimpleTile
                 name={item.name} 
-                muscule={item.muscule}
+                muscule={item.muscle}
                 detail = {item.detail}
                 order = {item.order}
                 editable = {true}
