@@ -10,8 +10,12 @@ import { RootStackParamList } from '../../../../App';
 
 
 
+interface ExerciseTopBarProps {
+  exerciseName?: string;
+}
 
-export default function ExerciseTopBar() {
+
+export default function ExerciseTopBar({ exerciseName = "PULL UPS" }: ExerciseTopBarProps) {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
@@ -21,7 +25,7 @@ export default function ExerciseTopBar() {
             navigation.goBack();
           }} />
 
-          <Text style={styles.exerciseTitle}>PULL UPS</Text>
+          <Text style={styles.exerciseTitle}>{exerciseName}</Text>
         </View>
         <GBSmallButton bgColor={'#E03616'} icon={<Delete width={24} height={24}  />} onPress={() => {}} />
 

@@ -5,11 +5,16 @@ import PublishToBroScienceButton from '../../../ReusableComponents/PublishToBroS
 import { GBBigButton } from '../../../ReusableComponents/GBBigButton'
 import Edit from '../../../../assets/icons/edit.svg'
 
-export default function ExerciseBottomBar() {
+interface ExerciseBottomBarProps {
+  isPublic?: boolean;
+}
+
+export default function ExerciseBottomBar({isPublic}: ExerciseBottomBarProps) {
   return (
     <View style={styles.footerRow}>
 
         <PublishToBroScienceButton />
+        
         <GBBigButton bgColor='#FBAF00' icon={<Edit width={32} height={32} />} onPress={() => { }} />
 
 
