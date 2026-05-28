@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   enabledTabButton: {
     backgroundColor: "#FBAF00",
     borderRadius: 4,
-    height: 60,
+    height: 48,
     justifyContent: "center",
     textAlign: 'center',
     alignItems: 'center'
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     borderColor: '#FBAF00',
     backgroundColor: "#242423",
     borderRadius: 4,
-    height: 60,
+    height: 48,
     justifyContent: "center",
     textAlign: 'center',
     alignItems: 'center'
