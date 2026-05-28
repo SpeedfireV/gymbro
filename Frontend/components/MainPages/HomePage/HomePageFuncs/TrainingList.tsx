@@ -16,11 +16,12 @@ const TrainingsList = ({ selectedDate }: { selectedDate: Date }) => {
         exercisesCount: 8,
         duration: '4 h 20 min',
         exercises: [
-            { id: 'e1', name: 'Cardio', detail: '45 min', order: 1 },
-            { id: 'e2', name: 'Incline Bench Press', detail: '4x12', order: 2 },
-            { id: 'e3', name: 'Cardio', detail: '45 min', order: 3 },
-            { id: 'e4', name: 'Incline Bench Press', detail: '4x12', order: 4 },
-        ]
+            { id: 'e1', name: 'Cardio', muscule: "Heart", detail: '45 min', order: 1, type: "excercise"},
+            { id: 'e2', name: 'Incline Bench Press', muscule: "Biceps", detail: '4x12', order: 2, type: "excercise"},
+            { id: 'e3', name: 'Cardio', muscule: "Heart", detail: '45 min', order: 3, type: "excercise"},
+            { id: 'e4', name: 'Incline Bench Press', muscule: "Biceps", detail: '4x12', order: 4, type: "excercise"},
+        ],
+        isPublic: true,
         },
         {
         id: '2',
@@ -31,9 +32,10 @@ const TrainingsList = ({ selectedDate }: { selectedDate: Date }) => {
         exercisesCount: 8,
         duration: '4 h 20 min',
         exercises: [
-            { id: 'x1', name: 'Cardio', detail: '45 min', order: 3 },
-            { id: 'x2', name: 'Incline Bench Press', detail: '4x12', order: 4 },
-        ]
+            { id: 'x1', name: 'Cardio', muscule: "Heart", detail: '45 min', order: 3, type: "excercise" },
+            { id: 'x2', name: 'Incline Bench Press', muscule: "Biceps", detail: '4x12', order: 4, type: "excercise" },
+        ],
+        isPublic: true,
         },
         {
         id: '3',
@@ -44,9 +46,10 @@ const TrainingsList = ({ selectedDate }: { selectedDate: Date }) => {
         exercisesCount: 8,
         duration: '4 h 20 min',
         exercises: [
-            { id: 'c1', name: 'Cardio', detail: '45 min', order: 3 },
-            { id: 'c2', name: 'Incline Bench Press', detail: '4x12', order: 4 },
-        ]
+            { id: 'c1', name: 'Cardio', muscule: "Biceps", detail: '45 min', order: 3, type: "excercise" },
+            { id: 'c2', name: 'Incline Bench Press', muscule: "Biceps", detail: '4x12', order: 4, type: "excercise" },
+        ],
+        isPublic: true,
         },
     ];
 

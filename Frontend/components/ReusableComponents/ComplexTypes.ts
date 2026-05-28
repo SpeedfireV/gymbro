@@ -1,7 +1,9 @@
 export interface Exercise {
   id: string;
   name: string;
+  muscule: string;
   detail: string;
+  type: string;
   order: number;
 }
 
@@ -14,4 +16,5 @@ export interface TrainingItem {
   exercisesCount: number;
   duration: string;
   exercises: Exercise[];
+  isPublic: boolean;
 }

@@ -6,10 +6,14 @@ import { TrainingItem } from './ComplexTypes'
 interface Props {
   item: TrainingItem;
   description: string;
+  showPublicity: boolean;
   onSelect: (item: TrainingItem) => void;
 }
 
-const ShortTrainingTile = ({ item, description, onSelect }: Props) => {
+const PRIVATE_ICON = "person-circle-outline";
+const PUBLIC_ICON = "earth-outline";
+
+const ShortTrainingTile = ({ item, description, showPublicity, onSelect }: Props) => {
   return (
     <TouchableOpacity 
         style={styles.card} 
@@ -34,6 +38,14 @@ const ShortTrainingTile = ({ item, description, onSelect }: Props) => {
                 <Text style={styles.frameText}>{item.duration}</Text>
             </View>
         </View>
+
+        
+        <View style={styles.doubleHolder}>
+            <Ionicons name= {item.isPublic? PUBLIC_ICON:PRIVATE_ICON} size={30} color="#FFA500" />
+            <Text style={styles.orangeText}>{item.isPublic? "Public":"Private"}</Text>
+        </View>
+
+
     </TouchableOpacity>
   );
 };
@@ -46,8 +58,8 @@ const styles = StyleSheet.create({
       marginBottom: 20,
       borderWidth: 1,
       borderColor: '#332b00',
-      shadowColor: '#FFA500',
       shadowOffset: { width: 0, height: 0 },
+      shadowColor: '#FFA500',
       shadowOpacity: 0.2,
       shadowRadius: 10,
       elevation: 5,
@@ -90,12 +102,31 @@ const styles = StyleSheet.create({
       borderRadius: 8,
       flex: 0.48,
   },
+
+  doubleHolder: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 10,
+      borderRadius: 8,
+      marginTop: 20,
+      flex: 0.48,
+  },
+
   frameText: {
       color: '#000',
       fontWeight: 'bold',
       fontSize: 13,
       marginLeft: 8,
   },
+
+  orangeText: {
+      color: '#FFA500',
+      fontWeight: 'bold',
+      fontSize: 20,
+      marginLeft: 8,
+  },
+
 });
 
 export default ShortTrainingTile;

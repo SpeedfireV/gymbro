@@ -7,6 +7,8 @@ import { Onboarding1, Onboarding2, Onboarding3 } from './components/HelloPages/H
 import { LoginScreen } from './components/LoginScreen/LoginScreen';
 import { RegistrationScreen } from './components/RegistrationScreen/RegistrationScreen';
 import { TrainingPage } from './components/MainPages/TrainingPage/TrainingPage';
+import { TrainingDetail } from './components/MainPages/TrainingPage/TrainingDetail'
+import { EditTrainingDetail } from './components/MainPages/TrainingPage/EditTrainingDetail'
 import { ExcercisesPage } from './components/MainPages/ExcercisesPage/ExcercisesPage';
 import { HomePage } from './components/MainPages/HomePage/HomePage';
 import { TrainingSelector } from './components/MainPages/HomePage/TrainingSelector'
@@ -24,6 +26,8 @@ export type RootStackParamList = {
   Home: undefined;
   TrainingSelector: undefined;
   DateSelector: { training: TrainingItem };
+  TrainingDetail: {training: TrainingItem};
+  EditTrainingDetail: {training: TrainingItem}
   
 };
 
@@ -82,6 +86,8 @@ function App() {
 		<Stack.Screen name="Excercises" component={ExcercisesPage} />
 		<Stack.Screen name="TrainingSelector" component = {TrainingSelector}/>
 		<Stack.Screen name="DateSelector" component = {DateSelector}/>
+		<Stack.Screen name="TrainingDetail" component = {TrainingDetail}/>
+		<Stack.Screen name="EditTrainingDetail" component = {EditTrainingDetail}/>
 	  </Stack.Navigator>
 	</NavigationContainer>
   );

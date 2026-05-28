@@ -1,0 +1,243 @@
+import React, {useState} from 'react';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, FlatList } from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParamList } from "../../../App";
+import EditAddHeader from "../../ReusableComponents/EditAddHeader";
+import { Ionicons } from '@expo/vector-icons';
+import { Exercise } from '../../ReusableComponents/ComplexTypes'
+import ExerciseSimpleTile from './ExcerciseSimpleTile'
+import NewActivityButton from "../../ReusableComponents/NewActivity"
+
+export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootStackParamList, 'EditTrainingDetail'>) {
+    const { training } = route.params;
+
+    const [titleText, setTitleText] = useState(training.title);
+    const [descriptionText, setDescriptionText] = useState(training.description);
+    const [exercisesList, setExercisesList] = useState<Exercise[]>(training.exercises)
+    
+    const renderItem = ({ item }: { item: Exercise }) => (
+        <ExerciseSimpleTile
+            name={item.name} 
+            muscule={item.muscule}
+            detail = {item.detail}
+            order = {item.order}
+            editable = {true}
+            onDelete={() => handleDeleteExercise(item.id)}
+        />
+    );
+
+    const handleDeleteExercise = (idToRemove: string) => {
+        const filteredList = exercisesList.filter(item => item.id !== idToRemove);
+        console.log("EnteredDeleter")
+        let currentOrder = 1;
+
+        const updatedList = filteredList.map((item) => {
+            if (item.type === 'break') {
+                return item; 
+            }
+            
+            const updatedItem = { ...item, order: currentOrder };
+            currentOrder++;
+            return updatedItem;
+        });
+        setExercisesList(updatedList);
+    };
+
+    const RenderAdderButtons = () => (
+        <View style={styles.AdderButtonWrapper}>
+            <TouchableOpacity 
+                style={styles.AdderButton} 
+                onPress={() => {}}
+                activeOpacity={0.7}
+                >
+                <Ionicons name="add" size={22} color="#FFB000" style={styles.AdderIcon} />
+                <Text style={styles.AdderText}>Add Excercise</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+                style={styles.AdderButton} 
+                onPress={() => {}}
+                activeOpacity={0.7}
+                >
+                <Ionicons name="add" size={22} color="#FFB000" style={styles.AdderIcon} />
+                <Text style={styles.AdderText}>Add Break</Text>
+            </TouchableOpacity>
+        </View>
+    );
+
+    return (
+    <View style={styles.container}>
+        <FlatList
+            data={exercisesList}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 0 }}
+            
+            ListHeaderComponent={
+                <>
+                    <View style={styles.contentUpper}>
+                        <View style={styles.frameTitleContainer}>
+                            <TextInput
+                                value={titleText}
+                                style={styles.titleText}
+                            	onChangeText={setTitleText}
+                            />
+                        </View>
+                    </View>
+
+                    <View style={styles.contentMiddle}>
+                        <View style={styles.infoFrame}>
+                            <View style={styles.rightSide}>
+                                <Ionicons name="barbell-outline" size={23} color="#ffffff" />
+                                <Text style={styles.frameText}>BODY PARTS</Text>
+                            </View>
+                            <Text style={styles.justText}>{training.muscles}</Text>
+                        </View>
+                        <View style={styles.infoFrame}>
+                            <View style={styles.rightSide}>
+                                <Ionicons name="time-outline" size={23} color="#ffffff" />
+                                <Text style={styles.frameText}>TOTAL TRAINING TIME</Text>
+                            </View>
+                            <Text style={styles.justText}>{training.duration}</Text>
+                        </View>
+                    </View>
+
+
+                    <View style={styles.contentLower}>
+                        <View style={styles.midTextWraper}>
+                                <TextInput
+                                    value={descriptionText}
+                                    style={styles.frameDescriptionContainer}
+                                    onChangeText={setDescriptionText}
+                                    multiline={true}
+                                    numberOfLines={4}
+                                    textAlignVertical="center"
+                                />
+                        </View>
+
+                        <Text style={styles.title}>EXCERCISES</Text>
+                    </View>
+                </>
+            }
+            
+
+            ListFooterComponent={<RenderAdderButtons />}
+        />
+        
+    </View>
+);
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#000'
+    },
+    contentUpper: {
+        padding: 20,
+        marginBottom: 20
+    },
+    contentMiddle: {
+        padding: 20,
+        alignItems: 'flex-start',
+        gap: 20
+    },
+    contentLower: {
+        padding: 20
+    },
+    infoFrame: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%'
+    },
+    frameText : {
+        color: '#ffffff',
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginLeft: 8,
+    },
+    justText : {
+        color: '#ffffff',
+        fontSize: 13,
+        marginLeft: 8,
+    },
+    rightSide : {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+    },
+    midTextWraper: {
+        justifyContent: "center",
+        textAlign: 'center',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+
+        marginHorizontal: 10,
+    },
+    midText: {
+        marginTop: 18,
+        textAlign: 'center',
+        color: '#ffffff',
+        fontSize: 20,
+    },
+    title: {
+        marginTop: 20,
+        color: '#FF4500',
+        fontSize: 32,
+        marginBottom: 30,
+        fontWeight: '600',
+    },
+    titleText:{
+        color: '#ffffff',
+        fontSize: 32,
+        width: '100%',
+    },
+
+    AdderButtonWrapper: {
+        alignItems: 'flex-end',
+        width: "95%",
+        marginTop: 15,
+        marginBottom: 100,
+    },
+    AdderButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 8,
+        marginBottom: 5,
+    },
+    AdderIcon: {
+        marginRight: 4,
+    },
+    AdderText: {
+        color: '#FFB000',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+
+    frameTitleContainer:{
+        flexDirection: 'row',
+        backgroundColor: '#222222',
+        borderColor: '#FFFFFF',
+        fontSize: 16,
+        marginTop: 5,
+        borderWidth: 1,
+        borderRadius: 5,
+        width: '100%',
+        alignItems: 'center',
+    },
+
+    frameDescriptionContainer:{
+        flexDirection: 'row',
+        backgroundColor: '#222222',
+        borderColor: '#FFFFFF',
+        fontSize: 20,
+        marginTop: 5,
+        borderWidth: 1,
+        borderRadius: 5,
+        width: '100%',
+        textAlign: 'center',
+        color: '#ffffff',
+    },
+});
