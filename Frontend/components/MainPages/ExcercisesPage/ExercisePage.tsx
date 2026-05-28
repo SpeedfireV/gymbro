@@ -9,15 +9,19 @@ import ArrowLeft from '../../../assets/icons/arrow_left.svg'
 import ArrowRight from '../../../assets/icons/arrow_right.svg'
 import { GBBigButton } from "../../ReusableComponents/GBBigButton";
 import PublishToBroScienceButton from "../../ReusableComponents/PublishToBroScienceButton";
+import { RootStackParamList } from "../../../App";
+import { StackScreenProps } from "@react-navigation/stack";
 
 
-export function ExercisePage() {
+export function ExercisePage({ navigation }: StackScreenProps<RootStackParamList, 'Exercise'>) {
 
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <View style={styles.headerLeft}>
-          <GBSmallButton bgColor='#FBAF00' icon={<ArrowBack width={24} height={24} />} onPress={() => {}} />
+          <GBSmallButton bgColor='#FBAF00' icon={<ArrowBack width={24} height={24} />} onPress={() => {
+            navigation.goBack();
+          }} />
 
           <Text style={styles.exerciseTitle}>PULL UPS</Text>
         </View>

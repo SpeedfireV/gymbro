@@ -86,6 +86,7 @@ function App() {
 		<Stack.Screen name="Training" component={TrainingPage} />
 		<Stack.Screen name="Home" component={HomePage} />
 		<Stack.Screen name="Excercises" component={ExcercisesPage} />
+    <Stack.Screen name="Exercise" component={ExercisePage} />
 		<Stack.Screen name="TrainingSelector" component = {TrainingSelector}/>
 		<Stack.Screen name="DateSelector" component = {DateSelector}/>
 		<Stack.Screen name="TrainingDetail" component = {TrainingDetail}/>
