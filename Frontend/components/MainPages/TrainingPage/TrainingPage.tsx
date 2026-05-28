@@ -133,7 +133,7 @@ export function TrainingPage({ navigation }: StackScreenProps<RootStackParamList
         <NewActivityButton
             Title='ADD NEW TRAINING'
             onPress={() => {
-            navigation.navigate('TrainingSelector');
+                navigation.navigate('TrainingSelector');
             }} 
         />
 

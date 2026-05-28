@@ -30,12 +30,9 @@ export default function BreakTile({ duration, editable, onDelete } : BreakTilePr
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#121212',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    width: '100%',
+    width: '90%',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   breakFrame: {
     flex: 1,
@@ -66,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#d33215',
     width: 46,
     height: 46,
-    borderRadius: 23,
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',

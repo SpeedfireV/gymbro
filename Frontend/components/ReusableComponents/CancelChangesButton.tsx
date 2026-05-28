@@ -11,10 +11,7 @@ export default function PublishToBroScienceButton({ onPress }: PublishToBroScien
         <TouchableOpacity style={styles.publishButton} onPress={onPress}>
           <Cancel width={32} height={32} fill={'#EFF1F3'} style={styles.cancelIcon} />
           <Text style={styles.publishPrefix}>
-            PUBLISH TO
-          </Text>
-          <Text style={styles.publishTarget}>
-            BRO SCIENCE
+            CANCEL CHANGES
           </Text>
         </TouchableOpacity>
   )

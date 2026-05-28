@@ -1,12 +1,17 @@
-import React, {useState} from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, FlatList } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
-import EditAddHeader from "../../ReusableComponents/EditAddHeader";
 import { Ionicons } from '@expo/vector-icons';
 import { Exercise } from '../../ReusableComponents/ComplexTypes'
 import ExerciseSimpleTile from './ExcerciseSimpleTile'
-import NewActivityButton from "../../ReusableComponents/NewActivity"
+import CancelChangesButton from '../../ReusableComponents/CancelChangesButton'
+import {GBBigButton} from '../../ReusableComponents/GBBigButton'
+import Save from "../../../assets/icons/edit_off.svg"
+import { AddBreak } from './AddBreak';
+import BreakTile from './BreakTile';
+
+let nextTempId = 1000000000;
 
 export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootStackParamList, 'EditTrainingDetail'>) {
     const { training } = route.params;
@@ -14,16 +19,47 @@ export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootS
     const [titleText, setTitleText] = useState(training.title);
     const [descriptionText, setDescriptionText] = useState(training.description);
     const [exercisesList, setExercisesList] = useState<Exercise[]>(training.exercises)
+
+    const [isBreakModalVisible, setIsBreakModalVisible] = useState(false);
+
+    useEffect(() => {
+        nextTempId = 1000000000;
+    }, []);
+
+    const handleAddBreak = (minutes: number, seconds: number) => {
+        const totalDurationString = `${minutes} MIN ${seconds > 0 ? seconds + ' SEC' : ''}`.trim();
+        
+        const newBreakItem: Exercise = {
+            id: nextTempId.toString(),
+            type: 'break',
+            detail: totalDurationString,
+            order: -1,
+            muscule: "none",
+            name: 'Break',
+        };
+
+        nextTempId = nextTempId + 1
+
+        console.log(nextTempId)
+
+        setExercisesList([...exercisesList, newBreakItem]);
+    };
     
     const renderItem = ({ item }: { item: Exercise }) => (
-        <ExerciseSimpleTile
-            name={item.name} 
-            muscule={item.muscule}
-            detail = {item.detail}
-            order = {item.order}
-            editable = {true}
-            onDelete={() => handleDeleteExercise(item.id)}
-        />
+        item.type === 'excercise' ? (
+            <ExerciseSimpleTile
+                name={item.name} 
+                muscule={item.muscule}
+                detail = {item.detail}
+                order = {item.order}
+                editable = {true}
+                onDelete={() => handleDeleteExercise(item.id)}
+        />) : (
+            <BreakTile
+                editable = {true}
+                duration= {item.detail}
+                onDelete={() => handleDeleteExercise(item.id)}
+        />)
     );
 
     const handleDeleteExercise = (idToRemove: string) => {
@@ -56,7 +92,7 @@ export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootS
 
             <TouchableOpacity 
                 style={styles.AdderButton} 
-                onPress={() => {}}
+                onPress={() => {setIsBreakModalVisible(true)}}
                 activeOpacity={0.7}
                 >
                 <Ionicons name="add" size={22} color="#FFB000" style={styles.AdderIcon} />
@@ -121,8 +157,29 @@ export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootS
                 </>
             }
             
-
             ListFooterComponent={<RenderAdderButtons />}
+        />
+        <View style={styles.dualButtonContainer}>
+            <View style={styles.CancelChangesContainer}>
+                <CancelChangesButton
+                    onPress={() => {
+                        navigation.navigate('TrainingDetail', { training })
+                    }} 
+                />
+            </View>
+            <GBBigButton
+                bgColor= '#FFA500'
+                icon = {<Save width={32} height={32} />}
+                onPress={() => {
+                
+                }} 
+            />
+        </View>
+
+        <AddBreak
+            visible={isBreakModalVisible}
+            onClose={() => setIsBreakModalVisible(false)}
+            onAddBreak={handleAddBreak}
         />
         
     </View>
@@ -240,4 +297,20 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#ffffff',
     },
+
+    dualButtonContainer:{
+        position: 'absolute',
+        bottom: 25,
+        left: "5%",
+        right: "5%",
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 20,
+    },
+    CancelChangesContainer:{
+        flex: 1,
+    },
+    endingMargin:{
+        marginBottom: 100
+    }
 });

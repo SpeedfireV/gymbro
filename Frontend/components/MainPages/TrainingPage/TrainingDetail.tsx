@@ -6,7 +6,9 @@ import EditAddHeader from "../../ReusableComponents/EditAddHeader";
 import { Ionicons } from '@expo/vector-icons';
 import { Exercise } from '../../ReusableComponents/ComplexTypes'
 import ExerciseSimpleTile from './ExcerciseSimpleTile'
-import NewActivityButton from "../../ReusableComponents/NewActivity"
+import PublishToBroScienceButton from '../../ReusableComponents/PublishToBroScienceButton'
+import {GBBigButton} from '../../ReusableComponents/GBBigButton'
+import Edit from "../../../assets/icons/edit.svg"
 
 export function TrainingDetail({ route, navigation }: StackScreenProps<RootStackParamList, 'TrainingDetail'>) {
     const { training } = route.params;
@@ -36,7 +38,7 @@ export function TrainingDetail({ route, navigation }: StackScreenProps<RootStack
                     <View style={styles.contentUpper}>
                         <EditAddHeader
                             title={training.title}
-                            onBack={() => navigation.goBack()}
+                            onBack={() => navigation.navigate("Training")}
                             onDelete={() => {}}
                             showDelete={true}
                         />
@@ -71,14 +73,26 @@ export function TrainingDetail({ route, navigation }: StackScreenProps<RootStack
                     </View>
                 </>
             }
+
+            ListFooterComponent={<View style={styles.endingMargin}/>}
         />
 
-        <NewActivityButton
-            Title='MOVE TO BETTER GROUNDS'
-            onPress={() => {
-           navigation.navigate('EditTrainingDetail', { training })
-            }} 
-        />
+        <View style={styles.dualButtonContainer}>
+            <View style={styles.BroScienceContainer}>
+                <PublishToBroScienceButton
+                    onPress={() => {
+                    
+                    }} 
+                />
+            </View>
+            <GBBigButton
+                bgColor= '#FFA500'
+                icon = {<Edit width={32} height={32} />}
+                onPress={() => {
+                navigation.navigate('EditTrainingDetail', { training })
+                }} 
+            />
+        </View>
         
     </View>
 );
@@ -144,4 +158,20 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         fontWeight: '600',
     },
+
+    dualButtonContainer:{
+        position: 'absolute',
+        bottom: 25,
+        left: "5%",
+        right: "5%",
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 20,
+    },
+    BroScienceContainer:{
+        flex: 1,
+    },
+    endingMargin:{
+        marginBottom: 100
+    }
 });
