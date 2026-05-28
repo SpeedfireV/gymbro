@@ -1,6 +1,9 @@
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 import Personal from '../../../../assets/icons/personal.svg'
 import Public from '../../../../assets/icons/public.svg'
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from "../../../../App";
+import { StackNavigationProp } from "@react-navigation/stack";
 interface ExcerciseInfo {
   mainImage?: ImageBitmap,
   title: string,
@@ -10,19 +13,22 @@ interface ExcerciseInfo {
 }
 
 export function ExcerciseCard({ mainImage, title, bodyParts, desc, isPublic }: ExcerciseInfo) {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
-    <View style={styles.card}>
-      <View>
-        <View style={styles.iconPosition}>
-          {(isPublic) ? <Public width={24} height={24} /> : <Personal width={24} height={24} />}</View>
-        <View style={styles.contentPadding}>
-          <Text style={[styles.excerciseTitle, styles.anyText]}>{title}</Text>
-          <Text style={[styles.excerciseBodyParts, styles.anyText]}>{bodyParts.join(' ')}</Text>
-          <Text style={[styles.excerciseDesc, styles.anyText]}>{desc}</Text>
+    <TouchableOpacity onPress={() => navigation.navigate('Exercise')}>
+      <View style={styles.card}>
+        <View>
+          <View style={styles.iconPosition}>
+            {(isPublic) ? <Public width={24} height={24} /> : <Personal width={24} height={24} />}</View>
+          <View style={styles.contentPadding}>
+            <Text style={[styles.excerciseTitle, styles.anyText]}>{title}</Text>
+            <Text style={[styles.excerciseBodyParts, styles.anyText]}>{bodyParts.join(' ')}</Text>
+            <Text style={[styles.excerciseDesc, styles.anyText]}>{desc}</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 
 }
