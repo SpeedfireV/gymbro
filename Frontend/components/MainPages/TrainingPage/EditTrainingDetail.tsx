@@ -3,50 +3,48 @@ import { StyleSheet, View, Text, TouchableOpacity, TextInput, FlatList } from 'r
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
 import { Ionicons } from '@expo/vector-icons';
-import { Exercise } from '../../ReusableComponents/ComplexTypes'
-import ExerciseSimpleTile from './ExcerciseSimpleTile'
+import { ExerciseItem } from '../../ReusableComponents/ComplexTypes'
+import ExerciseSimpleTile from './ExerciseSimpleTile'
 import CancelChangesButton from '../../ReusableComponents/CancelChangesButton'
 import {GBBigButton} from '../../ReusableComponents/GBBigButton'
 import Save from "../../../assets/icons/edit_off.svg"
-import { AddBreak } from './AddBreak';
+import { AddTrainingComponent } from './AddTrainingComponent';
 import BreakTile from './BreakTile';
-
-let nextTempId = 1000000000;
+import { AddExercisePage } from './AddExercisePage';
 
 export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootStackParamList, 'EditTrainingDetail'>) {
     const { training } = route.params;
 
     const [titleText, setTitleText] = useState(training.title);
     const [descriptionText, setDescriptionText] = useState(training.description);
-    const [exercisesList, setExercisesList] = useState<Exercise[]>(training.exercises)
+    const [exercisesList, setExercisesList] = useState<ExerciseItem[]>(training.exercises)
+    const [nextTempId, setNextTempId] = useState<number>(1000000000)
 
-    const [isBreakModalVisible, setIsBreakModalVisible] = useState(false);
-
-    useEffect(() => {
-        nextTempId = 1000000000;
-    }, []);
+    const [isAddExerciseVisible, setIsAddExerciseVisible] = useState(false);
+    const [isAddBreakVisible, setIsAddBreakVisible] = useState(false);
 
     const handleAddBreak = (minutes: number, seconds: number) => {
         const totalDurationString = `${minutes} MIN ${seconds > 0 ? seconds + ' SEC' : ''}`.trim();
         
-        const newBreakItem: Exercise = {
+        const newBreakItem: ExerciseItem = {
             id: nextTempId.toString(),
             type: 'break',
-            detail: totalDurationString,
+            detail: 'none',
             order: -1,
-            muscle: "none",
+            muscle: ["none"],
             name: 'Break',
+            innerBreakDuration: totalDurationString
         };
 
-        nextTempId = nextTempId + 1
+        setNextTempId(nextTempId + 1)
 
         console.log(nextTempId)
 
         setExercisesList([...exercisesList, newBreakItem]);
     };
     
-    const renderItem = ({ item }: { item: Exercise }) => (
-        item.type === 'excercise' ? (
+    const renderItem = ({ item }: { item: ExerciseItem }) => (
+        item.type === 'exercise' ? (
             <ExerciseSimpleTile
                 name={item.name} 
                 muscule={item.muscle}
@@ -54,10 +52,12 @@ export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootS
                 order = {item.order}
                 editable = {true}
                 onDelete={() => handleDeleteExercise(item.id)}
+                innerBreakDuration={item.innerBreakDuration}
+                isRepeating = {item.isRepeating}
         />) : (
             <BreakTile
                 editable = {true}
-                duration= {item.detail}
+                duration= {item.innerBreakDuration}
                 onDelete={() => handleDeleteExercise(item.id)}
         />)
     );
@@ -83,16 +83,18 @@ export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootS
         <View style={styles.AdderButtonWrapper}>
             <TouchableOpacity 
                 style={styles.AdderButton} 
-                onPress={() => {}}
+                onPress={() => {
+                    setIsAddExerciseVisible(true)
+                }}
                 activeOpacity={0.7}
                 >
                 <Ionicons name="add" size={22} color="#FFB000" style={styles.AdderIcon} />
-                <Text style={styles.AdderText}>Add Excercise</Text>
+                <Text style={styles.AdderText}>Add Exercise</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
                 style={styles.AdderButton} 
-                onPress={() => {setIsBreakModalVisible(true)}}
+                onPress={() => {setIsAddBreakVisible(true)}}
                 activeOpacity={0.7}
                 >
                 <Ionicons name="add" size={22} color="#FFB000" style={styles.AdderIcon} />
@@ -102,87 +104,93 @@ export function EditTrainingDetail({ route, navigation }: StackScreenProps<RootS
     );
 
     return (
+    isAddExerciseVisible ? (
+        <AddExercisePage
+            exercisesList={exercisesList}
+            setExercisesList={setExercisesList}
+            nextTempId={nextTempId}
+            setNextTempId={setNextTempId}
+            onBack={() => setIsAddExerciseVisible(false)} 
+        />) : (
     <View style={styles.container}>
-        <FlatList
-            data={exercisesList}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 0 }}
-            
-            ListHeaderComponent={
-                <>
-                    <View style={styles.contentUpper}>
-                        <View style={styles.frameTitleContainer}>
-                            <TextInput
-                                value={titleText}
-                                style={styles.titleText}
-                            	onChangeText={setTitleText}
-                            />
-                        </View>
-                    </View>
-
-                    <View style={styles.contentMiddle}>
-                        <View style={styles.infoFrame}>
-                            <View style={styles.rightSide}>
-                                <Ionicons name="barbell-outline" size={23} color="#ffffff" />
-                                <Text style={styles.frameText}>BODY PARTS</Text>
-                            </View>
-                            <Text style={styles.justText}>{training.muscles}</Text>
-                        </View>
-                        <View style={styles.infoFrame}>
-                            <View style={styles.rightSide}>
-                                <Ionicons name="time-outline" size={23} color="#ffffff" />
-                                <Text style={styles.frameText}>TOTAL TRAINING TIME</Text>
-                            </View>
-                            <Text style={styles.justText}>{training.duration}</Text>
-                        </View>
-                    </View>
-
-
-                    <View style={styles.contentLower}>
-                        <View style={styles.midTextWraper}>
-                                <TextInput
-                                    value={descriptionText}
-                                    style={styles.frameDescriptionContainer}
-                                    onChangeText={setDescriptionText}
-                                    multiline={true}
-                                    numberOfLines={4}
-                                    textAlignVertical="center"
-                                />
-                        </View>
-
-                        <Text style={styles.title}>EXCERCISES</Text>
-                    </View>
-                </>
-            }
-            
-            ListFooterComponent={<RenderAdderButtons />}
-        />
-        <View style={styles.dualButtonContainer}>
-            <View style={styles.CancelChangesContainer}>
-                <CancelChangesButton
-                    onPress={() => {
-                        navigation.navigate('TrainingDetail', { training })
-                    }} 
+      <FlatList
+        data={exercisesList}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 0 }}
+        ListHeaderComponent={
+          <>
+            <View style={styles.contentUpper}>
+              <View style={styles.frameTitleContainer}>
+                <TextInput
+                  value={titleText}
+                  style={styles.titleText}
+                  onChangeText={setTitleText}
                 />
+              </View>
             </View>
-            <GBBigButton
-                bgColor= '#FFA500'
-                icon = {<Save width={32} height={32} />}
-                onPress={() => {
-                
-                }} 
-            />
-        </View>
 
-        <AddBreak
-            visible={isBreakModalVisible}
-            onClose={() => setIsBreakModalVisible(false)}
-            onAddBreak={handleAddBreak}
+            <View style={styles.contentMiddle}>
+              <View style={styles.infoFrame}>
+                <View style={styles.rightSide}>
+                  <Ionicons name="barbell-outline" size={23} color="#ffffff" />
+                  <Text style={styles.frameText}>BODY PARTS</Text>
+                </View>
+                <Text style={styles.justText}>{training.muscles}</Text>
+              </View>
+              <View style={styles.infoFrame}>
+                <View style={styles.rightSide}>
+                  <Ionicons name="time-outline" size={23} color="#ffffff" />
+                  <Text style={styles.frameText}>TOTAL TRAINING TIME</Text>
+                </View>
+                <Text style={styles.justText}>{training.duration}</Text>
+              </View>
+            </View>
+
+            <View style={styles.contentLower}>
+              <View style={styles.midTextWraper}>
+                <TextInput
+                  value={descriptionText}
+                  style={styles.frameDescriptionContainer}
+                  onChangeText={setDescriptionText}
+                  multiline={true}
+                  numberOfLines={4}
+                  textAlignVertical="center"
+                />
+              </View>
+              <Text style={styles.title}>EXERCISES</Text>
+            </View>
+          </>
+        }
+        ListFooterComponent={<RenderAdderButtons />}
+      />
+
+      <View style={styles.dualButtonContainer}>
+        <View style={styles.CancelChangesContainer}>
+          <CancelChangesButton
+            onPress={() => {
+              navigation.navigate('TrainingDetail', { training });
+            }}
+          />
+        </View>
+        <GBBigButton
+          bgColor="#FFA500"
+          icon={<Save width={32} height={32} />}
+          onPress={() => {
+            // Tutaj logika zapisu całości
+          }}
         />
-        
+      </View>
+
+      <AddTrainingComponent
+        visible={isAddBreakVisible}
+        isExercise={false}
+        onClose={() => setIsAddBreakVisible(false)}
+        onAddBreak={handleAddBreak}
+      />
     </View>
+  )
 );
 }
 

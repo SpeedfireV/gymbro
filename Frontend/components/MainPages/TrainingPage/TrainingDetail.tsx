@@ -4,24 +4,31 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
 import EditAddHeader from "../../ReusableComponents/EditAddHeader";
 import { Ionicons } from '@expo/vector-icons';
-import { Exercise } from '../../ReusableComponents/ComplexTypes'
-import ExerciseSimpleTile from './ExcerciseSimpleTile'
+import { ExerciseItem } from '../../ReusableComponents/ComplexTypes'
+import ExerciseSimpleTile from './ExerciseSimpleTile'
 import PublishToBroScienceButton from '../../ReusableComponents/PublishToBroScienceButton'
 import {GBBigButton} from '../../ReusableComponents/GBBigButton'
+import BreakTile from './BreakTile';
 import Edit from "../../../assets/icons/edit.svg"
 
 export function TrainingDetail({ route, navigation }: StackScreenProps<RootStackParamList, 'TrainingDetail'>) {
     const { training } = route.params;
     
-    const renderItem = ({ item }: { item: Exercise }) => (
-        <ExerciseSimpleTile
-            name={item.name} 
-            muscule={item.muscle}
-            detail = {item.detail}
-            order = {item.order}
-            editable = {false}
-            onDelete={()=>{}}
-        />
+    const renderItem = ({ item }: { item: ExerciseItem }) => (
+        item.type === 'exercise' ? (
+            <ExerciseSimpleTile
+                name={item.name} 
+                muscule={item.muscle}
+                detail = {item.detail}
+                order = {item.order}
+                editable = {false}
+                innerBreakDuration= {item.innerBreakDuration}
+                isRepeating = {item.isRepeating}
+            />) : (
+            <BreakTile
+                editable = {false}
+                duration= {item.detail}
+        />)
     );
 
     return (
@@ -69,7 +76,7 @@ export function TrainingDetail({ route, navigation }: StackScreenProps<RootStack
                             </Text>
                         </View>
 
-                        <Text style={styles.title}>EXCERCISES</Text>
+                        <Text style={styles.title}>EXERCISES</Text>
                     </View>
                 </>
             }

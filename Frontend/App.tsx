@@ -9,12 +9,12 @@ import { RegistrationScreen } from './components/RegistrationScreen/Registration
 import { TrainingPage } from './components/MainPages/TrainingPage/TrainingPage';
 import { TrainingDetail } from './components/MainPages/TrainingPage/TrainingDetail'
 import { EditTrainingDetail } from './components/MainPages/TrainingPage/EditTrainingDetail'
-import { ExcercisesPage } from './components/MainPages/ExcercisesPage/ExcercisesPage';
 import { HomePage } from './components/MainPages/HomePage/HomePage';
 import { TrainingSelector } from './components/MainPages/HomePage/TrainingSelector'
 import { DateSelector } from './components/MainPages/HomePage/DateSelector'
-import { TrainingItem } from './components/ReusableComponents/ComplexTypes'
+import { ExerciseItem, TrainingItem, } from './components/ReusableComponents/ComplexTypes'
 import { ExercisePage } from './components/MainPages/ExcercisesPage/ExercisePage';
+import { ExercisesPage } from './components/MainPages/ExcercisesPage/ExercisesPage'
 
 export type RootStackParamList = {
   Onboarding1: undefined;
@@ -23,13 +23,13 @@ export type RootStackParamList = {
   Login: undefined;
   Registration: undefined;
   Training: undefined;
-  Excercises: undefined;
+  Exercises: undefined;
   Exercise: undefined;
   Home: undefined;
   TrainingSelector: undefined;
   DateSelector: { training: TrainingItem };
   TrainingDetail: {training: TrainingItem};
-  EditTrainingDetail: {training: TrainingItem}
+  EditTrainingDetail: {training: TrainingItem};
   
 };
 
@@ -78,21 +78,21 @@ function App() {
 		initialRouteName="Onboarding1"
 		screenOptions={{ headerShown: false }}
 	  >
-		<Stack.Screen name="Onboarding1" component={Onboarding1} />
-		<Stack.Screen name="Onboarding2" component={Onboarding2} />
-		<Stack.Screen name="Onboarding3" component={Onboarding3} />
-		<Stack.Screen name="Login" component={LoginScreen} />
-		<Stack.Screen name="Registration" component={RegistrationScreen} />
-		<Stack.Screen name="Training" component={TrainingPage} />
-		<Stack.Screen name="Home" component={HomePage} />
-		<Stack.Screen name="Excercises" component={ExcercisesPage} />
-    <Stack.Screen name="Exercise" component={ExercisePage} />
-		<Stack.Screen name="TrainingSelector" component = {TrainingSelector}/>
-		<Stack.Screen name="DateSelector" component = {DateSelector}/>
-		<Stack.Screen name="TrainingDetail" component = {TrainingDetail}/>
-		<Stack.Screen name="EditTrainingDetail" component = {EditTrainingDetail}/>
-	  </Stack.Navigator>
-	</NavigationContainer>
+      <Stack.Screen name="Onboarding1" component={Onboarding1} />
+      <Stack.Screen name="Onboarding2" component={Onboarding2} />
+      <Stack.Screen name="Onboarding3" component={Onboarding3} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Registration" component={RegistrationScreen} />
+      <Stack.Screen name="Training" component={TrainingPage} />
+      <Stack.Screen name="Home" component={HomePage} />
+      <Stack.Screen name="Exercises" component={ExercisesPage} />
+      <Stack.Screen name="Exercise" component={ExercisePage} />
+      <Stack.Screen name="TrainingSelector" component = {TrainingSelector}/>
+      <Stack.Screen name="DateSelector" component = {DateSelector}/>
+      <Stack.Screen name="TrainingDetail" component = {TrainingDetail}/>
+      <Stack.Screen name="EditTrainingDetail" component = {EditTrainingDetail}/>
+      </Stack.Navigator>
+  </NavigationContainer>
   );
 }
 

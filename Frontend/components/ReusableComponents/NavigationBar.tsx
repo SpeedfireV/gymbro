@@ -47,7 +47,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ activeTab }) => {
 
       <TouchableOpacity 
         onPress={() => {
-            navigation.navigate('Excercises') 
+            navigation.navigate('Exercises') 
             console.log('Went to page: ', activeTab);
             }} 
         style={styles.navItem}
@@ -55,7 +55,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ activeTab }) => {
         <Ionicons 
           name="barbell-outline" 
           size={30} 
-          color={activeTab === 'Excercises' ? '#FFB800' : '#FFF'} 
+          color={activeTab === 'Exercises' ? '#FFB800' : '#FFF'} 
         />
       </TouchableOpacity>
     </View>
