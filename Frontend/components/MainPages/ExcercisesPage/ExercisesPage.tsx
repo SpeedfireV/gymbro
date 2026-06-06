@@ -5,12 +5,12 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from "../../../App";
 import NewActivityButton from "../../ReusableComponents/NewActivity"
 import { TabButton } from '../../ReusableComponents/TabButton';
-import { ExcerciseCard } from './components/ExcerciseCard';
+import { ExerciseCard } from '../../ReusableComponents/ExerciseCard';
 import { PageTitle } from '../../ReusableComponents/PageTitle';
 import { GBSearchBar } from '../../ReusableComponents/GBSearchBar';
 
-export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamList, 'Excercises'>) {
-  const [activeTab] = useState<keyof RootStackParamList>('Excercises');
+export function ExercisesPage({ navigation }: StackScreenProps<RootStackParamList, 'Exercises'>) {
+  const [activeTab] = useState<keyof RootStackParamList>('Exercises');
   const [PersonalActive, setPersonalActive] = useState(true);
 
   const EXERCISES = [{
@@ -62,12 +62,13 @@ export function ExcercisesPage({ navigation }: StackScreenProps<RootStackParamLi
           ItemSeparatorComponent={() => <View style={{ height: 32 }} />}
           renderItem={({ item }) => (
             <View style={{ paddingHorizontal: 20 }}>
-              <ExcerciseCard
-
+              <ExerciseCard
                 title={item.title}
                 bodyParts={item.bodyParts}
                 desc={item.desc}
                 isPublic={item.isPublic}
+                showIcon={true}
+                onPress={()=>{navigation.navigate('Exercise')}}
               /></View>
           )}
           keyExtractor={(item, index) => index.toString()}

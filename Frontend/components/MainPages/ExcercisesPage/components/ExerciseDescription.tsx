@@ -1,7 +1,5 @@
-import { View, Text } from 'react-native'
+import { Text, StyleSheet } from 'react-native'
 import React from 'react'
-import { styles } from '../ExercisePage'
-
 
 interface ExerciseDescriptionProps {
   description?: string;
@@ -14,3 +12,13 @@ export default function ExerciseDescription({ description = "The best training f
     </Text>
   )
 }
+
+const styles = StyleSheet.create({
+  description: {
+    fontFamily: 'ChakraPetch-Regular',
+    fontSize: 16,
+    color: '#EFF1F3',
+    textAlign: 'center',
+    marginHorizontal: 24,
+  },
+});

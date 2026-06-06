@@ -2,26 +2,46 @@ import React, { useState } from 'react';
 import { Modal, StyleSheet, View, Text, TouchableOpacity, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-interface AddBreakProps {
+interface AddTrainingComponentProps {
   visible: boolean;
+  isExercise: boolean;
+  exerciseName?: string;
+  isRepeating?: boolean;
   onClose: () => void;
-  onAddBreak: (minutes: number, seconds: number) => void;
+  onAddBreak? : (minutes: number, seconds: number) => void;
+  onAddExercise? : (sets: number, reps: number, minutes: number, seconds: number) => void;
 }
 
-export function AddBreak({ visible, onClose, onAddBreak }: AddBreakProps) {
+export function AddTrainingComponent({ visible, isExercise, exerciseName, isRepeating, onClose, onAddBreak, onAddExercise }: AddTrainingComponentProps) {
   const [minutes, setMinutes] = useState('3');
   const [seconds, setSeconds] = useState('30');
+
+  const [sets, setSets] = useState('4');
+  const [repeats, setReps] = useState('12');
 
   const handleNumberChange = (text: string, setter: (val: string) => void) => {
     const cleaned = text.replace(/[^0-9]/g, '');
     setter(cleaned);
   };
 
-  const handleConfirm = () => {
+  const handleConfirmBreak = () => {
     const mins = parseInt(minutes) || 0;
     const secs = parseInt(seconds) || 0;
-    onAddBreak(mins, secs);
+    if(onAddBreak) onAddBreak(mins, secs);
     onClose();
+  };
+
+  const handleConfirmExercise = () => {
+    const setsC = parseInt(sets) || 1;
+    const reps = parseInt(repeats) || 1;
+    const mins = parseInt(minutes) || 0;
+    const secs = parseInt(seconds) || 0;
+    if(setsC > 1 || reps > 1){
+      if(onAddExercise) onAddExercise(setsC, reps, mins, secs);
+      onClose();
+    } else{
+      alert("Sets and Reps MUST be more than 1");
+    }
   };
 
   return (
@@ -36,16 +56,65 @@ export function AddBreak({ visible, onClose, onAddBreak }: AddBreakProps) {
           <TouchableWithoutFeedback>
             <View style={styles.modalContent}>
               
-              <View style={styles.headerRow}>
-                <Text style={styles.modalTitle}>NEW BREAK</Text>
+              <View style={styles.titleRow}>
+                <Text style={styles.titleText}>{isExercise? exerciseName: "NEW BREAK"}</Text>
                 <TouchableOpacity style={styles.closeButton} onPress={onClose}>
                   <Ionicons name="close" size={24} color="#ffffff" />
                 </TouchableOpacity>
               </View>
 
-              <View style={styles.timeSelectorContainer}>
+              {(isExercise && isRepeating)?
+                (
+                <View style={styles.titleRow}>
+                  <Text style={styles.titleText}>SETS & REPS</Text>
+                </View>
+                ):(<View/>)
+              }
+
+              {(isExercise && isRepeating)?
+                (
+                <View style={styles.inputContainer}>
+                  <View style={styles.inputDual}>
+                    <View style={styles.numberBox}>
+                      <TextInput
+                        style={styles.timeInput}
+                        keyboardType="number-pad"
+                        maxLength={2}
+                        value={sets}
+                        onChangeText={(text) => handleNumberChange(text, setSets)}
+                      />
+                    </View>
+                    <Text style={styles.unitText}>SETS</Text>
+                  </View>
+
+                  <View style={styles.inputDual}>
+                    <View style={styles.numberBox}>
+                      <TextInput
+                        style={styles.timeInput}
+                        keyboardType="number-pad"
+                        maxLength={2}
+                        value={repeats}
+                        onChangeText={(text) => handleNumberChange(text, setReps)}
+                      />
+                    </View>
+                    <Text style={styles.unitText}>REPS</Text>
+                  </View>
+
+                </View>
+                ):(<View/>)
+              }
+
+              {isExercise?
+                (
+                <View style={styles.titleRow}>
+                  <Text style={styles.titleText}>{isRepeating? "BREAKS" : "TIME"}</Text>
+                </View>
+                ):(<View/>)
+              }
+
+              <View style={styles.inputContainer}>
                 
-                <View style={styles.inputGroup}>
+                <View style={styles.inputDual}>
                   <View style={styles.numberBox}>
                     <TextInput
                       style={styles.timeInput}
@@ -58,7 +127,7 @@ export function AddBreak({ visible, onClose, onAddBreak }: AddBreakProps) {
                   <Text style={styles.unitText}>MINUTES</Text>
                 </View>
 
-                <View style={styles.inputGroup}>
+                <View style={styles.inputDual}>
                   <View style={styles.numberBox}>
                     <TextInput
                       style={styles.timeInput}
@@ -73,9 +142,9 @@ export function AddBreak({ visible, onClose, onAddBreak }: AddBreakProps) {
 
               </View>
 
-              <TouchableOpacity style={styles.submitButton} onPress={handleConfirm}>
+              <TouchableOpacity style={styles.submitButton} onPress={isExercise? handleConfirmExercise: handleConfirmBreak}>
                 <Ionicons name="add" size={24} color="#000000" />
-                <Text style={styles.submitButtonText}>ADD BREAK</Text>
+                <Text style={styles.submitButtonText}>{isExercise? "ADD EXERCISE": "ADD BREAK"}</Text>
               </TouchableOpacity>
 
             </View>
@@ -98,16 +167,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 16,
     paddingBottom: 40
   },
-  headerRow: {
+  titleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
   },
-  modalTitle: {
+  titleText: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#2D241E',
@@ -121,7 +188,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  timeSelectorContainer: {
+  inputContainer: {
     flexDirection: 'row',
     backgroundColor: '#FDEFD4',
     paddingVertical: 16,
@@ -129,7 +196,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  inputGroup: {
+  inputDual: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,

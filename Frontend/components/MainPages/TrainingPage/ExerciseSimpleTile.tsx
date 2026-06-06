@@ -4,14 +4,16 @@ import { Ionicons } from '@expo/vector-icons';
 
 interface ExerciseSimpleTileProps {
     name: string;
-    muscule: string;
+    muscule: string[];
     detail: string;
     order: number;
     editable: boolean;
+    innerBreakDuration: string;
+    isRepeating?: boolean;
     onDelete?: () => void;
 }
 
-export default function ExerciseSimpleTile({name, muscule, order, detail, editable, onDelete} : ExerciseSimpleTileProps) {
+export default function ExerciseSimpleTile({name, muscule, order, detail, editable, innerBreakDuration, isRepeating = true, onDelete} : ExerciseSimpleTileProps) {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.headerRow}>
@@ -20,14 +22,18 @@ export default function ExerciseSimpleTile({name, muscule, order, detail, editab
       </View>
 
       <View style={styles.infoRow}>
-        <View style={editable? styles.dualWrapper: styles.dualWrapperWhite}>
-          <Ionicons name="barbell" size={18} color={editable? "#ffffff": "#000000"} style={styles.icon} />
-          <Text style={editable? styles.simpleText: styles.simpleTextWhite}>{detail}</Text>
-        </View>
+        {isRepeating? 
+          (<View style={editable? styles.dualWrapper: styles.dualWrapperWhite}>
+            <Ionicons name="barbell" size={18} color={editable? "#ffffff": "#000000"} style={styles.icon} />
+            <Text style={editable? styles.simpleText: styles.simpleTextWhite}>{detail}</Text>
+          </View>):(
+            <View/>
+          )
+        }
 
         <View style={editable? styles.dualWrapper: styles.dualWrapperWhite}>
           <Ionicons name="time-outline" size={18} color={editable? "#ffffff": "#000000"} style={styles.icon} />
-          <Text style={editable?  styles.simpleText: styles.simpleTextWhite}>1 MIN BREAKS</Text>
+          <Text style={editable?  styles.simpleText: styles.simpleTextWhite}>{innerBreakDuration}</Text>
         </View>
       </View>
       {
