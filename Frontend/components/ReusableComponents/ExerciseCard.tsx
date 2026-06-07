@@ -15,7 +15,6 @@ interface ExerciseInfo {
 }
 
 export function ExerciseCard({ mainImage, title, bodyParts, desc, isPublic,showIcon, onPress}: ExerciseInfo) {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
     <TouchableOpacity onPress={onPress}>

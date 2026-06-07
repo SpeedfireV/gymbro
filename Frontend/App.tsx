@@ -15,6 +15,8 @@ import { DateSelector } from './components/MainPages/HomePage/DateSelector'
 import { ExerciseItem, TrainingItem, } from './components/ReusableComponents/ComplexTypes'
 import { ExercisePage } from './components/MainPages/ExcercisesPage/ExercisePage';
 import { ExercisesPage } from './components/MainPages/ExcercisesPage/ExercisesPage'
+import ExerciseEditPage from './components/MainPages/ExcercisesPage/EditExercisePage';
+import AddNewExercise from './components/MainPages/ExcercisesPage/AddNewExercise';
 
 export type RootStackParamList = {
   Onboarding1: undefined;
@@ -25,6 +27,8 @@ export type RootStackParamList = {
   Training: undefined;
   Exercises: undefined;
   Exercise: undefined;
+  AddNewExercise: undefined;
+  ExerciseEditPage: undefined;
   Home: undefined;
   TrainingSelector: undefined;
   DateSelector: { training: TrainingItem };
@@ -91,6 +95,8 @@ function App() {
       <Stack.Screen name="DateSelector" component = {DateSelector}/>
       <Stack.Screen name="TrainingDetail" component = {TrainingDetail}/>
       <Stack.Screen name="EditTrainingDetail" component = {EditTrainingDetail}/>
+      <Stack.Screen name="AddNewExercise" component = {AddNewExercise}/>
+      <Stack.Screen name="ExerciseEditPage" component = {ExerciseEditPage}/>
       </Stack.Navigator>
   </NavigationContainer>
   );
