@@ -1,3 +1,581 @@
-from django.test import TestCase
+from rest_framework.test import APITestCase
+from rest_framework import status
+from django.utils import timezone
+from datetime import timedelta
+from .models import users, workouts, exercises, workout_exercises, workout_history, exercises_history
+from .models import posts, comments, ratings, comments_ratings
 
-# Create your tests here.
+class AuthEndpointsTest(APITestCase):
+    def setUp(self):
+        self.register_url = '/api/register/'
+        self.login_url = '/api/login/'
+
+        self.valid_register_payload = {
+            "nickname": "Test100",
+            "email": "useremail@mail.com",
+            "password": "1234",
+            "repeat_password": "1234"
+        }
+
+    # --- Testy rejestracji ---
+
+    def test_register_successful(self):
+        response = self.client.post(self.register_url, self.valid_register_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn('tokens', response.data)
+        self.assertEqual(users.objects.count(), 1)
+
+    def test_register_duplicate_email(self):
+        self.client.post(self.register_url, self.valid_register_payload, format='json')
+
+        payload = self.valid_register_payload.copy()
+        payload['nickname'] = "Nowe1"
+
+        response = self.client.post(self.register_url, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('email', response.data)
+
+    def test_register_missing_field(self):
+        invalid_payload = {"nickname": "Test100"}
+        response = self.client.post(self.register_url, invalid_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_register_passwords_mismatch(self):
+        payload = self.valid_register_payload.copy()
+        payload['repeat_password'] = "4321"
+
+        response = self.client.post(self.register_url, payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('password', response.data)
+
+    # --- Testy logowania ---
+    def test_login_successful(self):
+        self.client.post(self.register_url, self.valid_register_payload, format='json')
+
+        login_payload = {
+            "email": "useremail@mail.com",
+            "password": "1234"
+        }
+
+        response = self.client.post(self.login_url, login_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('tokens', response.data)
+
+    def test_login_wrong_password(self):
+        self.client.post(self.register_url, self.valid_register_payload, format='json')
+
+        login_payload = {
+            "email": "useremail@mail.com",
+            "password": "zlehaslo"
+        }
+
+        response = self.client.post(self.login_url, login_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('error', response.data)
+
+
+class WorkoutExercisesEndpointsTest(APITestCase):
+
+    def setUp(self):
+        self.url_add = '/api/workout-exercises/'
+        self.user = users.objects.create(username="XYZ", email="xyz@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+
+        self.exercise = exercises.objects.create(
+            name="Wyciskanie", type="Strength", muscle="chest",
+            difficulty="beginner", instructions="...", safety_info="..."
+        )
+
+        self.valid_payload = {
+            "workout": self.workout.id,
+            "exercise": self.exercise.id,
+            "index": 1,
+            "sets": 4,
+            "reps": 10,
+            "duration": "00:00:00",
+            "break_between": "00:01:30",
+            "break_after": "00:02:00"
+        }
+
+    def test_add_workout_exercise_successful(self):
+        response = self.client.post(self.url_add, self.valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(workout_exercises.objects.count(), 1)
+
+    def test_add_workout_exercise_invalid_data_missing(self):
+        invalid_payload_missing = self.valid_payload.copy()
+        invalid_payload_missing.pop('exercise')
+        
+        response = self.client.post(self.url_add, invalid_payload_missing, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('exercise', response.data)
+
+    def test_add_workout_exercose_invalid_data_type(self):
+        invalid_payload_type = self.valid_payload.copy()
+        invalid_payload_type['sets'] = "dużo"
+        
+        response = self.client.post(self.url_add, invalid_payload_type, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('sets', response.data)
+
+    def test_delete_workout_exercise_successful(self):
+        we_to_delete = workout_exercises.objects.create(
+            workout=self.workout, exercise=self.exercise, index=1, sets=4, reps=10,
+            duration=timedelta(seconds=0), break_between=timedelta(seconds=90), break_after=timedelta(seconds=120)
+        )
+        url_delete = f'/api/workout-exercises/{we_to_delete.id}/'
+        response = self.client.delete(url_delete)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(workout_exercises.objects.count(), 0)
+
+    def test_delete_non_existent_Exercise(self):
+        url_delete = '/api/workout-exercises/999/'
+        response = self.client.delete(url_delete)
+        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class WorkoutsEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_workouts = '/api/workouts/'
+        self.user = users.objects.create(username="Ludwig", email="ludwig@mail.com", password="123")
+
+        self.valid_payload = {
+            "user": self.user.id,
+            "created_at": "2026-05-03T12:00:00Z"
+        }
+
+    def test_create_workout_successfyl(self):
+        response = self.client.post(self.url_workouts, self.valid_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(workouts.objects.count(), 1)
+
+    def test_create_workout_invalid_data(self):
+        invalid_payload = {
+            "user": 999, 
+            "created_at": "to-w-ogole-nie-jest-data"
+        }
+        
+        response = self.client.post(self.url_workouts, invalid_payload, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('user', response.data)
+        self.assertIn('created_at', response.data)
+        self.assertEqual(workouts.objects.count(), 0)
+
+    def test_delete_workout_successful(self):
+        workout_to_delete = workouts.objects.create(user=self.user, created_at=timezone.now())
+        url_delete = f'/api/workouts/{workout_to_delete.id}/'
+        response = self.client.delete(url_delete)
+        
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(workouts.objects.count(), 0)
+
+    def test_delete_non_existent_workout(self):
+        url_delete = '/api/workouts/999/'
+        response = self.client.delete(url_delete)
+        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class ExercisesEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_exercises = '/api/exercises/'
+        self.normal_user = users.objects.create(username="zwykly", email="zwykly@mail.com", password="123")
+        self.admin_user = users.objects.create(username="Admin", email="admin@mail.com", password="123", is_staff=True)
+
+        self.valid_payload = {
+            "name": "Wyciskanie sztangi leżąc",
+            "type": "strength",
+            "muscle": "chest",
+            "difficulty": "beginner",
+            "instructions": "Opuść sztangę do klatki i wyciśnij.",
+            "safety_info": "Używaj asekuracji."
+        }
+
+    def test_create_exercise_as_admin_successful(self):
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.post(self.url_exercises, self.valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(exercises.objects.count(), 1)
+
+    def test_create_exercise_as_normal_user_forbidden(self):
+        self.client.force_authenticate(user=self.normal_user)
+        response = self.client.post(self.url_exercises, self.valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(exercises.objects.count(), 0)
+
+    def test_create_exercise_invalid_data_missing_field(self):
+        self.client.force_authenticate(user=self.admin_user)
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload.pop('name')
+        response = self.client.post(self.url_exercises, invalid_payload, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('name', response.data)
+        self.assertEqual(exercises.objects.count(), 0)
+
+    def test_create_exercise_invalid_choices(self):
+        self.client.force_authenticate(user=self.admin_user)
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload['difficulty'] = "impossible"
+        response = self.client.post(self.url_exercises, invalid_payload, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('difficulty', response.data)
+        self.assertEqual(exercises.objects.count(), 0)
+
+    def test_delete_exercise_as_admin_successful(self):
+        self.client.force_authenticate(user=self.admin_user)
+        ex_to_delete = exercises.objects.create(
+            name="Pompki", type="strength", muscle="chest", difficulty="beginner", instructions=".", safety_info="."
+        )
+        
+        response = self.client.delete(f'/api/exercises/{ex_to_delete.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(exercises.objects.count(), 0)
+
+    def test_delete_exercise_as_normal_user_forbidden(self):
+        self.client.force_authenticate(user=self.normal_user)
+        ex_to_delete = exercises.objects.create(
+            name="Pompki", type="strength", muscle="chest", difficulty="beginner", instructions=".", safety_info="."
+        )
+        
+        response = self.client.delete(f'/api/exercises/{ex_to_delete.id}/')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(exercises.objects.count(), 1)
+
+    def test_delete_non_existent_exercise(self):
+        self.client.force_authenticate(user=self.admin_user)
+        response = self.client.delete('/api/exercises/999/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class WorkoutHistoryEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_history = '/api/workout-history/'
+        self.user = users.objects.create(username="Vegeta", email="vegeta@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.valid_payload = {
+            "user": self.user.id,
+            "workout": self.workout.id,
+            "start_time": "2026-05-03T18:00:00Z",
+            "total_time": "01:30:00" 
+        }
+
+    def test_create_workout_history_successful(self):
+        response = self.client.post(self.url_history, self.valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(workout_history.objects.count(), 1)
+
+    def test_delete_workout_history_successful(self):
+        history = workout_history.objects.create(
+            user=self.user, workout=self.workout, start_time=timezone.now(), total_time=timedelta(hours=1, minutes=30)
+        )
+        
+        url_delete = f'/api/workout-history/{history.id}/'
+        response = self.client.delete(url_delete)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(workout_history.objects.count(), 0)
+
+    def test_delete_non_existent_workout_history(self):
+        url_delete = '/api/workout-history/999/'
+        response = self.client.delete(url_delete)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_create_workout_history_missing_data(self):
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload.pop('workout')
+        response = self.client.post(self.url_history, invalid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('workout', response.data)
+        self.assertEqual(workout_history.objects.count(), 0)
+
+    def test_create_workout_history_invalid_format(self):
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload['total_time'] = "bardzo-dlugo" 
+        response = self.client.post(self.url_history, invalid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('total_time', response.data)
+        self.assertEqual(workout_history.objects.count(), 0)
+
+
+class ExerciseHistoryEndpointsTest(APITestCase):
+    def setUp(self):
+        self.user = users.objects.create(username="Gohan", email="gohan@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.exercise = exercises.objects.create(
+            name="Pompki", type="strength", muscle="chest", difficulty="beginner", instructions=".", safety_info="."
+        )
+
+    def test_save_workout_with_exercises_successful(self):
+        payload = {
+            "user": self.user.id,
+            "workout": self.workout.id,
+            "start_time": "2026-05-03T18:00:00Z",
+            "total_time": "01:00:00",
+            "exercises": [
+                {
+                    "index": 1,
+                    "exercise": self.exercise.id,
+                    "weight": 20.5,
+                    "reps": 12.0,
+                    "duration": "00:01:00",
+                    "utc_time": "2026-05-03T18:05:00Z"
+                }
+            ]
+        }
+
+        response = self.client.post('/api/workout-history/', payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(workout_history.objects.count(), 1)
+        self.assertEqual(exercises_history.objects.count(), 1)
+
+    def test_modify_exercise_history_successful(self):
+        history = workout_history.objects.create(user=self.user, workout=self.workout, start_time=timezone.now(), total_time=timedelta(hours=1))
+        ex = exercises_history.objects.create(
+            user=self.user, workout_history=history, index=1, exercise=self.exercise,
+            weight=0.0, reps=10.0, duration=timedelta(minutes=1), utc_time=timezone.now()
+        )
+
+        response = self.client.patch(f'/api/exercise-history/{ex.id}/', {"reps": 50.0}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ex.refresh_from_db()
+        self.assertEqual(ex.reps, 50.0)
+
+    def test_delete_exercise_history_successful(self):
+        history = workout_history.objects.create(user=self.user, workout=self.workout, start_time=timezone.now(), total_time=timedelta(hours=1))
+        ex = exercises_history.objects.create(
+            user=self.user, workout_history=history, index=1, exercise=self.exercise,
+            weight=0.0, reps=10.0, duration=timedelta(minutes=1), utc_time=timezone.now()
+        )
+
+        response = self.client.delete(f'/api/exercise-history/{ex.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(exercises_history.objects.count(), 0)
+        self.assertEqual(workout_history.objects.count(), 1)
+
+    def test_save_workout_with_invalid_exercise_triggers_rollback(self):
+        payload = {
+            "user": self.user.id,
+            "workout": self.workout.id,
+            "start_time": "2026-05-03T18:00:00Z",
+            "total_time": "01:00:00",
+            "exercises": [
+                {
+                    "index": 1,
+                    "exercise": self.exercise.id,
+                    "weight": "to-nie-jest-liczba",
+                    "reps": 12.0,
+                    "duration": "00:01:00",
+                    "utc_time": "2026-05-03T18:05:00Z"
+                }
+            ]
+        }
+
+        response = self.client.post('/api/workout-history/', payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(workout_history.objects.count(), 0)
+        self.assertEqual(exercises_history.objects.count(), 0)
+
+    def test_modify_non_existent_exercise_history(self):
+        response = self.client.patch('/api/exercise-history/9999/', {"reps": 50.0}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_non_existent_exercise_history(self):
+        response = self.client.delete('/api/exercise-history/9999/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class PostsEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_posts = '/api/posts/'
+        self.user = users.objects.create(username="Adrian", email="adrian@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.valid_payload = {
+            "user": self.user.id,
+            "title": "Trening klatki",
+            "description": "Zrobiłem dzisiaj 5 serii wyciskania.",
+            "workout": self.workout.id
+        }
+
+    def test_create_post_successful(self):
+        response = self.client.post(self.url_posts, self.valid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(posts.objects.count(), 1)
+        self.assertEqual(response.data['like_count'], 0)
+        self.assertEqual(response.data['dislike_count'], 0)
+
+    def test_get_all_posts_successful(self):
+        posts.objects.create(user=self.user, title="Post 1", description="...", workout=self.workout, like_count=0, dislike_count=0)
+        posts.objects.create(user=self.user, title="Post 2", description="...", workout=self.workout, like_count=0, dislike_count=0)
+        response = self.client.get(self.url_posts)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+    def test_delete_post_successful(self):
+        post = posts.objects.create(user=self.user, title="Do usunięcia", description="...", workout=self.workout, like_count=0, dislike_count=0)
+        url_delete = f'/api/posts/{post.id}/'
+        response = self.client.delete(url_delete)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(posts.objects.count(), 0)
+
+    def test_create_post_missing_field(self):
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload.pop('title')
+        response = self.client.post(self.url_posts, invalid_payload, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('title', response.data)
+        self.assertEqual(posts.objects.count(), 0)
+
+    def test_delete_non_existent_post(self):
+        url_delete = '/api/posts/9999/'
+        response = self.client.delete(url_delete)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class CommentsEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_comments = '/api/comments/'
+        self.user = users.objects.create(username="Adrian", email="adrian@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.post = posts.objects.create(
+            user=self.user, title="Moja forma", description="Jest git", workout=self.workout, like_count=0, dislike_count=0
+        )
+
+        self.valid_payload = {
+            "post": self.post.id,
+            "user": self.user.id,
+            "content": "Super trening"
+        }
+
+    def test_create_comment_successful(self):
+        response = self.client.post(self.url_comments, self.valid_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(comments.objects.count(), 1)
+        self.assertEqual(response.data['like_count'], 0)
+        self.assertEqual(response.data['dislike_count'], 0)
+
+    def test_get_all_comments_successful(self):
+        comments.objects.create(post=self.post, user=self.user, content="Komentarz 1", like_count=0, dislike_count=0)
+        comments.objects.create(post=self.post, user=self.user, content="Komentarz 2", like_count=0, dislike_count=0)
+        response = self.client.get(self.url_comments)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+    def test_delete_comment_successful(self):
+        comment = comments.objects.create(post=self.post, user=self.user, content="Do usunięcia", like_count=0, dislike_count=0)
+        url_delete = f'/api/comments/{comment.id}/'
+        response = self.client.delete(url_delete)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(comments.objects.count(), 0)
+
+    def test_create_comment_missing_field(self):
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload.pop('content')
+        response = self.client.post(self.url_comments, invalid_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('content', response.data)
+        self.assertEqual(comments.objects.count(), 0)
+
+    def test_create_comment_non_existent_post(self):
+        invalid_payload = self.valid_payload.copy()
+        invalid_payload['post'] = 9999
+        response = self.client.post(self.url_comments, invalid_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('post', response.data)
+        self.assertEqual(comments.objects.count(), 0)
+
+
+class RatingsEndpointsTest(APITestCase):
+    def setUp(self):
+        self.user = users.objects.create(username="Adrian", email="adrian@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.post = posts.objects.create(
+            user=self.user, title="Trening", description="...", workout=self.workout, like_count=0, dislike_count=0
+        )
+        self.url_rate = f'/api/posts/{self.post.id}/rate/'
+
+    def test_rating_toggle_mechanic(self):
+        payload_like = {"user": self.user.id, "is_like": True}
+        response1 = self.client.post(self.url_rate, payload_like, format='json')
+
+        self.assertEqual(response1.status_code, status.HTTP_200_OK)
+        self.assertEqual(response1.data['like_count'], 1)
+        self.assertEqual(ratings.objects.count(), 1)
+
+        payload_dislike = {"user": self.user.id, "is_like": False}
+        response2 = self.client.post(self.url_rate, payload_dislike, format='json')
+
+        self.assertEqual(response2.status_code, status.HTTP_200_OK)
+        self.assertEqual(response2.data['like_count'], 0)
+        self.assertEqual(response2.data['dislike_count'], 1)
+        self.assertEqual(ratings.objects.count(), 1)
+
+        response3 = self.client.post(self.url_rate, payload_dislike, format='json')
+
+        self.assertEqual(response3.status_code, status.HTTP_200_OK)
+        self.assertEqual(response3.data['like_count'], 0)
+        self.assertEqual(response3.data['dislike_count'], 0)
+        self.assertEqual(ratings.objects.count(), 0)
+
+    def test_rating_missing_data(self):
+        response = self.client.post(self.url_rate, {"user": self.user.id}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_rating_non_existent_post(self):
+        response = self.client.post('/api/posts/999/rate/', {"user": self.user.id, "is_like": True}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class CommentRatingsEndpointsTest(APITestCase):
+    def setUp(self):
+        self.user = users.objects.create(username="Adrian", email="adrian@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        self.post = posts.objects.create(
+            user=self.user, title="Post do komentarza", description="...", workout=self.workout, like_count=0, dislike_count=0
+        )
+        self.comment = comments.objects.create(
+            post=self.post, user=self.user, content="Komentarz", like_count=0, dislike_count=0
+        )
+        self.url_rate = f'/api/comments/{self.comment.id}/rate/'
+
+    def test_comment_rating_toggle_mechanic(self):
+        payload_like = {"user": self.user.id, "is_like": True}
+        response1 = self.client.post(self.url_rate, payload_like, format='json')
+        self.assertEqual(response1.status_code, status.HTTP_200_OK)
+        self.assertEqual(response1.data['like_count'], 1)
+        self.assertEqual(comments_ratings.objects.count(), 1)
+
+        payload_dislike = {"user": self.user.id, "is_like": False}
+        response2 = self.client.post(self.url_rate, payload_dislike, format='json')
+        self.assertEqual(response2.status_code, status.HTTP_200_OK)
+        self.assertEqual(response2.data['like_count'], 0)
+        self.assertEqual(response2.data['dislike_count'], 1)
+        self.assertEqual(comments_ratings.objects.count(), 1)
+
+        response3 = self.client.post(self.url_rate, payload_dislike, format='json')
+        self.assertEqual(response3.status_code, status.HTTP_200_OK)
+        self.assertEqual(response3.data['like_count'], 0)
+        self.assertEqual(response3.data['dislike_count'], 0)
+        self.assertEqual(comments_ratings.objects.count(), 0)
+
+    def test_comment_rating_missing_data(self):
+        response = self.client.post(self.url_rate, {"user": self.user.id}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_comment_rating_non_existent_comment(self):
+        response = self.client.post('/api/comments/999/rate/', {"user": self.user.id, "is_like": True}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
