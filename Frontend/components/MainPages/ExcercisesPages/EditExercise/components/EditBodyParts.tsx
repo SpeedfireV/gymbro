@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import { Icon } from "../../../../../Icons";
+import { colors } from "../../../../../Colors";
 
 export default function EditBodyParts() {
   return (
@@ -17,7 +18,7 @@ export default function EditBodyParts() {
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Icon
           name="sports"
-          fill={"#FFFFFF"}
+          fill={colors.platiniumWhite}
           width={24}
           height={24}
           style={{ marginRight: 8 }}
@@ -31,10 +32,10 @@ export default function EditBodyParts() {
 
 const styles = StyleSheet.create({
   editArea: {
-    backgroundColor: "#242423",
+    backgroundColor: colors.coffeeBackground,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#EFF1F3",
+    borderColor: colors.platiniumWhite,
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginHorizontal: 24,
@@ -43,11 +44,11 @@ const styles = StyleSheet.create({
   bodyPartsText: {
     fontSize: 20,
     fontFamily: "ChakraPetch-Bold",
-    color: "#FFFFFF",
+    color: colors.platiniumWhite,
   },
   descEditText: {
     fontSize: 16,
     fontFamily: "ChakraPetch-Regular",
-    color: "#EFF1F3",
+    color: colors.platiniumWhite,
   },
 });

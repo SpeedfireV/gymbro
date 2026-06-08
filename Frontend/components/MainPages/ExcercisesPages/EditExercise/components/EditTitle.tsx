@@ -1,5 +1,6 @@
 import { TextInput, StyleSheet } from "react-native";
 import React from "react";
+import { colors } from "../../../../../Colors";
 
 export default function EditTitle() {
   return (
@@ -11,10 +12,10 @@ export default function EditTitle() {
 
 const styles = StyleSheet.create({
   editArea: {
-    backgroundColor: "#242423",
+    backgroundColor: colors.inputBackground,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#EFF1F3",
+    borderColor: colors.platiniumWhite,
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginHorizontal: 24,
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
   titleEditText: {
     fontSize: 18,
     fontFamily: "ChakraPetch-Regular",
-    color: "#EFF1F3",
+    color: colors.platiniumWhite,
     marginTop: 48,
     marginHorizontal: 24,
     marginBottom: 24,

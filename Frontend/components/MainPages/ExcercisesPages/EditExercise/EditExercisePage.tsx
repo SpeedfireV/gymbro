@@ -7,6 +7,7 @@ import AddMedia from "./components/AddMedia";
 import EditBodyParts from "./components/EditBodyParts";
 import EditDescription from "./components/EditDescription";
 import BottomRow from "./components/BottomRow";
+import { colors } from "../../../../Colors";
 
 export default function ExerciseEditPage() {
   return (
@@ -26,6 +27,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "#111111",
+    backgroundColor: colors.coffeeBackground,
   },
 });

@@ -6,6 +6,7 @@ import { Icon } from "../../../../../Icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../../App";
+import { colors } from "../../../../../Colors";
 
 export default function BottomRow() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -18,8 +19,8 @@ export default function BottomRow() {
       />
       <View style={{ width: 16 }} />
       <GBBigButton
-        bgColor="#FBAF00"
-        icon={<Icon name="editOff" fill={"#322214"} />}
+        bgColor={colors.activeYellow}
+        icon={<Icon name="editOff" fill={colors.coffeeBackground} />}
         onPress={() => {}}
       />
     </View>
