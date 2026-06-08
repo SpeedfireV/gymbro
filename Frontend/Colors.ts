@@ -8,7 +8,3 @@ export const colors = {
   onSurface: '#181818',
   inputBackground: '#242423',
 } as const;
-
-export type ColorPalette = typeof colors;
-export type ColorToken = keyof ColorPalette;
-export type ColorValue = ColorPalette[ColorToken];

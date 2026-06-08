@@ -11,7 +11,7 @@ import { colors } from "../../../../../Colors";
 export default function BottomRow() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   return (
-    <View style={[styles.bottomRow]}>
+    <View style={styles.bottomRow}>
       <CancelChangesButton
         onPress={() => {
           navigation.goBack();

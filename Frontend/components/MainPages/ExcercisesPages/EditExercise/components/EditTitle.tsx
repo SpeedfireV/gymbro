@@ -1,17 +1,14 @@
 import { TextInput, StyleSheet } from "react-native";
 import React from "react";
 import { colors } from "../../../../../Colors";
+import { fonts } from "../../../../../Fonts";
 
 export default function EditTitle() {
-  return (
-    <TextInput style={[styles.editArea, styles.titleEditText]}>
-      PULL UPS
-    </TextInput>
-  );
+  return <TextInput style={styles.titleEditText}>PULL UPS</TextInput>;
 }
 
 const styles = StyleSheet.create({
-  editArea: {
+  titleEditText: {
     backgroundColor: colors.inputBackground,
     borderRadius: 4,
     borderWidth: 1,
@@ -20,13 +17,9 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     marginHorizontal: 24,
     marginBottom: 24,
-  },
-  titleEditText: {
     fontSize: 18,
-    fontFamily: "ChakraPetch-Regular",
+    fontFamily: fonts.chakraPetchRegular,
     color: colors.platiniumWhite,
     marginTop: 48,
-    marginHorizontal: 24,
-    marginBottom: 24,
   },
 });

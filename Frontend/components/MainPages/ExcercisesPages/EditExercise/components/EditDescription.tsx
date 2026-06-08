@@ -1,6 +1,7 @@
 import { TextInput, StyleSheet } from "react-native";
 import React from "react";
 import { colors } from "../../../../../Colors";
+import { fonts } from "../../../../../Fonts";
 
 export default function EditDescription() {
   return (
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
   },
   descEditText: {
     fontSize: 16,
-    fontFamily: "ChakraPetch-Regular",
+    fontFamily: fonts.chakraPetchRegular,
     color: colors.platiniumWhite,
   },
 });
