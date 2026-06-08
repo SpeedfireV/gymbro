@@ -24,7 +24,7 @@ export default function ImageCarousel() {
         <TouchableOpacity style={[styles.overlayButton, styles.favoriteButton]}>
           <Icon
             name="star"
-            fill={colors.coffeeBackground}
+            fill={colors.platiniumWhite}
             width={24}
             height={24}
           />
