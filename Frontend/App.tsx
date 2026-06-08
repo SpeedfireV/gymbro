@@ -20,10 +20,10 @@ import {
   ExerciseItem,
   TrainingItem,
 } from "./components/ReusableComponents/ComplexTypes";
-import { ExercisePage } from "./components/MainPages/ExcercisesPage/ExercisePage";
-import { ExercisesPage } from "./components/MainPages/ExcercisesPage/ExercisesPage";
-import ExerciseEditPage from "./components/MainPages/ExcercisesPage/EditExercise/EditExercisePage";
-import AddNewExercise from "./components/MainPages/ExcercisesPage/AddNewExercise";
+import { ExercisePage } from "./components/MainPages/ExcercisesPages/ExercisePage/ExercisePage";
+import { ExercisesPage } from "./components/MainPages/ExcercisesPages/ExercisesPage/ExercisesPage";
+import ExerciseEditPage from "./components/MainPages/ExcercisesPages/EditExercise/EditExercisePage";
+import AddNewExercise from "./components/MainPages/ExcercisesPages/AddNewExercise/AddNewExercise";
 
 export type RootStackParamList = {
   Onboarding1: undefined;
