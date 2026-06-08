@@ -7,19 +7,13 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { GBBigButton } from "../../ReusableComponents/GBBigButton";
-import EditOff from "../../../assets/icons/edit_off.svg";
-import Sports from "../../../assets/icons/sports.svg";
-import Delete from "../../../assets/icons/delete.svg";
-import Star from "../../../assets/icons/star.svg";
-import ArrowLeft from "../../../assets/icons/arrow_left.svg";
-import ArrowRight from "../../../assets/icons/arrow_right.svg";
-import Add from "../../../assets/icons/add.svg";
-import CancelChangesButton from "../../ReusableComponents/CancelChangesButton";
-import { RootStackParamList } from "../../../App";
+import { GBBigButton } from "../../../ReusableComponents/GBBigButton";
+import CancelChangesButton from "../../../ReusableComponents/CancelChangesButton";
+import { RootStackParamList } from "../../../../App";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-import Spacer from "../../ReusableComponents/Spacer";
+import Spacer from "../../../ReusableComponents/Spacer";
+import { Icon } from "../../../../Icons";
 
 export default function ExerciseEditPage() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -41,11 +35,11 @@ export default function ExerciseEditPage() {
         <TouchableOpacity
           style={{ backgroundColor: "#FBAF00", borderRadius: 45, padding: 8 }}
         >
-          <ArrowLeft width={24} height={24} fill={"#ffffff"} />
+          <Icon name="arrowLeft" fill={"#ffffff"} width={24} height={24} />
         </TouchableOpacity>
         <View>
           <Image
-            source={require("../../../assets/placeholder_images/exercise_image.png")}
+            source={require("../../../../assets/placeholder_images/exercise_image.png")}
             style={{ borderRadius: 12 }}
           ></Image>
 
@@ -64,7 +58,7 @@ export default function ExerciseEditPage() {
               justifyContent: "center",
             }}
           >
-            <Star style={{ maxHeight: 24, maxWidth: 24 }} />
+            <Icon name="star" fill={"#322214"} width={24} height={24} />
           </TouchableOpacity>
           <TouchableOpacity
             style={{
@@ -81,13 +75,13 @@ export default function ExerciseEditPage() {
               justifyContent: "center",
             }}
           >
-            <Delete style={{ maxHeight: 24, maxWidth: 24 }} />
+            <Icon name="delete" fill={"#EFF1F3"} width={24} height={24} />
           </TouchableOpacity>
         </View>
         <TouchableOpacity
           style={{ backgroundColor: "#FBAF00", borderRadius: 45, padding: 8 }}
         >
-          <ArrowRight width={24} height={24} fill={"#ffffff"} />
+          <Icon name="arrowRight" fill={"#ffffff"} width={24} height={24} />
         </TouchableOpacity>
       </View>
       <TouchableOpacity
@@ -99,12 +93,14 @@ export default function ExerciseEditPage() {
           marginHorizontal: 24,
         }}
       >
-        <Add
+        <Icon
+          name="add"
+          fill={"#FBAF00"}
           width={24}
           height={24}
-          fill={"#FBAF00"}
           style={{ marginRight: 4 }}
         />
+
         <Text
           style={{
             fontSize: 24,
@@ -126,10 +122,11 @@ export default function ExerciseEditPage() {
         ]}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Sports
+          <Icon
+            name="sports"
+            fill={"#FFFFFF"}
             width={24}
             height={24}
-            fill={"#FFFFFF"}
             style={{ marginRight: 8 }}
           />
           <Text style={styles.bodyPartsText}>BODY PARTS</Text>
@@ -157,7 +154,7 @@ export default function ExerciseEditPage() {
         <View style={{ width: 16 }} />
         <GBBigButton
           bgColor="#FBAF00"
-          icon={<EditOff fill={"#322214"} />}
+          icon={<Icon name="editOff" fill={"#322214"} />}
           onPress={() => {}}
         />
       </View>
