@@ -202,7 +202,7 @@ export function EditTrainingDetail({
         </View>
         <GBBigButton
           bgColor="#FFA500"
-          icon={<Save width={32} height={32} />}
+          icon="editOff"
           onPress={() => {
             // Tutaj logika zapisu całości
           }}

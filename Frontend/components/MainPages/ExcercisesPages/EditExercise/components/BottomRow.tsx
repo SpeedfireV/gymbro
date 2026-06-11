@@ -20,7 +20,7 @@ export default function BottomRow() {
       <View style={{ width: 16 }} />
       <GBBigButton
         bgColor={colors.activeYellow}
-        icon={<Icon name="editOff" fill={colors.coffeeBackground} />}
+        icon="editOff"
         onPress={() => {}}
       />
     </View>

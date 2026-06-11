@@ -8,7 +8,6 @@ import ExerciseCard from "../ExerciseSimpleTile";
 import PublishToBroScienceButton from "../../../ReusableComponents/PublishToBroScienceButton";
 import { GBBigButton } from "../../../ReusableComponents/GBBigButton";
 import BreakTile from "../BreakTile";
-import Edit from "../../../../assets/icons/edit.svg";
 import TrainingDetailsInfo from "./components/TrainingDetailsInfo";
 import { colors } from "../../../../Colors";
 
@@ -67,7 +66,7 @@ export function TrainingDetails({
         </View>
         <GBBigButton
           bgColor={colors.activeYellow}
-          icon={<Edit width={32} height={32} />}
+          icon="edit"
           onPress={() => {
             navigation.navigate("EditTrainingDetail", { training });
           }}

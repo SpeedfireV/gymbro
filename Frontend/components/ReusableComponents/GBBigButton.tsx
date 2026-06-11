@@ -1,9 +1,9 @@
 import { ColorValue, DimensionValue, TouchableOpacity } from "react-native";
 
-import ArrowBack from "../../assets/icons/arrow_back.svg";
+import { Icon, IconName } from "../../Icons";
 
 interface GBBigButtonData {
-  icon?: React.ReactNode;
+  icon: IconName;
   customWidth?: number;
   customHeight?: number;
   iconColor?: ColorValue;
@@ -31,7 +31,7 @@ export function GBBigButton({
         alignItems: "center",
       }}
     >
-      {icon ?? <ArrowBack width={32} height={32} />}
+      <Icon name={icon} width={32} height={32} />
     </TouchableOpacity>
   );
 }
