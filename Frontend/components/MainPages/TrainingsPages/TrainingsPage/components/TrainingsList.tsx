@@ -1,9 +1,7 @@
-import { View, Text, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import React from "react";
-import { TrainingItem } from "../../../ReusableComponents/ComplexTypes";
-import ShortTrainingTile from "../../../ReusableComponents/ShortTrainingTile";
-import { useNavigation } from "@react-navigation/native";
-import { StackScreenProps } from "@react-navigation/stack";
+import { TrainingItem } from "../../../../ReusableComponents/ComplexTypes";
+import TrainingCard from "./TrainingCard";
 
 interface TrainingsListData {
   trainings: Array<TrainingItem>;
@@ -15,7 +13,7 @@ export default function TrainingsList({
   navigation,
 }: TrainingsListData) {
   const renderItem = ({ item }: { item: TrainingItem }) => (
-    <ShortTrainingTile
+    <TrainingCard
       item={item}
       description={item.description}
       showPublicity={false}
@@ -30,7 +28,7 @@ export default function TrainingsList({
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 30 }}
+      contentContainerStyle={{ paddingBottom: 64, paddingTop: 16 }}
       style={{ flex: 1 }}
     />
   );

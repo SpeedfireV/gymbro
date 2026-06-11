@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import React from "react";
-import { TabButton } from "../../../ReusableComponents/TabButton";
+import { TabButton } from "../../../../ReusableComponents/TabButton";
 
 interface TrainingsCategoryButtonsData {
   personalActive: boolean;

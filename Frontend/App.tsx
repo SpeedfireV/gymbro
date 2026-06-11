@@ -10,9 +10,9 @@ import {
 } from "./components/HelloPages/HelloPages";
 import { LoginScreen } from "./components/LoginScreen/LoginScreen";
 import { RegistrationScreen } from "./components/RegistrationScreen/RegistrationScreen";
-import { TrainingPage } from "./components/MainPages/TrainingPage/TrainingPage";
-import { TrainingDetail } from "./components/MainPages/TrainingPage/TrainingDetail";
-import { EditTrainingDetail } from "./components/MainPages/TrainingPage/EditTrainingDetail";
+import { TrainingsPage } from "./components/MainPages/TrainingsPages/TrainingsPage/TrainingsPage";
+import { TrainingDetail } from "./components/MainPages/TrainingsPages/TrainingDetail";
+import { EditTrainingDetail } from "./components/MainPages/TrainingsPages/EditTrainingDetail";
 import { HomePage } from "./components/MainPages/HomePage/HomePage";
 import { TrainingSelector } from "./components/MainPages/HomePage/TrainingSelector";
 import { DateSelector } from "./components/MainPages/HomePage/DateSelector";
@@ -93,7 +93,7 @@ function App() {
         <Stack.Screen name="Onboarding3" component={Onboarding3} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Registration" component={RegistrationScreen} />
-        <Stack.Screen name="Training" component={TrainingPage} />
+        <Stack.Screen name="Training" component={TrainingsPage} />
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="Exercises" component={ExercisesPage} />
         <Stack.Screen name="Exercise" component={ExercisePage} />

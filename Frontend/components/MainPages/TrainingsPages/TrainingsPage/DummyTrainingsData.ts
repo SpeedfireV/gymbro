@@ -1,29 +1,6 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, FlatList } from "react-native";
-import NavigationBar from "../../ReusableComponents/NavigationBar";
-import { StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "../../../App";
-import { Ionicons } from "@expo/vector-icons";
-import { TrainingItem } from "../../ReusableComponents/ComplexTypes";
-import ShortTrainingTile from "../../ReusableComponents/ShortTrainingTile";
-import { TabButton } from "../../ReusableComponents/TabButton";
-import NewActivityButton from "../../ReusableComponents/NewActivity";
-import { PageTitle } from "../../ReusableComponents/PageTitle";
-import ExcercisesSearchBar from "../ExcercisesPages/ExercisesPage/ExercisesPage";
-import TrainingsSearchBar from "./components/TrainingsSearchBar";
-import { GBSearchBar } from "../../ReusableComponents/GBSearchBar";
-import TrainingsCategoryButtons from "./components/TrainingsCategoryButtons";
-import TrainingsList from "./components/TrainingsList";
+import { TrainingItem } from "../../../ReusableComponents/ComplexTypes";
 
-export function TrainingPage({
-  navigation,
-}: StackScreenProps<RootStackParamList, "Training">) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] =
-    useState<keyof RootStackParamList>("Training");
-  const [PersonalActive, setPersonalActive] = useState(true);
-
-  const dummyTrainings: TrainingItem[] = [
+export const dummyTrainings: TrainingItem[] = [
     {
       id: "1",
       title: "Leg Day",
@@ -143,7 +120,7 @@ export function TrainingPage({
     },
   ];
 
-  const dummyTrainings2: TrainingItem[] = [
+export const dummyTrainings2: TrainingItem[] = [
     {
       id: "1",
       title: "Second Day",
@@ -197,87 +174,3 @@ export function TrainingPage({
       isPublic: false,
     },
   ];
-
-  return (
-    <View style={styles.container}>
-      <PageTitle title="TRAININGS" />
-      <View style={{ marginHorizontal: 24 }}>
-        <GBSearchBar
-          placeholderText="Find Training"
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
-      </View>
-      <View style={styles.content}>
-        <TrainingsCategoryButtons
-          personalActive={PersonalActive}
-          setPersonalActive={setPersonalActive}
-        />
-        <TrainingsList
-          trainings={PersonalActive ? dummyTrainings : dummyTrainings2}
-          navigation={navigation}
-        />
-      </View>
-
-      <NewActivityButton
-        Title="ADD NEW TRAINING"
-        onPress={() => {
-          navigation.navigate("TrainingSelector");
-        }}
-      />
-
-      <NavigationBar activeTab={activeTab} />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000000",
-  },
-  edditAddContainer: {
-    padding: 10,
-    flex: 0.15,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
-  pageTitleContainer: {
-    flex: 0.15,
-    padding: 20,
-  },
-  doubleButtonContainer: {
-    flexDirection: "row",
-    marginBottom: 20,
-    width: "100%",
-    gap: 10,
-  },
-  pageTitle: {
-    fontSize: 34,
-    color: "#FF4500",
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    marginBottom: 20,
-  },
-  searchSection: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#272727",
-    borderWidth: 2,
-    borderColor: "#ffffff",
-    borderRadius: 10,
-    height: 55,
-    paddingHorizontal: 15,
-    marginBottom: 20,
-  },
-  input: {
-    flex: 1,
-    color: "#FFFFFF",
-    fontSize: 16,
-  },
-  searchIcon: {
-    marginLeft: 10,
-  },
-});

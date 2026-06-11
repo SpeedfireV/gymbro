@@ -8,6 +8,7 @@ import { TabButton } from "../../../ReusableComponents/TabButton";
 import { ExerciseCard } from "../../../ReusableComponents/ExerciseCard";
 import { PageTitle } from "../../../ReusableComponents/PageTitle";
 import { GBSearchBar } from "../../../ReusableComponents/GBSearchBar";
+import { colors } from "../../../../Colors";
 
 export function ExercisesPage({
   navigation,
@@ -52,7 +53,7 @@ export function ExercisesPage({
   return (
     <View style={styles.container}>
       <PageTitle title="EXERCISES" />
-      <View style={{ paddingHorizontal: 20 }}>
+      <View style={{ paddingHorizontal: 24 }}>
         <GBSearchBar
           placeholderText="Find Exercise"
           searchQuery={searchQuery}
@@ -74,10 +75,10 @@ export function ExercisesPage({
       <View style={{ flex: 1 }}>
         <FlatList
           data={EXERCISES}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 100, paddingTop: 16 }}
           ItemSeparatorComponent={() => <View style={{ height: 32 }} />}
           renderItem={({ item }) => (
-            <View style={{ paddingHorizontal: 20 }}>
+            <View style={{ paddingHorizontal: 24 }}>
               <ExerciseCard
                 title={item.title}
                 bodyParts={item.bodyParts}
@@ -117,18 +118,18 @@ export default function ExcercisesSearchBar() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000",
+    backgroundColor: colors.background,
   },
   doubleButtonContainer: {
     flexDirection: "row",
     marginBottom: 20,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     width: "100%",
     gap: 10,
   },
   headerText: {
     fontSize: 28,
-    color: "#FF4500",
+    color: colors.fireRed,
     fontWeight: "bold",
     textTransform: "uppercase",
     marginBottom: 20,
