@@ -6,6 +6,7 @@ import ArrowLeft from "./assets/icons/arrow_left.svg";
 import ArrowRight from "./assets/icons/arrow_right.svg";
 import Add from "./assets/icons/add.svg";
 import Search from "./assets/icons/search.svg";
+import Time from "./assets/icons/time.svg";
 import { SvgProps } from "react-native-svg";
 
 const ICONS = {
@@ -17,6 +18,7 @@ const ICONS = {
   arrowRight: ArrowRight,
   add: Add,
   search: Search,
+  time: Time,
 } as const;
 
 export type IconName = keyof typeof ICONS;
