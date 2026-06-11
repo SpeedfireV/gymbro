@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 
 from .models import users, workout_exercises, workouts, exercises, workout_history, exercises_history
@@ -106,7 +106,7 @@ class WorkoutDeleteView(APIView):
 
 
 class ExerciseAddView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = ExerciseSerializer(data=request.data)
@@ -118,7 +118,7 @@ class ExerciseAddView(APIView):
     
 
 class ExerciseDeleteView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, pk):
         try:
