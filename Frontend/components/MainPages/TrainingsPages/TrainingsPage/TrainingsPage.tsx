@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import NavigationBar from "../../../ReusableComponents/NavigationBar";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../App";
-import { TrainingItem } from "../../../ReusableComponents/ComplexTypes";
 import NewActivityButton from "../../../ReusableComponents/NewActivity";
 import { PageTitle } from "../../../ReusableComponents/PageTitle";
 import { GBSearchBar } from "../../../ReusableComponents/GBSearchBar";

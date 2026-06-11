@@ -18,7 +18,7 @@ export default function TrainingPublicityStatus({
       <Ionicons
         name={isPublic ? PUBLIC_ICON : PRIVATE_ICON}
         size={30}
-        color="#FFA500"
+        color={colors.activeYellow}
       />
       <Text style={styles.orangeText}>{isPublic ? "PUBLIC" : "PRIVATE"}</Text>
     </View>

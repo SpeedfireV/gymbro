@@ -21,19 +21,6 @@ export default function TrainingCardHeaderRow({
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.onSurface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 32,
-    borderWidth: 1,
-    borderColor: "#332b00",
-    shadowOffset: { width: 0, height: 0 },
-    shadowColor: "#FFA500",
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 5,
-  },
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -49,49 +36,5 @@ const styles = StyleSheet.create({
     color: colors.platiniumWhite,
     fontSize: 20,
     fontFamily: fonts.chakraPetchSemiBold,
-  },
-  description: {
-    color: colors.platiniumWhite,
-    fontSize: 16,
-    fontFamily: fonts.chakraPetchRegular,
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  Splitter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  infoFrame: {
-    backgroundColor: colors.platiniumWhite,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 10,
-    borderRadius: 4,
-    flex: 0.44,
-  },
-
-  doubleHolder: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 10,
-    borderRadius: 8,
-    marginTop: 20,
-    flex: 0.48,
-  },
-
-  frameText: {
-    fontFamily: fonts.chakraPetchSemiBold,
-    color: colors.coffeeBackground,
-    fontSize: 16,
-    paddingLeft: 8,
-  },
-
-  orangeText: {
-    color: colors.activeYellow,
-    fontFamily: fonts.bigShouldersBlack,
-    fontSize: 20,
-    marginLeft: 8,
   },
 });

@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { TrainingItem } from "../../../../ReusableComponents/ComplexTypes";
 import { colors } from "../../../../../Colors";
 import { fonts } from "../../../../../Fonts";
