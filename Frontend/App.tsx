@@ -23,7 +23,7 @@ import {
 import { ExercisePage } from "./components/MainPages/ExcercisesPages/ExercisePage/ExercisePage";
 import { ExercisesPage } from "./components/MainPages/ExcercisesPages/ExercisesPage/ExercisesPage";
 import ExerciseEditPage from "./components/MainPages/ExcercisesPages/EditExercise/EditExercisePage";
-import AddNewExercise from "./components/MainPages/ExcercisesPages/AddNewExercise/AddNewExercise";
+import AddNewExercisePage from "./components/MainPages/ExcercisesPages/AddNewExercise/AddNewExercisePage";
 
 export type RootStackParamList = {
   Onboarding1: undefined;
@@ -104,7 +104,7 @@ function App() {
           name="EditTrainingDetail"
           component={EditTrainingDetail}
         />
-        <Stack.Screen name="AddNewExercise" component={AddNewExercise} />
+        <Stack.Screen name="AddNewExercise" component={AddNewExercisePage} />
         <Stack.Screen name="ExerciseEditPage" component={ExerciseEditPage} />
       </Stack.Navigator>
     </NavigationContainer>

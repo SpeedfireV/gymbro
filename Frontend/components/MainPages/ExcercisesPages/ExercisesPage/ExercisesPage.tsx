@@ -97,7 +97,7 @@ export function ExercisesPage({
       <NewActivityButton
         Title="ADD NEW EXERCISE"
         onPress={() => {
-          navigation.navigate("TrainingSelector");
+          navigation.navigate("AddNewExercise");
         }}
       ></NewActivityButton>
 
