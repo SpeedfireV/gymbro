@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.onSurface,
     borderRadius: 12,
     padding: 16,
-    marginHorizontal: 24,
     marginBottom: 32,
     boxShadow: `0px 0px 8px ${colors.activeYellow}`,
   },
