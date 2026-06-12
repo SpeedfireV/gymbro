@@ -4,15 +4,15 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../App";
 import EditAddHeader from "../../../ReusableComponents/EditAddHeader";
 import { ExerciseItem } from "../../../ReusableComponents/ComplexTypes";
-import ExerciseCard from "../ExerciseCard";
+import ExerciseCard from "../components/ExerciseCard";
 import PublishToBroScienceButton from "../../../ReusableComponents/PublishToBroScienceButton";
 import { GBBigButton } from "../../../ReusableComponents/GBBigButton";
-import BreakTile from "../BreakTile";
+import BreakTile from "../components/BreakTile";
 import TrainingDetailsInfo from "./components/TrainingDetailsInfo";
 import { colors } from "../../../../Colors";
 import { fonts } from "../../../../Fonts";
 
-export function TrainingDetails({
+export function TrainingDetailsPage({
   route,
   navigation,
 }: StackScreenProps<RootStackParamList, "TrainingDetail">) {
@@ -54,8 +54,8 @@ export function TrainingDetails({
             <TrainingDetailsInfo
               muscles={training.muscles}
               duration={training.duration}
-              description={training.description}
             />
+            <Text style={styles.description}>{training.description}</Text>
             <Text
               style={{
                 fontSize: 24,
@@ -102,6 +102,13 @@ const styles = StyleSheet.create({
   },
   contentLower: {
     padding: 20,
+  },
+  description: {
+    fontFamily: fonts.chakraPetchRegular,
+    color: colors.platiniumWhite,
+    fontSize: 16,
+    marginTop: 24,
+    textAlign: "center",
   },
   infoFrame: {
     flexDirection: "row",

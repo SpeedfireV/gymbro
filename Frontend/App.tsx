@@ -11,8 +11,8 @@ import {
 import { LoginScreen } from "./components/LoginScreen/LoginScreen";
 import { RegistrationScreen } from "./components/RegistrationScreen/RegistrationScreen";
 import { TrainingsPage } from "./components/MainPages/TrainingsPages/TrainingsPage/TrainingsPage";
-import { TrainingDetails } from "./components/MainPages/TrainingsPages/TrainingDetails/TrainingDetails";
-import { EditTrainingDetail } from "./components/MainPages/TrainingsPages/EditTrainingDetail";
+import { TrainingDetailsPage } from "./components/MainPages/TrainingsPages/TrainingDetails/TrainingDetailsPage";
+import { EditTrainingDetailsPage } from "./components/MainPages/TrainingsPages/EditTrainingDetails/EditTrainingDetail";
 import { HomePage } from "./components/MainPages/HomePage/HomePage";
 import { TrainingSelector } from "./components/MainPages/HomePage/TrainingSelector";
 import { DateSelector } from "./components/MainPages/HomePage/DateSelector";
@@ -99,10 +99,10 @@ function App() {
         <Stack.Screen name="Exercise" component={ExercisePage} />
         <Stack.Screen name="TrainingSelector" component={TrainingSelector} />
         <Stack.Screen name="DateSelector" component={DateSelector} />
-        <Stack.Screen name="TrainingDetail" component={TrainingDetails} />
+        <Stack.Screen name="TrainingDetail" component={TrainingDetailsPage} />
         <Stack.Screen
           name="EditTrainingDetail"
-          component={EditTrainingDetail}
+          component={EditTrainingDetailsPage}
         />
         <Stack.Screen name="AddNewExercise" component={AddNewExercisePage} />
         <Stack.Screen name="ExerciseEditPage" component={ExerciseEditPage} />

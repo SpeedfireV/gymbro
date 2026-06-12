@@ -1,8 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../../../Colors";
-import { fonts } from "../../../Fonts";
+import { colors } from "../../../../Colors";
+import { fonts } from "../../../../Fonts";
+import ExerciseCardInfoTile from "./ExerciseCardInfoTile";
+import { Icon } from "../../../../Icons";
 
 interface ExerciseSimpleTileProps {
   name: string;
@@ -34,46 +36,37 @@ export default function ExerciseCard({
         <Text style={styles.bodyPartsText}>{muscle}</Text>
       </View>
 
-      <View style={styles.infoRow}>
-        {isRepeating ? (
-          <View style={editable ? styles.dualWrapper : styles.dualWrapperWhite}>
-            <Ionicons
-              name="barbell"
-              size={18}
-              color={editable ? "#ffffff" : "#000000"}
-              style={styles.icon}
-            />
-            <Text style={editable ? styles.simpleText : styles.simpleTextWhite}>
-              {detail}
-            </Text>
-          </View>
-        ) : (
-          <View />
-        )}
-
-        <View style={editable ? styles.dualWrapper : styles.dualWrapperWhite}>
-          <Ionicons
-            name="time-outline"
-            size={18}
-            color={editable ? "#ffffff" : "#000000"}
-            style={styles.icon}
+      {isRepeating ? (
+        <View style={styles.infoRow}>
+          <ExerciseCardInfoTile
+            editable={editable}
+            icon="sports"
+            text={detail}
           />
-          <Text style={editable ? styles.simpleText : styles.simpleTextWhite}>
-            {innerBreakDuration}
-          </Text>
+          <ExerciseCardInfoTile
+            editable={editable}
+            icon="time"
+            text={innerBreakDuration}
+          />
         </View>
-      </View>
+      ) : (
+        <ExerciseCardInfoTile
+          editable={editable}
+          icon="time"
+          text={innerBreakDuration}
+        />
+      )}
       {editable ? (
         <TouchableOpacity
           style={styles.removeButton}
           activeOpacity={0.7}
           onPress={onDelete}
         >
-          <Ionicons
-            name="trash-outline"
-            size={18}
-            color="#fff"
-            style={styles.buttonIcon}
+          <Icon
+            name="delete"
+            fill={colors.platiniumWhite}
+            width={24}
+            height={24}
           />
           <Text style={styles.buttonText}>Remove Exercise</Text>
         </TouchableOpacity>
@@ -113,7 +106,6 @@ const styles = StyleSheet.create({
   infoRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 16,
     gap: 20,
   },
   dualWrapper: {
@@ -138,21 +130,24 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   removeButton: {
-    backgroundColor: "#d33215",
-    borderRadius: 14,
+    backgroundColor: colors.fireRed,
+    borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 14,
+    paddingVertical: 12,
+    marginTop: 12,
+    gap: 8,
     width: "100%",
+    elevation: 8,
   },
   buttonIcon: {
     marginRight: 8,
   },
   buttonText: {
-    color: "#ffffff",
-    fontSize: 18,
-    fontWeight: "600",
+    color: colors.platiniumWhite,
+    fontSize: 24,
+    fontFamily: fonts.bigShouldersBold,
   },
 
   dualWrapperWhite: {
