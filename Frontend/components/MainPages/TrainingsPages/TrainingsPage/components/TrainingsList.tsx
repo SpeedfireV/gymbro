@@ -28,7 +28,11 @@ export default function TrainingsList({
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 64, paddingTop: 16 }}
+      contentContainerStyle={{
+        paddingBottom: 64,
+        paddingTop: 16,
+        marginHorizontal: 24,
+      }}
       style={{ flex: 1 }}
     />
   );
