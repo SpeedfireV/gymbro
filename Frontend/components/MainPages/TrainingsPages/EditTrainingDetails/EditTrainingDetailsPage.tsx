@@ -6,9 +6,9 @@ import { ExerciseItem } from "../../../ReusableComponents/ComplexTypes";
 import ExerciseCard from "../components/ExerciseCard";
 import CancelChangesButton from "../../../ReusableComponents/CancelChangesButton";
 import { GBBigButton } from "../../../ReusableComponents/GBBigButton";
-import { AddTrainingComponent } from "../AddTrainingComponent";
+import { AddTrainingComponent } from "./components/AddTrainingComponent";
 import BreakTile from "../components/BreakTile";
-import { AddExercisePage } from "../AddExercisePage";
+import { AddExerciseToTrainingPage } from "./components/AddExerciseToTrainingPage";
 import EditTrainingTitle from "./components/EditTrainingTitle";
 import TrainingDetailsInfo from "../TrainingDetails/components/TrainingDetailsInfo";
 import EditTrainingDescription from "./components/EditTrainingDescription";
@@ -91,7 +91,7 @@ export function EditTrainingDetailsPage({
   };
 
   return isAddExerciseVisible ? (
-    <AddExercisePage
+    <AddExerciseToTrainingPage
       exercisesList={exercisesList}
       setExercisesList={setExercisesList}
       nextTempId={nextTempId}
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+
   dualButtonContainer: {
     position: "absolute",
     bottom: 25,

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../../Colors";
@@ -9,27 +9,30 @@ interface ExerciseCardInfoTileProps {
   editable: boolean;
   icon: IconName;
   text: string;
+  onPress?: () => void;
 }
 
 export default function ExerciseCardInfoTile({
   editable,
   icon,
   text,
+  onPress,
 }: ExerciseCardInfoTileProps) {
   const iconAndTextColor = editable
     ? colors.platiniumWhite
     : colors.coffeeBackground;
   return (
-    <View
+    <TouchableOpacity
       style={[
         styles.card,
         editable ? styles.cardColorsEditable : styles.cardColors,
       ]}
+      onPress={onPress}
     >
       <Icon name={icon} width={24} height={24} fill={iconAndTextColor} />
 
       <Text style={[styles.text, { color: iconAndTextColor }]}>{text}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 

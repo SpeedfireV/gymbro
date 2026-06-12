@@ -1,4 +1,4 @@
-import { View, Text, TextInput } from "react-native";
+import { TextInput, StyleSheet } from "react-native";
 import React from "react";
 import { colors } from "../../../../../Colors";
 import { fonts } from "../../../../../Fonts";
@@ -15,16 +15,7 @@ export default function EditTrainingDescription({
   return (
     <TextInput
       value={description}
-      style={{
-        backgroundColor: colors.inputBackground,
-        borderWidth: 1,
-        borderColor: colors.platiniumWhite,
-        borderRadius: 4,
-        height: 80,
-        color: colors.platiniumWhite,
-        fontFamily: fonts.chakraPetchRegular,
-        fontSize: 16,
-      }}
+      style={styles.description}
       onChangeText={setDescription}
       multiline={true}
       numberOfLines={4}
@@ -33,3 +24,16 @@ export default function EditTrainingDescription({
     />
   );
 }
+
+const styles = StyleSheet.create({
+  description: {
+    backgroundColor: colors.inputBackground,
+    borderWidth: 1,
+    borderColor: colors.platiniumWhite,
+    borderRadius: 4,
+    height: 80,
+    color: colors.platiniumWhite,
+    fontFamily: fonts.chakraPetchRegular,
+    fontSize: 16,
+  },
+});

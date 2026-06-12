@@ -12,14 +12,11 @@ import { LoginScreen } from "./components/LoginScreen/LoginScreen";
 import { RegistrationScreen } from "./components/RegistrationScreen/RegistrationScreen";
 import { TrainingsPage } from "./components/MainPages/TrainingsPages/TrainingsPage/TrainingsPage";
 import { TrainingDetailsPage } from "./components/MainPages/TrainingsPages/TrainingDetails/TrainingDetailsPage";
-import { EditTrainingDetailsPage } from "./components/MainPages/TrainingsPages/EditTrainingDetails/EditTrainingDetail";
+import { EditTrainingDetailsPage } from "./components/MainPages/TrainingsPages/EditTrainingDetails/EditTrainingDetailsPage";
 import { HomePage } from "./components/MainPages/HomePage/HomePage";
 import { TrainingSelector } from "./components/MainPages/HomePage/TrainingSelector";
 import { DateSelector } from "./components/MainPages/HomePage/DateSelector";
-import {
-  ExerciseItem,
-  TrainingItem,
-} from "./components/ReusableComponents/ComplexTypes";
+import { TrainingItem } from "./components/ReusableComponents/ComplexTypes";
 import { ExercisePage } from "./components/MainPages/ExcercisesPages/ExercisePage/ExercisePage";
 import { ExercisesPage } from "./components/MainPages/ExcercisesPages/ExercisesPage/ExercisesPage";
 import ExerciseEditPage from "./components/MainPages/ExcercisesPages/EditExercise/EditExercisePage";
