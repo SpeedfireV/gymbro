@@ -15,6 +15,7 @@ export function GBBigButton({
   icon,
   customWidth,
   customHeight,
+  iconColor,
   bgColor,
   onPress,
 }: GBBigButtonData) {
@@ -31,7 +32,7 @@ export function GBBigButton({
         alignItems: "center",
       }}
     >
-      <Icon name={icon} width={32} height={32} />
+      <Icon name={icon} width={32} height={32} fill={iconColor} />
     </TouchableOpacity>
   );
 }

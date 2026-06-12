@@ -1,10 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { colors } from "../../../Colors";
+import { fonts } from "../../../Fonts";
 
 interface ExerciseSimpleTileProps {
   name: string;
-  muscule: string[];
+  muscle: string[];
   detail: string;
   order: number;
   editable: boolean;
@@ -15,7 +17,7 @@ interface ExerciseSimpleTileProps {
 
 export default function ExerciseCard({
   name,
-  muscule,
+  muscle,
   order,
   detail,
   editable,
@@ -26,10 +28,10 @@ export default function ExerciseCard({
   return (
     <View style={styles.cardContainer}>
       <View style={styles.headerRow}>
-        <Text style={styles.titleText}>
+        <Text style={styles.exerciseTitleText}>
           {order}. {name}
         </Text>
-        <Text style={styles.titleText}>{muscule}</Text>
+        <Text style={styles.bodyPartsText}>{muscle}</Text>
       </View>
 
       <View style={styles.infoRow}>
@@ -84,16 +86,13 @@ export default function ExerciseCard({
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: "#1c1c1e",
+    backgroundColor: colors.onSurface,
     borderRadius: 12,
     padding: 16,
-    borderWidth: 1.5,
-    width: "90%",
+    width: "100%",
     alignSelf: "center",
     marginBottom: 20,
-    shadowColor: "#FFA500",
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
+    boxShadow: `0px 0px 8px ${colors.activeYellow}`,
   },
   headerRow: {
     flexDirection: "row",
@@ -101,11 +100,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 16,
   },
-  titleText: {
-    color: "#ffffff",
-    fontSize: 22,
-    fontWeight: "bold",
-    fontFamily: "System",
+  exerciseTitleText: {
+    color: colors.platiniumWhite,
+    fontSize: 24,
+    fontFamily: fonts.bigShouldersBold,
+  },
+  bodyPartsText: {
+    color: colors.platiniumWhite,
+    fontSize: 20,
+    fontFamily: fonts.chakraPetchSemiBold,
   },
   infoRow: {
     flexDirection: "row",
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
   simpleText: {
     color: "#ffffff",
     fontSize: 14,
-    fontWeight: "600",
+
     textTransform: "uppercase",
   },
   removeButton: {

@@ -11,7 +11,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../App";
 import { Ionicons } from "@expo/vector-icons";
 import { ExerciseItem } from "../../ReusableComponents/ComplexTypes";
-import ExerciseCard from "./ExerciseSimpleTile";
+import ExerciseCard from "./ExerciseCard";
 import CancelChangesButton from "../../ReusableComponents/CancelChangesButton";
 import { GBBigButton } from "../../ReusableComponents/GBBigButton";
 import Save from "../../../assets/icons/edit_off.svg";
@@ -60,7 +60,7 @@ export function EditTrainingDetail({
     item.type === "exercise" ? (
       <ExerciseCard
         name={item.name}
-        muscule={item.muscle}
+        muscle={item.muscle}
         detail={item.detail}
         order={item.order}
         editable={true}

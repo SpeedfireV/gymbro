@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Text } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../App";
 import EditAddHeader from "../../../ReusableComponents/EditAddHeader";
 import { ExerciseItem } from "../../../ReusableComponents/ComplexTypes";
-import ExerciseCard from "../ExerciseSimpleTile";
+import ExerciseCard from "../ExerciseCard";
 import PublishToBroScienceButton from "../../../ReusableComponents/PublishToBroScienceButton";
 import { GBBigButton } from "../../../ReusableComponents/GBBigButton";
 import BreakTile from "../BreakTile";
 import TrainingDetailsInfo from "./components/TrainingDetailsInfo";
 import { colors } from "../../../../Colors";
+import { fonts } from "../../../../Fonts";
 
 export function TrainingDetails({
   route,
@@ -21,7 +22,7 @@ export function TrainingDetails({
     item.type === "exercise" ? (
       <ExerciseCard
         name={item.name}
-        muscule={item.muscle}
+        muscle={item.muscle}
         detail={item.detail}
         order={item.order}
         editable={false}
@@ -39,9 +40,9 @@ export function TrainingDetails({
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 0 }}
+        contentContainerStyle={{ marginHorizontal: 24 }}
         ListHeaderComponent={
-          <>
+          <View>
             <View style={styles.contentUpper}>
               <EditAddHeader
                 title={training.title}
@@ -55,7 +56,16 @@ export function TrainingDetails({
               duration={training.duration}
               description={training.description}
             />
-          </>
+            <Text
+              style={{
+                fontSize: 24,
+                fontFamily: fonts.chakraPetchSemiBold,
+                color: colors.fireRed,
+              }}
+            >
+              EXERCISES
+            </Text>
+          </View>
         }
         ListFooterComponent={<View style={styles.endingMargin} />}
       />
@@ -67,6 +77,7 @@ export function TrainingDetails({
         <GBBigButton
           bgColor={colors.activeYellow}
           icon="edit"
+          iconColor={colors.coffeeBackground}
           onPress={() => {
             navigation.navigate("EditTrainingDetail", { training });
           }}
@@ -82,8 +93,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   contentUpper: {
-    padding: 20,
-    marginBottom: 20,
+    marginTop: 24,
   },
   contentMiddle: {
     padding: 20,
