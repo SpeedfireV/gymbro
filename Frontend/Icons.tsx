@@ -8,6 +8,9 @@ import Add from "./assets/icons/add.svg";
 import Search from "./assets/icons/search.svg";
 import Time from "./assets/icons/time.svg";
 import Edit from "./assets/icons/edit.svg";
+import Visibility from "./assets/icons/visibility.svg";
+import VisibilityOff from "./assets/icons/visibility_off.svg";
+
 import { SvgProps } from "react-native-svg";
 
 const ICONS = {
@@ -21,6 +24,8 @@ const ICONS = {
   search: Search,
   time: Time,
   edit: Edit,
+  visibility: Visibility,
+  visibilityOff: VisibilityOff,
 } as const;
 
 export type IconName = keyof typeof ICONS;
