@@ -7,7 +7,7 @@ import AddMedia from "../EditExercise/components/AddMedia";
 import EditBodyParts from "../EditExercise/components/EditBodyParts";
 import Spacer from "../../../ReusableComponents/Spacer";
 import CreateExerciseButton from "./components/CreateExerciseButton";
-import ExerciseTextInputWithTitle from "./components/ExerciseTextInputWithTitle";
+import TextInputWithTitle from "../../../ReusableComponents/TextInputWithTitle";
 
 export default function AddNewExercisePage() {
   const [name, setNameState] = useState("");
@@ -20,10 +20,10 @@ export default function AddNewExercisePage() {
       <AddMedia />
       <EditBodyParts />
       <View style={{ marginBottom: 32 }}>
-        <ExerciseTextInputWithTitle
+        <TextInputWithTitle
           fieldTitle="Exercise Name"
           value={name}
-          setTextFunc={setNameState}
+          onChangeText={setNameState}
           placeholder="Best Training Ever"
         />
       </View>
@@ -33,10 +33,10 @@ export default function AddNewExercisePage() {
           flex: 1,
         }}
       >
-        <ExerciseTextInputWithTitle
+        <TextInputWithTitle
           fieldTitle="Description"
           value={description}
-          setTextFunc={setDescriptionState}
+          onChangeText={setDescriptionState}
           placeholder="Describe what it's about!"
           multiline={true}
         />

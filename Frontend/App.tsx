@@ -8,8 +8,8 @@ import {
   Onboarding2,
   Onboarding3,
 } from "./components/HelloPages/HelloPages";
-import { LoginScreen } from "./components/LoginScreen/LoginScreen";
-import { RegistrationScreen } from "./components/RegistrationScreen/RegistrationScreen";
+import { LoginScreen } from "./components/AuthPages/LoginPage/LoginPage";
+import { RegistrationPage } from "./components/AuthPages/RegistrationPage/RegistrationPage";
 import { TrainingsPage } from "./components/MainPages/TrainingsPages/TrainingsPage/TrainingsPage";
 import { TrainingDetailsPage } from "./components/MainPages/TrainingsPages/TrainingDetails/TrainingDetailsPage";
 import { EditTrainingDetailsPage } from "./components/MainPages/TrainingsPages/EditTrainingDetails/EditTrainingDetailsPage";
@@ -89,7 +89,7 @@ function App() {
         <Stack.Screen name="Onboarding2" component={Onboarding2} />
         <Stack.Screen name="Onboarding3" component={Onboarding3} />
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Registration" component={RegistrationScreen} />
+        <Stack.Screen name="Registration" component={RegistrationPage} />
         <Stack.Screen name="Training" component={TrainingsPage} />
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="Exercises" component={ExercisesPage} />
