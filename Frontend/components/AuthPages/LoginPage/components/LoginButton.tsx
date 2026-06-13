@@ -11,7 +11,9 @@ export default function LoginButton({ handleLogin }: LoginButtonProps) {
   return (
     <TouchableOpacity
       style={styles.button}
-      onPress={handleLogin}
+      onPress={(e: any) => {
+        handleLogin();
+      }}
       activeOpacity={0.7}
     >
       <Text style={styles.buttonText}>LOGIN</Text>

@@ -1,5 +1,14 @@
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../App";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getApiUrl } from '../../../config/api';
 
-export  const handleLogin = (emailText: string, passwordText: string) => {
+export  const handleLogin = async (
+  emailText: string,
+  passwordText: string,
+  navigation: StackNavigationProp<RootStackParamList, "Login">) => {
+    
+  
     console.log("AttemptLogEmail: ", emailText);
     console.log("AttemptLogPass: ", passwordText);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,8 +41,36 @@ export  const handleLogin = (emailText: string, passwordText: string) => {
       return;
     }
 
-    console.log("Try login");
-    navigation.navigate("Home");
+    try {
 
-    console.log("Success");
-  };
+    const response = await fetch(getApiUrl('/api/login/'), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailText,
+        password: passwordText,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log("Success! Logged correctly", data);
+      if (data.access) {
+        await AsyncStorage.setItem('userToken', data.access);
+        await AsyncStorage.setItem('refreshToken', data.refresh);
+      }
+      navigation.navigate("Home");
+    } else {
+      console.log("Login Fail from Backend:", data);
+      alert(data.detail || "E-mail password error");
+    }
+  } catch (error) {
+    console.error("Network error:", error);
+    alert("Failed backend connection");
+  }
+
+  navigation.navigate("Home");
+};
