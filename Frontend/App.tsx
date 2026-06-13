@@ -9,7 +9,7 @@ import {
   Onboarding3,
 } from "./components/HelloPages/HelloPages";
 import { LoginScreen } from "./components/AuthPages/LoginPage/LoginPage";
-import { RegistrationPage } from "./components/AuthPages/RegistrationPage/RegistrationScreen";
+import { RegistrationPage } from "./components/AuthPages/RegistrationPage/RegistrationPage";
 import { TrainingsPage } from "./components/MainPages/TrainingsPages/TrainingsPage/TrainingsPage";
 import { TrainingDetailsPage } from "./components/MainPages/TrainingsPages/TrainingDetails/TrainingDetailsPage";
 import { EditTrainingDetailsPage } from "./components/MainPages/TrainingsPages/EditTrainingDetails/EditTrainingDetailsPage";

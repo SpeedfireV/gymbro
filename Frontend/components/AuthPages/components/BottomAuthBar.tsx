@@ -28,13 +28,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingHorizontal: 20,
-  },
-  titleBox: {
-    paddingTop: 80,
-    marginBottom: 80,
-    justifyContent: "center",
-    alignItems: "center",
+    paddingHorizontal: 24,
   },
   bottomBox: {
     flexDirection: "row",
@@ -44,21 +38,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
 
-  title: {
-    fontFamily: "SairaStencil-reg",
-    color: colors.activeYellow,
-    textAlign: "center",
-    marginTop: 64,
-    fontSize: 48,
-    transform: [{ scaleY: 1.5 }, { scaleX: 0.9 }],
-  },
-
-  textBold: {
-    color: "#ffffff",
-    fontSize: 18,
-    fontFamily: "Impact-Local",
-    paddingTop: 25,
-  },
   text: {
     color: colors.platiniumWhite,
     fontSize: 24,
@@ -68,25 +47,5 @@ const styles = StyleSheet.create({
     color: colors.activeYellow,
     fontSize: 28,
     fontFamily: fonts.bigShouldersBold,
-  },
-
-  frameContainer: {
-    flexDirection: "row",
-    backgroundColor: "#222222",
-    borderColor: "#FFFFFF",
-    fontSize: 16,
-    marginTop: 5,
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingRight: 10,
-    width: "100%",
-    alignItems: "center",
-  },
-
-  frameText: {
-    flex: 1,
-    fontFamily: "ChakraPetch-ExtraLight",
-    color: "#fff8e5",
-    fontSize: 12,
   },
 });
