@@ -1,82 +1,88 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
-import Personal from '../../assets/icons/personal.svg'
-import Public from '../../assets/icons/public.svg'
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import Personal from "../../assets/icons/personal.svg";
+import Public from "../../assets/icons/public.svg";
+import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../App";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { colors } from "../../Colors";
 interface ExerciseInfo {
-  mainImage?: ImageBitmap,
-  title: string,
-  bodyParts: Array<string>,
-  desc: string,
-  isPublic: boolean
-  showIcon: boolean
-  onPress : ()=> void
+  mainImage?: ImageBitmap;
+  title: string;
+  bodyParts: Array<string>;
+  desc: string;
+  isPublic: boolean;
+  showIcon: boolean;
+  onPress: () => void;
 }
 
-export function ExerciseCard({ mainImage, title, bodyParts, desc, isPublic,showIcon, onPress}: ExerciseInfo) {
-
+export function ExerciseCard({
+  mainImage,
+  title,
+  bodyParts,
+  desc,
+  isPublic,
+  showIcon,
+  onPress,
+}: ExerciseInfo) {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.card}>
         <View>
-          {showIcon? <View style={styles.iconPosition}>
-            {(isPublic) ? <Public width={24} height={24} /> : <Personal width={24} height={24} />}</View>:
-            <View style={styles.iconPosition}/>}
+          {showIcon ? (
+            <View style={styles.iconPosition}>
+              {isPublic ? (
+                <Public width={24} height={24} />
+              ) : (
+                <Personal width={24} height={24} />
+              )}
+            </View>
+          ) : (
+            <View style={styles.iconPosition} />
+          )}
           <View style={styles.contentPadding}>
             <Text style={[styles.excerciseTitle, styles.anyText]}>{title}</Text>
-            <Text style={[styles.excerciseBodyParts, styles.anyText]}>{bodyParts.join(' ')}</Text>
+            <Text style={[styles.excerciseBodyParts, styles.anyText]}>
+              {bodyParts.join(" ")}
+            </Text>
             <Text style={[styles.excerciseDesc, styles.anyText]}>{desc}</Text>
           </View>
         </View>
       </View>
     </TouchableOpacity>
-  )
-
+  );
 }
 
-
-const styles = StyleSheet.create(
-  {
-    card: {
-
-      backgroundColor: '#111',
-      borderRadius: 12,
-      borderWidth: 1,
-      borderColor: '#332b00',
-      shadowColor: '#FFA500',
-      shadowOpacity: 0.2,
-      shadowRadius: 10,
-      elevation: 8,
-
-    },
-    iconPosition: {
-      position: 'absolute',
-      top: 16,
-      right: 16,
-      zIndex: 1
-    },
-    contentPadding: {
-      padding: 16,
-    },
-    anyText: {
-      color: '#EFF1F3'
-    },
-    excerciseTitle: {
-      fontSize: 24,
-      marginBottom: 4,
-      fontFamily: 'BigShoulders-ExtraBold'
-    },
-    excerciseBodyParts: {
-      fontSize: 20,
-      marginBottom: 12,
-      fontFamily: 'ChakraPetch-SemiBold'
-
-    },
-    excerciseDesc: {
-      fontSize: 12,
-      fontFamily: 'ChakraPetch-Regular'
-    }
-
-
-  })
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: colors.onSurface,
+    borderRadius: 12,
+    borderWidth: 1,
+    boxShadow: `0px 0px 8px ${colors.activeYellow}`,
+  },
+  iconPosition: {
+    position: "absolute",
+    top: 16,
+    right: 16,
+    zIndex: 1,
+  },
+  contentPadding: {
+    padding: 16,
+  },
+  anyText: {
+    color: "#EFF1F3",
+  },
+  excerciseTitle: {
+    fontSize: 24,
+    marginBottom: 4,
+    fontFamily: "BigShoulders-ExtraBold",
+  },
+  excerciseBodyParts: {
+    fontSize: 20,
+    marginBottom: 12,
+    fontFamily: "ChakraPetch-SemiBold",
+  },
+  excerciseDesc: {
+    fontSize: 12,
+    fontFamily: "ChakraPetch-Regular",
+  },
+});

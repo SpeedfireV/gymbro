@@ -10,16 +10,13 @@ import {
 } from "./components/HelloPages/HelloPages";
 import { LoginScreen } from "./components/LoginScreen/LoginScreen";
 import { RegistrationScreen } from "./components/RegistrationScreen/RegistrationScreen";
-import { TrainingPage } from "./components/MainPages/TrainingPage/TrainingPage";
-import { TrainingDetail } from "./components/MainPages/TrainingPage/TrainingDetail";
-import { EditTrainingDetail } from "./components/MainPages/TrainingPage/EditTrainingDetail";
+import { TrainingsPage } from "./components/MainPages/TrainingsPages/TrainingsPage/TrainingsPage";
+import { TrainingDetailsPage } from "./components/MainPages/TrainingsPages/TrainingDetails/TrainingDetailsPage";
+import { EditTrainingDetailsPage } from "./components/MainPages/TrainingsPages/EditTrainingDetails/EditTrainingDetailsPage";
 import { HomePage } from "./components/MainPages/HomePage/HomePage";
 import { TrainingSelector } from "./components/MainPages/HomePage/TrainingSelector";
 import { DateSelector } from "./components/MainPages/HomePage/DateSelector";
-import {
-  ExerciseItem,
-  TrainingItem,
-} from "./components/ReusableComponents/ComplexTypes";
+import { TrainingItem } from "./components/ReusableComponents/ComplexTypes";
 import { ExercisePage } from "./components/MainPages/ExcercisesPages/ExercisePage/ExercisePage";
 import { ExercisesPage } from "./components/MainPages/ExcercisesPages/ExercisesPage/ExercisesPage";
 import ExerciseEditPage from "./components/MainPages/ExcercisesPages/EditExercise/EditExercisePage";
@@ -93,16 +90,16 @@ function App() {
         <Stack.Screen name="Onboarding3" component={Onboarding3} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Registration" component={RegistrationScreen} />
-        <Stack.Screen name="Training" component={TrainingPage} />
+        <Stack.Screen name="Training" component={TrainingsPage} />
         <Stack.Screen name="Home" component={HomePage} />
         <Stack.Screen name="Exercises" component={ExercisesPage} />
         <Stack.Screen name="Exercise" component={ExercisePage} />
         <Stack.Screen name="TrainingSelector" component={TrainingSelector} />
         <Stack.Screen name="DateSelector" component={DateSelector} />
-        <Stack.Screen name="TrainingDetail" component={TrainingDetail} />
+        <Stack.Screen name="TrainingDetail" component={TrainingDetailsPage} />
         <Stack.Screen
           name="EditTrainingDetail"
-          component={EditTrainingDetail}
+          component={EditTrainingDetailsPage}
         />
         <Stack.Screen name="AddNewExercise" component={AddNewExercisePage} />
         <Stack.Screen name="ExerciseEditPage" component={ExerciseEditPage} />
