@@ -8,9 +8,10 @@ import { Icon } from "../../../../Icons";
 
 interface ExerciseSimpleTileProps {
   name: string;
-  muscle: string[];
-  detail: string;
+  muscle: string;
   order: number;
+  sitsreps: string;
+  duration: string;
   editable: boolean;
   innerBreakDuration: string;
   isRepeating?: boolean;
@@ -21,7 +22,8 @@ export default function ExerciseCard({
   name,
   muscle,
   order,
-  detail,
+  sitsreps,
+  duration,
   editable,
   innerBreakDuration,
   isRepeating = true,
@@ -41,7 +43,7 @@ export default function ExerciseCard({
           <ExerciseCardInfoTile
             editable={editable}
             icon="sports"
-            text={detail}
+            text={sitsreps}
           />
           <ExerciseCardInfoTile
             editable={editable}
@@ -50,11 +52,13 @@ export default function ExerciseCard({
           />
         </View>
       ) : (
-        <ExerciseCardInfoTile
-          editable={editable}
-          icon="time"
-          text={innerBreakDuration}
-        />
+        <View style={styles.infoRow}>
+          <ExerciseCardInfoTile
+            editable={editable}
+            icon="time"
+            text={duration}
+          />
+        </View>
       )}
       {editable ? (
         <TouchableOpacity

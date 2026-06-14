@@ -36,53 +36,78 @@ export function EditTrainingDetailsPage({
     const totalDurationString =
       `${minutes} MIN ${seconds > 0 ? seconds + " SEC" : ""}`.trim();
 
-    const newBreakItem: ExerciseItem = {
-      id: nextTempId.toString(),
-      type: "break",
-      detail: "none",
-      order: -1,
-      muscle: ["none"],
-      name: "Break",
-      innerBreakDuration: totalDurationString,
-    };
 
-    setNextTempId(nextTempId + 1);
+    const updatedList = exercisesList.map((item, index) => {
+      if (index === exercisesList.length - 1) {
+        return {
+          ...item,
+          break_after: totalDurationString,
+        };
+      }
+      return item;
+    });
 
-    console.log(nextTempId);
-
-    setExercisesList([...exercisesList, newBreakItem]);
+    setExercisesList(updatedList);
   };
 
   const renderItem = ({ item }: { item: ExerciseItem }) =>
-    item.type === "exercise" ? (
-      <ExerciseCard
-        name={item.name}
-        muscle={item.muscle}
-        detail={item.detail}
-        order={item.order}
-        editable={true}
-        onDelete={() => handleDeleteExercise(item.id)}
-        innerBreakDuration={item.innerBreakDuration}
-        isRepeating={item.isRepeating}
-      />
+    /[1-9]/.test(item.break_after) ? (
+      <View >
+        <ExerciseCard
+          name={item.exercise.name}
+          muscle={item.exercise.muscule}
+          sitsreps={item.sets + "x" + item.reps}
+          duration={item.duration}
+          order={item.order}
+          editable={true}
+          onDelete={() => handleDeleteExercise(item.index)}
+          innerBreakDuration={item.break_between}
+          isRepeating={item.exercise.type == "reps"}
+        />
+
+        <BreakTile
+          editable={true}
+          duration={item.break_after}
+          onDelete={() => handleDeleteBreak(item.index)}
+        />
+      </View>
     ) : (
-      <BreakTile
-        editable={true}
-        duration={item.innerBreakDuration}
-        onDelete={() => handleDeleteExercise(item.id)}
-      />
+        <ExerciseCard
+          name={item.exercise.name}
+          muscle={item.exercise.muscule}
+          sitsreps={item.sets + "x" + item.reps}
+          duration={item.duration}
+          order={item.order}
+          editable={true}
+          onDelete={() => handleDeleteExercise(item.index)}
+          innerBreakDuration={item.break_between}
+          isRepeating={item.exercise.type == "reps"}
+        />
     );
 
+
+  const handleDeleteBreak = (idToBreakRemove: string) => {
+    const updatedList = exercisesList.map((item) => {
+    if (item.index === idToBreakRemove) {
+      return {
+        ...item,
+        break_after: "00:00"
+      };
+    }
+
+    return item;
+  });
+
+  setExercisesList(updatedList);
+  };
+
+
   const handleDeleteExercise = (idToRemove: string) => {
-    const filteredList = exercisesList.filter((item) => item.id !== idToRemove);
+    const filteredList = exercisesList.filter((item) => item.index !== idToRemove);
     console.log("EnteredDeleter");
     let currentOrder = 1;
 
     const updatedList = filteredList.map((item) => {
-      if (item.type === "break") {
-        return item;
-      }
-
       const updatedItem = { ...item, order: currentOrder };
       currentOrder++;
       return updatedItem;
@@ -103,7 +128,7 @@ export function EditTrainingDetailsPage({
       <FlatList
         data={exercisesList}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.index}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ marginHorizontal: 24 }}
         ListHeaderComponent={
@@ -188,4 +213,5 @@ const styles = StyleSheet.create({
   CancelChangesContainer: {
     flex: 1,
   },
+
 });

@@ -16,6 +16,9 @@ import {
   ExercisePrototype,
 } from "../../../../ReusableComponents/ComplexTypes";
 
+import {pushUpPrototype, plankPrototype, squatPrototype, bicepCurlPrototype} from "../../TrainingsPage/DummyTrainingsData";
+
+
 interface AddExerciseToTrainingPageProps {
   nextTempId: number;
   exercisesList: ExerciseItem[];
@@ -34,48 +37,46 @@ export function AddExerciseToTrainingPage({
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddExerciseVisable, setIsAddExerciseVisable] = useState(false);
   const [chosenExercise, setChosenExercise] = useState<ExercisePrototype>({
-    title: "",
-    desc: "",
-    isPublic: false,
-    bodyParts: [],
-    isRepeating: false,
+    name: "",
+    type: "",
+    muscule: "",
+    difficulty: "",
+    instructions: "",
+    safety_info: ""
   });
 
   const EXERCISES = [
     {
-      title: "Pull Ups1",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-      isRepeating: true,
+      name: "Push-Up",
+      type: "reps",
+      muscule: "Chest",
+      difficulty: "Beginner",
+      instructions: "Lower your body until your chest nearly touches the floor, then push back up.",
+      safety_info: "Keep your core tight and do not let your lower back sag."
     },
     {
-      title: "Cardio 1",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-      isRepeating: false,
+      name: "Plank",
+      type: "duration",
+      muscule: "Abs",
+      difficulty: "Beginner",
+      instructions: "Hold a push-up position but rest your weight on your forearms rather than your hands.",
+      safety_info: "Keep your body in a straight line from head to heels."
     },
     {
-      title: "Pull Ups3",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-      isRepeating: true,
+      name: "Bodyweight Squat",
+      type: "reps",
+      muscule: "Quads",
+      difficulty: "Beginner",
+      instructions: "Lower your hips until your thighs are parallel to the floor, then stand back up.",
+      safety_info: "Keep your knees aligned with your toes and your chest up."
     },
     {
-      title: "Cardio 2",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-      isRepeating: false,
-    },
-    {
-      title: "Pull Ups5",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: true,
-      isRepeating: true,
+      name: "Dumbbell Bicep Curl",
+      type: "reps",
+      muscule: "Biceps",
+      difficulty: "Beginner",
+      instructions: "Curl the weights while contracting your biceps.",
+      safety_info: "Do not swing your body to lift the weights."
     },
   ];
 
@@ -87,17 +88,16 @@ export function AddExerciseToTrainingPage({
   ) => {
     const totalDurationString =
       `${minutes} MIN ${seconds > 0 ? seconds + " SEC" : ""}`.trim();
-    const details = `${sets}x${reps}`.trim();
 
     const newExerciseItem: ExerciseItem = {
-      id: nextTempId.toString(),
-      type: "exercise",
-      detail: details,
-      order: Math.max(...exercisesList.map((item) => item.order)) + 1,
-      muscle: chosenExercise.bodyParts,
-      name: chosenExercise.title,
-      innerBreakDuration: totalDurationString,
-      isRepeating: chosenExercise.isRepeating,
+      index: nextTempId.toString(),
+      exercise: chosenExercise,
+      sets: String(sets),
+      reps: String(reps),
+      duration: totalDurationString,
+      break_between: totalDurationString,
+      break_after: "00:00",
+      order: exercisesList.length + 1
     };
 
     setNextTempId(nextTempId + 1);
@@ -132,18 +132,18 @@ export function AddExerciseToTrainingPage({
           renderItem={({ item }) => (
             <View style={{ paddingHorizontal: 20 }}>
               <ExerciseCard
-                title={item.title}
-                bodyParts={item.bodyParts}
-                desc={item.desc}
-                isPublic={item.isPublic}
+                title={item.name}
+                bodyParts={item.muscule}
+                desc={item.instructions}
                 showIcon={false}
                 onPress={() => {
                   setChosenExercise({
-                    title: item.title,
-                    desc: item.desc,
-                    isPublic: item.isPublic,
-                    bodyParts: item.bodyParts,
-                    isRepeating: item.isRepeating,
+                    name: item.name,
+                    instructions: item.instructions,
+                    muscule: item.muscule,
+                    type: item.type,
+                    difficulty: item.difficulty,
+                    safety_info: item.safety_info
                   });
                   setIsAddExerciseVisable(true);
                 }}
@@ -157,7 +157,7 @@ export function AddExerciseToTrainingPage({
       <AddTrainingComponent
         visible={isAddExerciseVisable}
         isExercise={true}
-        isRepeating={chosenExercise.isRepeating}
+        isRepeating={chosenExercise.type == "reps"}
         onClose={() => setIsAddExerciseVisable(false)}
         onAddExercise={handleAddExercise}
       />

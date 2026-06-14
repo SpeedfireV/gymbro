@@ -72,5 +72,4 @@ export  const handleLogin = async (
     alert("Failed backend connection");
   }
 
-  navigation.navigate("Home");
 };
