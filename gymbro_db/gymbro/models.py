@@ -10,6 +10,13 @@ class EventTypes(models.TextChoices):
     REST = 'rest'
 
 
+class RepeatChoices(models.TextChoices):
+    NONE = 'none'
+    DAILY = 'daily'
+    WEEKLY = 'weekly'
+    MONTHLY = 'monthly'
+
+
 class ExerciseTypes(models.TextChoices):
     STRENGTH = 'strength'
     CARDIO = 'cardio'
@@ -40,6 +47,7 @@ class users(models.Model):
     last_name = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_staff = models.BooleanField(default=False)
+    is_authenticated = True
 
     def save(self, *args, **kwargs):
         if not self.password.startswith('pbkdf2_'):
@@ -52,10 +60,12 @@ class users(models.Model):
 
 class calendar_events(models.Model):
     user = models.ForeignKey('users', on_delete=models.CASCADE)
+    workout = models.ForeignKey('workouts', on_delete=models.CASCADE, null=True, blank=True)
     utc_time = models.DateTimeField()
     event_type = models.CharField(max_length=50, choices=EventTypes.choices)
     title = models.TextField()
     description = models.TextField()
+    repeat = models.CharField(max_length=20, choices=RepeatChoices.choices, default=RepeatChoices.NONE)
 
 
 class exercises(models.Model):

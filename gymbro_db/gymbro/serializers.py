@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import users, workout_exercises, workouts
+from .models import users, workout_exercises, workouts, calendar_events
 from .models import exercises, workout_history, exercises_history
 from .models import posts, comments, ratings, comments_ratings
 
@@ -54,6 +54,8 @@ class WorkoutExerciseSerializer(serializers.ModelSerializer):
 
 
 class WorkoutSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = workouts
         fields = "__all__"
@@ -69,6 +71,30 @@ class WorkoutHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = workout_history
         fields = '__all__'
+
+
+class CalendarEventSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = calendar_events
+        fields = '__all__'
+
+    def validate(self, data):
+        event_type = data.get('event_type')
+        workout = data.get('workout')
+
+        if event_type == 'workout' and workout is None:
+            raise serializers.ValidationError({
+                'workout': 'Workout is required for workout calendar events.'
+            })
+
+        if event_type == 'rest' and workout is not None:
+            raise serializers.ValidationError({
+                'workout': 'Workout must be null for rest calendar events.'
+            })
+
+        return data
 
 
 class ExerciseHistorySerializer(serializers.ModelSerializer):
