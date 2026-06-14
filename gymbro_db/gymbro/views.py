@@ -81,6 +81,13 @@ class WorkoutExerciseDeleteView(APIView):
         
         except workout_exercises.DoesNotExist:
             return Response({"error": "Workout exercise not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class WorkoutExerciseListView(APIView):
+    def get(self,request, workout_id):
+        exercises_for_workout = workout_exercises.objects.filter(workout_id=workout_id).order_by('index')
+        serializer = WorkoutExerciseSerializer(exercises_for_workout, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class WorkoutAddView(APIView):
@@ -103,6 +110,13 @@ class WorkoutDeleteView(APIView):
             
         except workouts.DoesNotExist:
             return Response({"error": "Workout not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class UserWorkoutsListView(APIView):
+    def get(self, request, user_id):
+        user_workouts = workouts.objects.filter(user_id=user_id).order_by('-created_at')
+        serializer = WorkoutSerializer(user_workouts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ExerciseAddView(APIView):
