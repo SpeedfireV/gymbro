@@ -105,8 +105,20 @@ class WorkoutDeleteView(APIView):
             return Response({"error": "Workout not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class ExerciseAddView(APIView):
-    permission_classes = [IsAdminUser]
+class ExerciseListCreateView(APIView):
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAdminUser()]
+        return []
+
+    def get(self, request):
+        search_term = request.query_params.get('search') or request.query_params.get('name')
+        exercises_qs = exercises.objects.all()
+        if search_term:
+            exercises_qs = exercises_qs.filter(name__icontains=search_term)
+
+        serializer = ExerciseSerializer(exercises_qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = ExerciseSerializer(data=request.data)

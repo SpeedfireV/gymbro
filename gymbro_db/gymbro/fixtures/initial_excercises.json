@@ -1,0 +1,26 @@
+[
+  {
+    "model": "gymbro.exercises",
+    "pk": 1,
+    "fields": {
+      "name": "Wyciskanie sztangi leżąc",
+      "type": "strength",
+      "muscle": "chest",
+      "difficulty": "beginner",
+      "instructions": "Opuść sztangę do klatki i wyciśnij.",
+      "safety_info": "Używaj asekuracji."
+    }
+  },
+  {
+    "model": "gymbro.exercises",
+    "pk": 2,
+    "fields": {
+      "name": "Przysiady",
+      "type": "strength",
+      "muscle": "legs",
+      "difficulty": "beginner",
+      "instructions": "Zegnij kolana i opuść biodra.",
+      "safety_info": "Pilnuj prostych pleców."
+    }
+  }
+]
