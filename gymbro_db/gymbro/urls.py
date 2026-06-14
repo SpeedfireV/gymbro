@@ -4,6 +4,7 @@ from .views import WorkoutAddView, WorkoutDeleteView, ExerciseAddView, ExerciseD
 from .views import WorkoutHistoryAddView, WorkoutHistoryDeleteView, ExerciseHistoryDetailView
 from .views import PostListCreateView, PostDetailView, CommentListCreateView, CommentDetailView
 from .views import PostRateView, CommentRateView, WorkoutExerciseListView, UserWorkoutsListView
+from .views import ExerciseListView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -16,6 +17,7 @@ urlpatterns = [
     path('users/<int:user_id>/workouts/', UserWorkoutsListView.as_view(), name='user-workouts-list'),
     path('exercises/', ExerciseAddView.as_view(), name='add-exercise'),
     path('exercises/<int:pk>/', ExerciseDeleteView.as_view(), name='delete-exercise'),
+    path('exercises/', ExerciseListView.as_view(), name='exercises-list'),
     path('workout-history/', WorkoutHistoryAddView.as_view(), name='add-workout-history'),
     path('workout-history/<int:pk>/', WorkoutHistoryDeleteView.as_view(), name='delete-workout-history'),
     path('exercise-history/<int:pk>/', ExerciseHistoryDetailView.as_view(), name='detail-exercise-history'),
