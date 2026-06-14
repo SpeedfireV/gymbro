@@ -67,9 +67,9 @@ class WorkoutExerciseAddView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class WorkoutExerciseDeleteView(APIView):
     def delete(self, request, pk):
@@ -78,9 +78,16 @@ class WorkoutExerciseDeleteView(APIView):
             exercise_to_delete.delete()
 
             return Response({"message": "Workout exercise deleted"}, status=status.HTTP_204_NO_CONTENT)
-        
+
         except workout_exercises.DoesNotExist:
             return Response({"error": "Workout exercise not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class WorkoutExerciseListView(APIView):
+    def get(self,request, workout_id):
+        exercises_for_workout = workout_exercises.objects.filter(workout_id=workout_id).order_by('index')
+        serializer = WorkoutExerciseSerializer(exercises_for_workout, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class WorkoutAddView(APIView):
@@ -90,9 +97,9 @@ class WorkoutAddView(APIView):
         if (serializer.is_valid()):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class WorkoutDeleteView(APIView):
     def delete(self, request, pk):
@@ -100,9 +107,16 @@ class WorkoutDeleteView(APIView):
             workout_to_delete = workouts.objects.get(pk=pk)
             workout_to_delete.delete()
             return Response({"message": "Workout deleted"}, status=status.HTTP_204_NO_CONTENT)
-            
+
         except workouts.DoesNotExist:
             return Response({"error": "Workout not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UserWorkoutsListView(APIView):
+    def get(self, request, user_id):
+        user_workouts = workouts.objects.filter(user_id=user_id).order_by('-created_at')
+        serializer = WorkoutSerializer(user_workouts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ExerciseAddView(APIView):
@@ -115,7 +129,7 @@ class ExerciseAddView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class ExerciseDeleteView(APIView):
     permission_classes = [IsAdminUser]
@@ -129,6 +143,13 @@ class ExerciseDeleteView(APIView):
             return Response({"error": "exercise not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+class ExerciseListView(APIView):
+    def get(self, request):
+        all_exercises = exercises.objects.all()
+        serializer = ExerciseSerializer(all_exercises, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class WorkoutHistoryAddView(APIView):
     @transaction.atomic
     def post(self, request):
@@ -138,7 +159,7 @@ class WorkoutHistoryAddView(APIView):
 
         if history_serializer.is_valid():
             history_obj = history_serializer.save()
-        
+
             for ex_data in exercises_data:
                 ex_data['workout_history'] = history_obj.id
                 ex_data['user'] = history_obj.user.id
@@ -152,9 +173,9 @@ class WorkoutHistoryAddView(APIView):
                         "error": "Validation error in exercise", 
                         "details": ex_serializer.errors
                     }, status=status.HTTP_400_BAD_REQUEST)
-                    
+   
             return Response({"message": "Workout and exercises added successfully"}, status=status.HTTP_201_CREATED)
-            
+
         return Response(history_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -194,7 +215,7 @@ class PostListCreateView(APIView):
         all_posts = posts.objects.all().order_by('-id')
         serializer = PostSerializer(all_posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def post(self, request):
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
@@ -218,7 +239,7 @@ class CommentListCreateView(APIView):
         all_comments = comments.objects.all().order_by('-id')
         serializer = CommentSerializer(all_comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     def post(self, request):
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
