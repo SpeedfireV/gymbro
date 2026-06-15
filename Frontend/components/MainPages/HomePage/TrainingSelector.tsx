@@ -49,6 +49,18 @@ export function TrainingSelector({
       loadWorkouts();
     }, []);
 
+  const filteredTrainings = realTrainings.filter((training) => {
+      const query = searchQuery.toLowerCase().trim();
+      
+      if (!query) return true;
+
+      const matchesTitle = training.title?.toLowerCase().includes(query);
+      const matchesDescription = training.description?.toLowerCase().includes(query);
+      const matchesMuscles = training.muscles?.toLowerCase().includes(query);
+
+      return matchesTitle || matchesDescription || matchesMuscles;
+  });
+
   const renderItem = ({ item }: { item: TrainingItem }) => (
     <TrainingCard
       item={item}
@@ -61,7 +73,7 @@ export function TrainingSelector({
   return (
     <View style={styles.container}>
       <FlatList
-        data={realTrainings}
+        data={filteredTrainings}
         renderItem={renderItem}
         ListHeaderComponent={
           <View>
