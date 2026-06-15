@@ -232,6 +232,37 @@ class ExercisesEndpointsTest(APITestCase):
         self.assertIn('difficulty', response.data)
         self.assertEqual(exercises.objects.count(), 0)
 
+    def test_list_exercises(self):
+        exercises.objects.create(
+            name="Wyciskanie sztangi leżąc", type="strength", muscle="chest",
+            difficulty="beginner", instructions="...", safety_info="..."
+        )
+        exercises.objects.create(
+            name="Przysiady", type="strength", muscle="legs",
+            difficulty="beginner", instructions="...", safety_info="..."
+        )
+
+        response = self.client.get(self.url_exercises)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+    def test_search_exercises_by_name(self):
+        exercises.objects.create(
+            name="Wyciskanie sztangi leżąc", type="strength", muscle="chest",
+            difficulty="beginner", instructions="...", safety_info="..."
+        )
+        exercises.objects.create(
+            name="Przysiady", type="strength", muscle="legs",
+            difficulty="beginner", instructions="...", safety_info="..."
+        )
+
+        response = self.client.get(f'{self.url_exercises}?search=Wyciskanie')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['name'], "Wyciskanie sztangi leżąc")
+
     def test_delete_exercise_as_admin_successful(self):
         self.client.force_authenticate(user=self.admin_user)
         ex_to_delete = exercises.objects.create(
