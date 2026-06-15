@@ -11,12 +11,28 @@ import BreakTile from "../components/BreakTile";
 import TrainingDetailsInfo from "./components/TrainingDetailsInfo";
 import { colors } from "../../../../Colors";
 import { fonts } from "../../../../Fonts";
+import { deleteUserWorkout } from "./deleteWorkout"
 
 export function TrainingDetailsPage({
   route,
   navigation,
 }: StackScreenProps<RootStackParamList, "TrainingDetail">) {
   const { training } = route.params;
+
+  const handleDelete = async () => {
+    console.log("Trying to delete");
+    if (!training?.id) return;
+
+    const success = await deleteUserWorkout(training.id);
+
+    if (success) {
+      console.log("Delete SUCCESS");
+    } else {
+      console.error("Delete ERROR");
+    }
+
+    navigation.navigate("Training");
+  };
 
   const renderItem = ({ item }: { item: ExerciseItem }) =>
     (/[1-9]/.test(item.break_after)) ? (
@@ -61,7 +77,7 @@ export function TrainingDetailsPage({
               <EditAddHeader
                 title={training.title}
                 onBack={() => navigation.navigate("Training")}
-                onDelete={() => {}}
+                onDelete={() => {handleDelete()}}
                 showDelete={true}
               />
             </View>

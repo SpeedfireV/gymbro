@@ -185,16 +185,10 @@ export function NewTrainingDetailsPage({
           disabled = {isSaving}
           onPress={async () => {
             setIsSaving(true);
-            const success = await saveFullTraining(exercisesList);
+            const success = await saveFullTraining(titleText, descriptionText, exercisesList);
             setIsSaving(false);
-
             if (success) {
-              Alert.alert("Success", "Training has been saved correctly!", [
-                { 
-                  text: "OK", 
-                  onPress: () => navigation.navigate("Training") // Powrót na stronę listy treningów
-                }
-              ]);
+              navigation.navigate("Training");
             } else {
               Alert.alert("Error", "Failed to save your training. Check logs.");
             }

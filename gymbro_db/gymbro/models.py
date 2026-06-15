@@ -98,6 +98,8 @@ class workout_history(models.Model):
 class workouts(models.Model):
     user = models.ForeignKey('users', on_delete=models.CASCADE)
     created_at = models.DateTimeField()
+    name = models.CharField(max_length=255, default="Mój Trening")
+    description = models.TextField(null=True, blank=True)
 
 
 class media(models.Model):

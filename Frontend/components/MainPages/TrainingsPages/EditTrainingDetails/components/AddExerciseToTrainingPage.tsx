@@ -58,9 +58,17 @@ export function AddExerciseToTrainingPage({
     loadExercises();
   }, []);
 
-  const filteredExercises = exercisesDictionary.filter((ex) =>
-    ex.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredExercises = exercisesDictionary.filter((exercise) => {
+    const query = searchQuery.toLowerCase().trim();
+    
+    if (!query) return true;
+
+    const matchesTitle = exercise.name.toLowerCase().includes(query);
+    const matchesDescription = exercise.instructions.toLowerCase().includes(query);
+    const matchesMuscles = exercise.muscule.toLowerCase().includes(query);
+
+    return matchesTitle || matchesDescription || matchesMuscles;
+  });
 
   const handleAddExercise = (
     sets: number,
@@ -108,7 +116,6 @@ export function AddExerciseToTrainingPage({
       </View>
       <View style={{ flex: 1 }}>
         {isLoading ? (
-          // Spinner na czas ładowania bazy danych
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" color="#FFF" />
           </View>

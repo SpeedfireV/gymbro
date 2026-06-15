@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, Text, FlatList, Alert } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../App";
 import { ExerciseItem } from "../../../ReusableComponents/ComplexTypes";
@@ -15,6 +15,7 @@ import EditTrainingDescription from "./components/EditTrainingDescription";
 import { fonts } from "../../../../Fonts";
 import { colors } from "../../../../Colors";
 import AddExerciseOrBreak from "./components/AddExerciseOrBreak";
+import {updateFullTraining} from "./components/editExistingTraining";
 
 export function EditTrainingDetailsPage({
   route,
@@ -28,6 +29,7 @@ export function EditTrainingDetailsPage({
     training.exercises,
   );
   const [nextTempId, setNextTempId] = useState<number>(1000000000);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [isAddExerciseVisible, setIsAddExerciseVisible] = useState(false);
   const [isAddBreakVisible, setIsAddBreakVisible] = useState(false);
@@ -179,8 +181,16 @@ export function EditTrainingDetailsPage({
         <GBBigButton
           bgColor={colors.activeYellow}
           icon="editOff"
-          onPress={() => {
-            // Tutaj logika zapisu całości
+          disabled = {isSaving}
+          onPress={async () => {
+            setIsSaving(true);
+            const success = await updateFullTraining(training.id, titleText, descriptionText, exercisesList);
+            setIsSaving(false);
+            if (success) {
+              navigation.navigate("Training");
+            } else {
+              Alert.alert("Error", "Failed to save your training. Check logs.");
+            }
           }}
         />
       </View>

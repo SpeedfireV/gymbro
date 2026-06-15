@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getApiUrl } from '../../../../../config/api';
 import { ExerciseItem } from '../../../../ReusableComponents/ComplexTypes'
 
-const convertToDjangoDuration = (timeStr: string): string => {
+export const convertToDjangoDuration = (timeStr: string): string => {
   if (!timeStr) return "00:00:00";
 
   const minutesMatch = timeStr.match(/(\d+)\s*MIN/i);
@@ -30,7 +30,7 @@ const convertToDjangoDuration = (timeStr: string): string => {
   return `${pad(totalHours)}:${pad(totalMinutes)}:${pad(totalSeconds)}`;
 };
 
-export const saveFullTraining = async (exercises: ExerciseItem[]): Promise<boolean> => {
+export const saveFullTraining = async (name : string, description: string, exercises: ExerciseItem[]): Promise<boolean> => {
   try {
     const token = await AsyncStorage.getItem('userToken');
     const userId = await AsyncStorage.getItem('userId');
@@ -49,7 +49,9 @@ export const saveFullTraining = async (exercises: ExerciseItem[]): Promise<boole
       },
       body: JSON.stringify({
         user: parseInt(userId),               
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        name: name || "Nowy Trening",
+        description: description || ""
       }),
     });
 

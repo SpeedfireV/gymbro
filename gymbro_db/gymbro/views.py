@@ -102,24 +102,29 @@ class WorkoutListCreateView(APIView):
 
         serializer = WorkoutSerializer(workouts_qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        serializer = WorkoutSerializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                db_user = users.objects.get(id=request.user.id)
+            except users.DoesNotExist:
+                return Response(
+                    {"error": "Nie znaleziono profilu użytkownika w tabeli 'users'."}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            serializer.save(user=db_user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class WorkoutExerciseListView(APIView):
     def get(self,request, workout_id):
         exercises_for_workout = workout_exercises.objects.filter(workout_id=workout_id).order_by('index')
         serializer = WorkoutExerciseSerializer(exercises_for_workout, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class WorkoutAddView(APIView):
-    def post(self, request):
-        serializer = WorkoutSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class WorkoutDetailView(APIView):
@@ -149,9 +154,26 @@ class WorkoutDetailView(APIView):
 
     def delete(self, request, pk):
         try:
-            workout = workouts.objects.get(pk=pk, user=request.user)
+            current_user_id = request.user.id if hasattr(request.user, 'id') else request.user
+            workout = workouts.objects.get(pk=pk, user_id=request.user.id)
             workout.delete()
-            return Response({"message": "Workout deleted"}, status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        except workouts.DoesNotExist:
+            return Response({"error": "Workout not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+    def put(self, request, pk):
+        try:
+            workout = workouts.objects.get(pk=pk, user_id=request.user.id if hasattr(request.user, 'id') else request.user)
+            
+            workout.name = request.data.get('name', workout.name)
+            workout.description = request.data.get('description', workout.description)
+            workout.save()
+
+            workout.workout_exercises_set.all().delete()
+
+            serializer = WorkoutSerializer(workout)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         except workouts.DoesNotExist:
             return Response({"error": "Workout not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -213,8 +235,6 @@ class CalendarEventDetailView(APIView):
         except calendar_events.DoesNotExist:
             return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
 
-class ExerciseAddView(APIView):
-    permission_classes = [IsAdminUser]
 class UserWorkoutsListView(APIView):
     def get(self, request, user_id):
         user_workouts = workouts.objects.filter(user_id=user_id).order_by('-created_at')
