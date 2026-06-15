@@ -8,11 +8,11 @@ from django.contrib.auth.hashers import make_password, check_password
 class EventTypes(models.TextChoices):
     WORKOUT = 'workout'
     REST = 'rest'
-
+    
 
 class ExerciseTypes(models.TextChoices):
-    STRENGTH = 'strength'
-    CARDIO = 'cardio'
+    REPS = 'reps'
+    DURATION = 'duration'
 
 
 class MuscleGroups(models.TextChoices):

@@ -119,18 +119,6 @@ class UserWorkoutsListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ExerciseAddView(APIView):
-    permission_classes = [IsAdminUser]
-
-    def post(self, request):
-        serializer = ExerciseSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class ExerciseDeleteView(APIView):
     permission_classes = [IsAdminUser]
 
@@ -143,11 +131,25 @@ class ExerciseDeleteView(APIView):
             return Response({"error": "exercise not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class ExerciseListView(APIView):
+class ExerciseListCreateView(APIView):
     def get(self, request):
         all_exercises = exercises.objects.all()
         serializer = ExerciseSerializer(all_exercises, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        if not request.user or not request.user.is_staff:
+            return Response(
+                {"detail": "You do not have permission to perform this action."}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
+        serializer = ExerciseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class WorkoutHistoryAddView(APIView):

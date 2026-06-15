@@ -2,6 +2,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../App";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getApiUrl } from '../../../config/api';
+import { jwtDecode } from "jwt-decode";
 
 export  const handleLogin = async (
   emailText: string,
@@ -58,11 +59,22 @@ export  const handleLogin = async (
 
     if (response.ok) {
       console.log("Success! Logged correctly", data);
-      if (data.access) {
-        await AsyncStorage.setItem('userToken', data.access);
-        await AsyncStorage.setItem('refreshToken', data.refresh);
+      const tokens = data.tokens;
+      const user = data.user;
+      
+      if (tokens && tokens.access) {
+        await AsyncStorage.setItem('userToken', tokens.access);
+        await AsyncStorage.setItem('refreshToken', tokens.refresh);
+        console.log("Into access");
+        
+        if (user && user.id) {
+          await AsyncStorage.setItem('userId', String(user.id));
+          console.log("Saved user id:", user.id);
+        }
+        navigation.navigate("Home");
+      } else{
+        console.log("Tokens not found");
       }
-      navigation.navigate("Home");
     } else {
       console.log("Login Fail from Backend:", data);
       alert(data.detail || "E-mail password error");

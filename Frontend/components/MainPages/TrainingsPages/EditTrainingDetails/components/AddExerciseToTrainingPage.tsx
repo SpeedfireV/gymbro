@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { GBSearchBar } from "../../../../ReusableComponents/GBSearchBar";
 import EditAddHeader from "../../../../ReusableComponents/EditAddHeader";
@@ -15,9 +16,7 @@ import {
   ExerciseItem,
   ExercisePrototype,
 } from "../../../../ReusableComponents/ComplexTypes";
-
-import {pushUpPrototype, plankPrototype, squatPrototype, bicepCurlPrototype} from "../../TrainingsPage/DummyTrainingsData";
-
+import { fetchExercisesDictionary } from "./getExercises";
 
 interface AddExerciseToTrainingPageProps {
   nextTempId: number;
@@ -37,6 +36,7 @@ export function AddExerciseToTrainingPage({
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddExerciseVisable, setIsAddExerciseVisable] = useState(false);
   const [chosenExercise, setChosenExercise] = useState<ExercisePrototype>({
+    id: -1,
     name: "",
     type: "",
     muscule: "",
@@ -45,40 +45,22 @@ export function AddExerciseToTrainingPage({
     safety_info: ""
   });
 
-  const EXERCISES = [
-    {
-      name: "Push-Up",
-      type: "reps",
-      muscule: "Chest",
-      difficulty: "Beginner",
-      instructions: "Lower your body until your chest nearly touches the floor, then push back up.",
-      safety_info: "Keep your core tight and do not let your lower back sag."
-    },
-    {
-      name: "Plank",
-      type: "duration",
-      muscule: "Abs",
-      difficulty: "Beginner",
-      instructions: "Hold a push-up position but rest your weight on your forearms rather than your hands.",
-      safety_info: "Keep your body in a straight line from head to heels."
-    },
-    {
-      name: "Bodyweight Squat",
-      type: "reps",
-      muscule: "Quads",
-      difficulty: "Beginner",
-      instructions: "Lower your hips until your thighs are parallel to the floor, then stand back up.",
-      safety_info: "Keep your knees aligned with your toes and your chest up."
-    },
-    {
-      name: "Dumbbell Bicep Curl",
-      type: "reps",
-      muscule: "Biceps",
-      difficulty: "Beginner",
-      instructions: "Curl the weights while contracting your biceps.",
-      safety_info: "Do not swing your body to lift the weights."
-    },
-  ];
+  const [exercisesDictionary, setExercisesDictionary] = useState<ExercisePrototype[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadExercises = async () => {
+      setIsLoading(true);
+      const data = await fetchExercisesDictionary();
+      setExercisesDictionary(data);
+      setIsLoading(false);
+    };
+    loadExercises();
+  }, []);
+
+  const filteredExercises = exercisesDictionary.filter((ex) =>
+    ex.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleAddExercise = (
     sets: number,
@@ -125,8 +107,14 @@ export function AddExerciseToTrainingPage({
         />
       </View>
       <View style={{ flex: 1 }}>
+        {isLoading ? (
+          // Spinner na czas ładowania bazy danych
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="#FFF" />
+          </View>
+        ) : (
         <FlatList
-          data={EXERCISES}
+          data={filteredExercises}
           contentContainerStyle={{ paddingBottom: 100, marginTop: 16 }}
           ItemSeparatorComponent={() => <View style={{ height: 32 }} />}
           renderItem={({ item }) => (
@@ -138,6 +126,7 @@ export function AddExerciseToTrainingPage({
                 showIcon={false}
                 onPress={() => {
                   setChosenExercise({
+                    id: item.id,
                     name: item.name,
                     instructions: item.instructions,
                     muscule: item.muscule,
@@ -151,7 +140,7 @@ export function AddExerciseToTrainingPage({
             </View>
           )}
           keyExtractor={(item, index) => index.toString()}
-        />
+        />)}
       </View>
 
       <AddTrainingComponent

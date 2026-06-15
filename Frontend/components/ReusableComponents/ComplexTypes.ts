@@ -1,6 +1,7 @@
 
 
 export interface ExercisePrototype {
+  id: number;
   name: string;
   type : string;
   muscule: string;
