@@ -16,7 +16,7 @@ import {
   ExerciseItem,
   ExercisePrototype,
 } from "../../../../ReusableComponents/ComplexTypes";
-import { fetchExercisesDictionary } from "./getExercises";
+import { fetchExercisesDictionary } from "../../../../ReusableComponents/getExercises";
 
 interface AddExerciseToTrainingPageProps {
   nextTempId: number;

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getApiUrl } from '../../../../../config/api'; 
-import { ExercisePrototype } from '../../../../ReusableComponents/ComplexTypes';
+import { getApiUrl } from '../../config/api'; 
+import { ExercisePrototype } from './ComplexTypes';
 
 export const fetchExercisesDictionary = async (): Promise<ExercisePrototype[]> => {
   try {
