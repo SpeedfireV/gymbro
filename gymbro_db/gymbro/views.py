@@ -1,15 +1,17 @@
+import datetime
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from django.db import transaction
 
-from .models import users, workout_exercises, workouts, exercises, workout_history, exercises_history
+from .models import users, workout_exercises, workouts, calendar_events, exercises, workout_history, exercises_history
 from .models import posts, comments, ratings, comments_ratings
 from .serializers import RegisterSerializer, LoginSerializer, UserDTOSerializer, WorkoutExerciseSerializer, WorkoutSerializer
 from .serializers import ExerciseSerializer, WorkoutHistorySerializer, ExerciseHistorySerializer, PostSerializer
-from .serializers import CommentSerializer
+from .serializers import CommentSerializer, CalendarEventSerializer
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -83,6 +85,24 @@ class WorkoutExerciseDeleteView(APIView):
             return Response({"error": "Workout exercise not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+class WorkoutListCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        workouts_qs = workouts.objects.filter(user=request.user)
+        day = request.query_params.get('day')
+
+        if day:
+            try:
+                day_date = datetime.date.fromisoformat(day)
+            except ValueError:
+                return Response({"error": "Invalid day format. Expected YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
+
+            workouts_qs = workouts_qs.filter(created_at__date=day_date)
+
+        serializer = WorkoutSerializer(workouts_qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class WorkoutExerciseListView(APIView):
     def get(self,request, workout_id):
         exercises_for_workout = workout_exercises.objects.filter(workout_id=workout_id).order_by('index')
@@ -94,24 +114,107 @@ class WorkoutAddView(APIView):
     def post(self, request):
         serializer = WorkoutSerializer(data=request.data)
 
-        if (serializer.is_valid()):
-            serializer.save()
+        if serializer.is_valid():
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class WorkoutDeleteView(APIView):
+
+class WorkoutDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            workout = workouts.objects.get(pk=pk, user=request.user)
+        except workouts.DoesNotExist:
+            return Response({"error": "Workout not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = WorkoutSerializer(workout)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, pk):
+        try:
+            workout = workouts.objects.get(pk=pk, user=request.user)
+        except workouts.DoesNotExist:
+            return Response({"error": "Workout not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = WorkoutSerializer(workout, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def delete(self, request, pk):
         try:
-            workout_to_delete = workouts.objects.get(pk=pk)
-            workout_to_delete.delete()
+            workout = workouts.objects.get(pk=pk, user=request.user)
+            workout.delete()
             return Response({"message": "Workout deleted"}, status=status.HTTP_204_NO_CONTENT)
 
         except workouts.DoesNotExist:
             return Response({"error": "Workout not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+class CalendarEventListCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        events = calendar_events.objects.filter(user=request.user)
+        
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
+        if start_date:
+            events = events.filter(utc_time__gte=start_date)
+        if end_date:
+            events = events.filter(utc_time__lte=end_date)
+            
+        events = events.order_by('utc_time')
+        serializer = CalendarEventSerializer(events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = CalendarEventSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CalendarEventDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            event = calendar_events.objects.get(pk=pk, user=request.user)
+        except calendar_events.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = CalendarEventSerializer(event)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def patch(self, request, pk):
+        try:
+            event = calendar_events.objects.get(pk=pk, user=request.user)
+        except calendar_events.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = CalendarEventSerializer(event, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            event = calendar_events.objects.get(pk=pk, user=request.user)
+            event.delete()
+            return Response({"message": "Event deleted"}, status=status.HTTP_204_NO_CONTENT)
+        except calendar_events.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class ExerciseAddView(APIView):
+    permission_classes = [IsAdminUser]
 class UserWorkoutsListView(APIView):
     def get(self, request, user_id):
         user_workouts = workouts.objects.filter(user_id=user_id).order_by('-created_at')

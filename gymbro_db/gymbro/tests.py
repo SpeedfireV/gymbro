@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.utils import timezone
 from datetime import timedelta
-from .models import users, workouts, exercises, workout_exercises, workout_history, exercises_history
+from .models import users, workouts, exercises, workout_exercises, workout_history, exercises_history, calendar_events
 from .models import posts, comments, ratings, comments_ratings
 
 class AuthEndpointsTest(APITestCase):
@@ -152,12 +152,19 @@ class WorkoutsEndpointsTest(APITestCase):
         }
 
     def test_create_workout_successfyl(self):
+        self.client.force_authenticate(user=self.user)
         response = self.client.post(self.url_workouts, self.valid_payload, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(workouts.objects.count(), 1)
 
+    def test_create_workout_unauthenticated_forbidden(self):
+        response = self.client.post(self.url_workouts, self.valid_payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_create_workout_invalid_data(self):
+        self.client.force_authenticate(user=self.user)
         invalid_payload = {
             "user": 999, 
             "created_at": "to-w-ogole-nie-jest-data"
@@ -166,11 +173,11 @@ class WorkoutsEndpointsTest(APITestCase):
         response = self.client.post(self.url_workouts, invalid_payload, format='json')
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('user', response.data)
         self.assertIn('created_at', response.data)
         self.assertEqual(workouts.objects.count(), 0)
 
     def test_delete_workout_successful(self):
+        self.client.force_authenticate(user=self.user)
         workout_to_delete = workouts.objects.create(user=self.user, created_at=timezone.now())
         url_delete = f'/api/workouts/{workout_to_delete.id}/'
         response = self.client.delete(url_delete)
@@ -178,11 +185,117 @@ class WorkoutsEndpointsTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(workouts.objects.count(), 0)
 
+    def test_delete_workout_unauthenticated_forbidden(self):
+        workout_to_delete = workouts.objects.create(user=self.user, created_at=timezone.now())
+        url_delete = f'/api/workouts/{workout_to_delete.id}/'
+        response = self.client.delete(url_delete)
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_delete_non_existent_workout(self):
+        self.client.force_authenticate(user=self.user)
         url_delete = '/api/workouts/999/'
         response = self.client.delete(url_delete)
         
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_workout_successful(self):
+        self.client.force_authenticate(user=self.user)
+        workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        url_patch = f'/api/workouts/{workout.id}/'
+        payload = {"created_at": "2026-06-01T08:00:00Z"}
+
+        response = self.client.patch(url_patch, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], workout.id)
+        self.assertEqual(response.data['created_at'], "2026-06-01T08:00:00Z")
+
+    def test_patch_workout_unauthenticated_forbidden(self):
+        workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+        url_patch = f'/api/workouts/{workout.id}/'
+        payload = {"created_at": "2026-06-01T08:00:00Z"}
+
+        response = self.client.patch(url_patch, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_get_workouts_by_user_and_day(self):
+        self.client.force_authenticate(user=self.user)
+        workouts.objects.create(user=self.user, created_at=timezone.datetime(2026, 6, 14, 10, 0, tzinfo=timezone.UTC))
+        workouts.objects.create(user=self.user, created_at=timezone.datetime(2026, 6, 15, 10, 0, tzinfo=timezone.UTC))
+        other_user = users.objects.create(username="Other", email="other@mail.com", password="123")
+        workouts.objects.create(user=other_user, created_at=timezone.datetime(2026, 6, 14, 12, 0, tzinfo=timezone.UTC))
+
+        response = self.client.get(f'{self.url_workouts}?day=2026-06-14')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['user'], self.user.id)
+        self.assertEqual(response.data[0]['created_at'], '2026-06-14T10:00:00Z')
+
+    def test_get_workouts_unauthenticated_forbidden(self):
+        response = self.client.get(self.url_workouts)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class CalendarEventsEndpointsTest(APITestCase):
+    def setUp(self):
+        self.url_calendar = '/api/calendar-events/'
+        self.user = users.objects.create(username="Ludwig", email="ludwig@mail.com", password="123")
+        self.workout = workouts.objects.create(user=self.user, created_at=timezone.now())
+
+    def test_create_calendar_workout_event(self):
+        self.client.force_authenticate(user=self.user)
+        payload = {
+            "workout": self.workout.id,
+            "utc_time": "2026-06-14T09:00:00Z",
+            "event_type": "workout",
+            "title": "Morning session",
+            "description": "Plan this workout",
+            "repeat": "daily"
+        }
+
+        response = self.client.post(self.url_calendar, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(calendar_events.objects.count(), 1)
+        self.assertEqual(response.data['repeat'], 'daily')
+        self.assertEqual(response.data['workout'], self.workout.id)
+
+    def test_get_calendar_events_for_user(self):
+        self.client.force_authenticate(user=self.user)
+        calendar_events.objects.create(
+            user=self.user,
+            workout=self.workout,
+            utc_time=timezone.datetime(2026, 6, 14, 9, 0, tzinfo=timezone.UTC),
+            event_type='workout',
+            title='Morning session',
+            description='Plan this workout',
+            repeat='daily'
+        )
+
+        response = self.client.get(self.url_calendar)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['title'], 'Morning session')
+
+    def test_create_rest_calendar_event_without_workout(self):
+        self.client.force_authenticate(user=self.user)
+        payload = {
+            "utc_time": "2026-06-14T09:00:00Z",
+            "event_type": "rest",
+            "title": "Rest day",
+            "description": "Take a break",
+            "repeat": "weekly"
+        }
+
+        response = self.client.post(self.url_calendar, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['event_type'], 'rest')
+        self.assertIsNone(response.data['workout'])
 
 
 class ExercisesEndpointsTest(APITestCase):
