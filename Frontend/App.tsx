@@ -13,6 +13,7 @@ import { RegistrationPage } from "./components/AuthPages/RegistrationPage/Regist
 import { TrainingsPage } from "./components/MainPages/TrainingsPages/TrainingsPage/TrainingsPage";
 import { TrainingDetailsPage } from "./components/MainPages/TrainingsPages/TrainingDetails/TrainingDetailsPage";
 import { EditTrainingDetailsPage } from "./components/MainPages/TrainingsPages/EditTrainingDetails/EditTrainingDetailsPage";
+import { NewTrainingDetailsPage } from "./components/MainPages/TrainingsPages/EditTrainingDetails/NewTrainingDetailsPage";
 import { HomePage } from "./components/MainPages/HomePage/HomePage";
 import { TrainingSelector } from "./components/MainPages/HomePage/TrainingSelector";
 import { DateSelector } from "./components/MainPages/HomePage/DateSelector";
@@ -38,6 +39,7 @@ export type RootStackParamList = {
   DateSelector: { training: TrainingItem };
   TrainingDetail: { training: TrainingItem };
   EditTrainingDetail: { training: TrainingItem };
+  NewTrainingDetail: { training: TrainingItem };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -100,6 +102,10 @@ function App() {
         <Stack.Screen
           name="EditTrainingDetail"
           component={EditTrainingDetailsPage}
+        />
+        <Stack.Screen
+          name="NewTrainingDetail"
+          component={NewTrainingDetailsPage}
         />
         <Stack.Screen name="AddNewExercise" component={AddNewExercisePage} />
         <Stack.Screen name="ExerciseEditPage" component={ExerciseEditPage} />

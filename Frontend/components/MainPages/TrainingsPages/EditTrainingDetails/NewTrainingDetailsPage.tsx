@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, Text, FlatList, Alert } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../App";
 import { ExerciseItem } from "../../../ReusableComponents/ComplexTypes";
@@ -15,11 +15,12 @@ import EditTrainingDescription from "./components/EditTrainingDescription";
 import { fonts } from "../../../../Fonts";
 import { colors } from "../../../../Colors";
 import AddExerciseOrBreak from "./components/AddExerciseOrBreak";
+import {saveFullTraining} from "./components/saveNewTraining";
 
-export function EditTrainingDetailsPage({
+export function NewTrainingDetailsPage({
   route,
   navigation,
-}: StackScreenProps<RootStackParamList, "EditTrainingDetail">) {
+}: StackScreenProps<RootStackParamList, "NewTrainingDetail">) {
   const { training } = route.params;
 
   const [titleText, setTitleText] = useState(training.title);
@@ -31,6 +32,8 @@ export function EditTrainingDetailsPage({
 
   const [isAddExerciseVisible, setIsAddExerciseVisible] = useState(false);
   const [isAddBreakVisible, setIsAddBreakVisible] = useState(false);
+
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleAddBreak = (minutes: number, seconds: number) => {
     const totalDurationString =
@@ -172,15 +175,29 @@ export function EditTrainingDetailsPage({
         <View style={styles.CancelChangesContainer}>
           <CancelChangesButton
             onPress={() => {
-              navigation.navigate("TrainingDetail", { training });
+              navigation.navigate("Training");
             }}
           />
         </View>
         <GBBigButton
           bgColor={colors.activeYellow}
           icon="editOff"
-          onPress={() => {
-            // Tutaj logika zapisu całości
+          disabled = {isSaving}
+          onPress={async () => {
+            setIsSaving(true);
+            const success = await saveFullTraining(exercisesList);
+            setIsSaving(false);
+
+            if (success) {
+              Alert.alert("Success", "Training has been saved correctly!", [
+                { 
+                  text: "OK", 
+                  onPress: () => navigation.navigate("Training") // Powrót na stronę listy treningów
+                }
+              ]);
+            } else {
+              Alert.alert("Error", "Failed to save your training. Check logs.");
+            }
           }}
         />
       </View>

@@ -1,7 +1,10 @@
-export const handleRegistration = (
+import { getApiUrl } from '../../../config/api';
+
+export const handleRegistration = async (
   emailText: string,
   passwordText: string,
   passwordRepText: string,
+  nickname: string,
 ) => {
   console.log("AttemptLogEmail: ", emailText);
   console.log("AttemptLogPass: ", passwordText);
@@ -42,4 +45,33 @@ export const handleRegistration = (
   }
 
   console.log("Registration attempt");
+
+  try {
+    const response = await fetch(getApiUrl('/api/register/'), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailText,
+        nickname: nickname,
+        password: passwordText,
+        repeat_password: passwordRepText,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log("Registration Success", data);
+      alert("Konto założone pomyślnie! Możesz się zalogować.");
+    } else {
+      console.log("Registration Fail from Backend:", data);
+
+      alert(JSON.stringify(data)); 
+    }
+  } catch (error) {
+    console.error("Network error:", error);
+    alert("Brak połączenia z serwerem backendu.");
+  }
 };

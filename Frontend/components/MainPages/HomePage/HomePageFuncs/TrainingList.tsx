@@ -7,50 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const TrainingsList = ({ selectedDate }: { selectedDate: Date }) => {
     const dummyTrainings : TrainingItem[] = [
-        {
-        id: '1',
-        title: 'Leg Day',
-        description : '',
-        muscles: 'Leg, Triceps, Biceps',
-        time: '14:30-18:50',
-        exercisesCount: 8,
-        duration: '4 h 20 min',
-        exercises: [
-            { id: 'e1', name: 'Cardio', muscle: ["Heart"], detail: '45 min', order: 1, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: false},
-            { id: 'e2', name: 'Incline Bench Press', muscle: ["Biceps"], detail: '4x12', order: 2, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: true},
-            { id: 'e3', name: 'Cardio', muscle: ["Heart"], detail: '45 min', order: 3, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: false},
-            { id: 'e4', name: 'Incline Bench Press', muscle: ["Biceps"], detail: '4x12', order: 4, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: true},
-        ],
-        isPublic: true,
-        },
-        {
-        id: '2',
-        title: 'abscdefghijk',
-        description : '',
-        muscles: 'Leg, Triceps, Biceps',
-        time: '14:30-18:50',
-        exercisesCount: 8,
-        duration: '4 h 20 min',
-        exercises: [
-            { id: 'x1', name: 'Cardio', muscle: ["Heart"], detail: '45 min', order: 3, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: false},
-            { id: 'x2', name: 'Incline Bench Press', muscle: ["Biceps"], detail: '4x12', order: 4, type: "exercise" , innerBreakDuration : "1 min 30 sec", isRepeating: true},
-        ],
-        isPublic: true,
-        },
-        {
-        id: '3',
-        title: 'Leg Day',
-        muscles: 'Leg, Triceps, Biceps',
-        description : '',
-        time: '14:30-18:50',
-        exercisesCount: 8,
-        duration: '4 h 20 min',
-        exercises: [
-            { id: 'c1', name: 'Cardio', muscle: ["Biceps"], detail: '45 min', order: 3, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: false},
-            { id: 'c2', name: 'Incline Bench Press', muscle: ["Biceps"], detail: '4x12', order: 4, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: true},
-        ],
-        isPublic: true,
-        },
+        
     ];
 
     const dummyTrainingsEmpty : TrainingItem[] = []

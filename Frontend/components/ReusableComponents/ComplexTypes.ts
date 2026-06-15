@@ -1,23 +1,24 @@
-export interface ExerciseItem {
-  id: string;
-  name: string;
-  type: string;
-  muscle: string[];
-  detail: string;
-  difficulty?: string;
-  instructions?: string;
-  safetyInfo?: string;
-  order: number;
-  innerBreakDuration: string;
-  isRepeating? : boolean;
-}
+
 
 export interface ExercisePrototype {
-  title: string;
-  bodyParts: string[];
-  desc: string;
-  isPublic: boolean
-  isRepeating : boolean;
+  id: number;
+  name: string;
+  type : string;
+  muscule: string;
+  difficulty: string;
+  instructions: string;
+  safety_info: string;
+}
+
+export interface ExerciseItem {
+  index: string;
+  exercise: ExercisePrototype;
+  sets: string;
+  reps: string;
+  duration: string;
+  break_between: string;
+  break_after: string;
+  order: number;
 }
 
 export interface TrainingItem {

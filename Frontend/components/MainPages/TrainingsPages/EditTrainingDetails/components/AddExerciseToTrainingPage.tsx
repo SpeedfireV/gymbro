@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import { GBSearchBar } from "../../../../ReusableComponents/GBSearchBar";
 import EditAddHeader from "../../../../ReusableComponents/EditAddHeader";
@@ -15,6 +16,7 @@ import {
   ExerciseItem,
   ExercisePrototype,
 } from "../../../../ReusableComponents/ComplexTypes";
+import { fetchExercisesDictionary } from "./getExercises";
 
 interface AddExerciseToTrainingPageProps {
   nextTempId: number;
@@ -34,50 +36,31 @@ export function AddExerciseToTrainingPage({
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddExerciseVisable, setIsAddExerciseVisable] = useState(false);
   const [chosenExercise, setChosenExercise] = useState<ExercisePrototype>({
-    title: "",
-    desc: "",
-    isPublic: false,
-    bodyParts: [],
-    isRepeating: false,
+    id: -1,
+    name: "",
+    type: "",
+    muscule: "",
+    difficulty: "",
+    instructions: "",
+    safety_info: ""
   });
 
-  const EXERCISES = [
-    {
-      title: "Pull Ups1",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-      isRepeating: true,
-    },
-    {
-      title: "Cardio 1",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-      isRepeating: false,
-    },
-    {
-      title: "Pull Ups3",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-      isRepeating: true,
-    },
-    {
-      title: "Cardio 2",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-      isRepeating: false,
-    },
-    {
-      title: "Pull Ups5",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: true,
-      isRepeating: true,
-    },
-  ];
+  const [exercisesDictionary, setExercisesDictionary] = useState<ExercisePrototype[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadExercises = async () => {
+      setIsLoading(true);
+      const data = await fetchExercisesDictionary();
+      setExercisesDictionary(data);
+      setIsLoading(false);
+    };
+    loadExercises();
+  }, []);
+
+  const filteredExercises = exercisesDictionary.filter((ex) =>
+    ex.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleAddExercise = (
     sets: number,
@@ -87,17 +70,16 @@ export function AddExerciseToTrainingPage({
   ) => {
     const totalDurationString =
       `${minutes} MIN ${seconds > 0 ? seconds + " SEC" : ""}`.trim();
-    const details = `${sets}x${reps}`.trim();
 
     const newExerciseItem: ExerciseItem = {
-      id: nextTempId.toString(),
-      type: "exercise",
-      detail: details,
-      order: Math.max(...exercisesList.map((item) => item.order)) + 1,
-      muscle: chosenExercise.bodyParts,
-      name: chosenExercise.title,
-      innerBreakDuration: totalDurationString,
-      isRepeating: chosenExercise.isRepeating,
+      index: nextTempId.toString(),
+      exercise: chosenExercise,
+      sets: String(sets),
+      reps: String(reps),
+      duration: totalDurationString,
+      break_between: totalDurationString,
+      break_after: "00:00",
+      order: exercisesList.length + 1
     };
 
     setNextTempId(nextTempId + 1);
@@ -125,25 +107,32 @@ export function AddExerciseToTrainingPage({
         />
       </View>
       <View style={{ flex: 1 }}>
+        {isLoading ? (
+          // Spinner na czas ładowania bazy danych
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="#FFF" />
+          </View>
+        ) : (
         <FlatList
-          data={EXERCISES}
+          data={filteredExercises}
           contentContainerStyle={{ paddingBottom: 100, marginTop: 16 }}
           ItemSeparatorComponent={() => <View style={{ height: 32 }} />}
           renderItem={({ item }) => (
             <View style={{ paddingHorizontal: 20 }}>
               <ExerciseCard
-                title={item.title}
-                bodyParts={item.bodyParts}
-                desc={item.desc}
-                isPublic={item.isPublic}
+                title={item.name}
+                bodyParts={item.muscule}
+                desc={item.instructions}
                 showIcon={false}
                 onPress={() => {
                   setChosenExercise({
-                    title: item.title,
-                    desc: item.desc,
-                    isPublic: item.isPublic,
-                    bodyParts: item.bodyParts,
-                    isRepeating: item.isRepeating,
+                    id: item.id,
+                    name: item.name,
+                    instructions: item.instructions,
+                    muscule: item.muscule,
+                    type: item.type,
+                    difficulty: item.difficulty,
+                    safety_info: item.safety_info
                   });
                   setIsAddExerciseVisable(true);
                 }}
@@ -151,13 +140,13 @@ export function AddExerciseToTrainingPage({
             </View>
           )}
           keyExtractor={(item, index) => index.toString()}
-        />
+        />)}
       </View>
 
       <AddTrainingComponent
         visible={isAddExerciseVisable}
         isExercise={true}
-        isRepeating={chosenExercise.isRepeating}
+        isRepeating={chosenExercise.type == "reps"}
         onClose={() => setIsAddExerciseVisable(false)}
         onAddExercise={handleAddExercise}
       />

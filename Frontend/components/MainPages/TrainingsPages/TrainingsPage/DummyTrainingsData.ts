@@ -1,176 +1,119 @@
 import { TrainingItem } from "../../../ReusableComponents/ComplexTypes";
+import { ExercisePrototype } from "../../../ReusableComponents/ComplexTypes";
+
+
+export const pushUpPrototype: ExercisePrototype = {
+  name: "Push-Up",
+  type: "reps",
+  muscule: "Chest",
+  difficulty: "Beginner",
+  instructions: "Lower your body until your chest nearly touches the floor, then push back up.",
+  safety_info: "Keep your core tight and do not let your lower back sag."
+};
+
+export const plankPrototype: ExercisePrototype = {
+  name: "Plank",
+  type: "duration",
+  muscule: "Abs",
+  difficulty: "Beginner",
+  instructions: "Hold a push-up position but rest your weight on your forearms rather than your hands.",
+  safety_info: "Keep your body in a straight line from head to heels."
+};
+
+export const squatPrototype: ExercisePrototype = {
+  name: "Bodyweight Squat",
+  type: "reps",
+  muscule: "Quads",
+  difficulty: "Beginner",
+  instructions: "Lower your hips until your thighs are parallel to the floor, then stand back up.",
+  safety_info: "Keep your knees aligned with your toes and your chest up."
+};
+
+export const bicepCurlPrototype: ExercisePrototype = {
+  name: "Dumbbell Bicep Curl",
+  type: "reps",
+  muscule: "Biceps",
+  difficulty: "Beginner",
+  instructions: "Curl the weights while contracting your biceps.",
+  safety_info: "Do not swing your body to lift the weights."
+};
 
 export const dummyTrainings: TrainingItem[] = [
-    {
-      id: "1",
-      title: "Leg Day",
-      description: "NIG",
-      muscles: "Leg, Triceps, Biceps",
-      time: "14:30-18:50",
-      exercisesCount: 8,
-      duration: "4 h 20 min",
-      exercises: [
-        {
-          id: "e1",
-          name: "Cardio",
-          muscle: ["Heart"],
-          detail: "45 min",
-          order: 1,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: false,
-        },
-        {
-          id: "e2",
-          name: "Incline Bench Press",
-          muscle: ["Biceps"],
-          detail: "4x12",
-          order: 2,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: true,
-        },
-        {
-          id: "e3",
-          name: "Cardio",
-          muscle: ["Heart"],
-          detail: "45 min",
-          order: 3,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: false,
-        },
-        {
-          id: "e4",
-          name: "Incline Bench Press",
-          muscle: ["Biceps"],
-          detail: "4x12",
-          order: 4,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: true,
-        },
-      ],
-      isPublic: true,
-    },
-    {
-      id: "2",
-      title: "abscdjk",
-      description:
-        "aasodsjidajs odjoi asdjioasjd ajosdjioasdji asjidaosjdji aosdjoas jdasjdjaosdjasj dasjdjaosdjioasdjoasjd asjodjoiasdjiasjdja sodjiaosdjoasjdasjdjasdjioasdji oasjdasdjas doasdaasodsjid ajsodjo iasdjioa sjdajosdji oasdj iasjidaosjd jiaosdjoa sjdasjdjaos djasjdasjdjaosdjio asdjoa sjdasj aasodsjidajs odjoi asdjioasjd ajosdjioasdji asjidaosjdji aosdjoas jdasjdjaosdjasj dasjdjaosdjioasdjoasjd asjodjoiasdjiasjdja sodjiaosdjoasjdasjdjasdjioasdji oasjdasdjas doasdaasodsjid ajsodjo iasdjioa sjdajosdji oasdj iasjidaosjd jiaosdjoa sjdasjdjaos djasjdasjdjaosdjio asdjoa sjdasj aasodsjidajs odjoi asdjioasjd ajosdjioasdji asjidaosjdji aosdjoas jdasjdjaosdjasj dasjdjaosdjioasdjoasjd asjodjoiasdjiasjdja sodjiaosdjoasjdasjdjasdjioasdji oasjdasdjas doasdaasodsjid ajsodjo iasdjioa sjdajosdji oasdj iasjidaosjd jiaosdjoa sjdasjdjaos djasjdasjdjaosdjio asdjoa sjdasj ",
-      muscles: "Leg, Triceps, Biceps",
-      time: "14:30-18:50",
-      exercisesCount: 8,
-      duration: "4 h 20 min",
-      exercises: [
-        {
-          id: "x1",
-          name: "Cardio",
-          muscle: ["Heart"],
-          detail: "45 min",
-          order: 3,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: false,
-        },
-        {
-          id: "x2",
-          name: "Incline Bench Press",
-          muscle: ["Biceps"],
-          detail: "4x12",
-          order: 4,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: true,
-        },
-      ],
-      isPublic: true,
-    },
-    {
-      id: "3",
-      title: "Leg Day",
-      description: "ER",
-      muscles: "Leg, Triceps, Biceps",
-      time: "14:30-18:50",
-      exercisesCount: 8,
-      duration: "4 h 20 min",
-      exercises: [
-        {
-          id: "c1",
-          name: "Cardio",
-          muscle: ["Heart"],
-          detail: "45 min",
-          order: 3,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: false,
-        },
-        {
-          id: "c2",
-          name: "Incline Bench Press",
-          muscle: ["Biceps"],
-          detail: "4x12",
-          order: 4,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: true,
-        },
-      ],
-      isPublic: true,
-    },
-  ];
+  {
+    id: "t1",
+    title: "Full Body Starter",
+    description: "A quick full body workout mixing repetitions and timed holds.",
+    muscles: "Chest, Abs, Quads",
+    time: "15:00",
+    exercisesCount: 3,
+    duration: "15:00",
+    isPublic: true,
+    exercises: [
+      {
+        index: "e1_1",
+        exercise: pushUpPrototype,
+        sets: "3",
+        reps: "12",
+        duration: "00:00",
+        break_between: "00:45",
+        break_after: "01:00",
+        order: 1
+      },
+      {
+        index: "e1_2",
+        exercise: plankPrototype,
+        sets: "0",
+        reps: "0",
+        duration: "01:00",
+        break_between: "00:30",
+        break_after: "00:00",
+        order: 2
+      },
+      {
+        index: "e1_3",
+        exercise: squatPrototype,
+        sets: "3",
+        reps: "15",
+        duration: "00:00",
+        break_between: "00:45",
+        break_after: "02:00",
+        order: 3
+      }
+    ]
+  }
+];
 
 export const dummyTrainings2: TrainingItem[] = [
-    {
-      id: "1",
-      title: "Second Day",
-      description: "NIG",
-      muscles: "Leg, Triceps, Biceps",
-      time: "14:30-18:50",
-      exercisesCount: 8,
-      duration: "4 h 20 min",
-      exercises: [
-        {
-          id: "e1",
-          name: "Cardio",
-          muscle: ["Heart"],
-          detail: "45 min",
-          order: 1,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: false,
-        },
-        {
-          id: "e2",
-          name: "Incline Bench Press",
-          muscle: ["Biceps"],
-          detail: "4x12",
-          order: 2,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: true,
-        },
-        {
-          id: "e3",
-          name: "Cardio",
-          muscle: ["Heart"],
-          detail: "45 min",
-          order: 3,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: false,
-        },
-        {
-          id: "e4",
-          name: "Incline Bench Press",
-          muscle: ["Biceps"],
-          detail: "4x12",
-          order: 4,
-          type: "exercise",
-          innerBreakDuration: "1 min 30 sec",
-          isRepeating: true,
-        },
-      ],
-      isPublic: false,
-    },
-  ];
+  {
+    id: "t2",
+    title: "Upper Body Express",
+    description: "Focused training targeting upper body strength.",
+    muscles: "Chest, Biceps",
+    time: "10:00",
+    exercisesCount: 2,
+    duration: "10:00",
+    isPublic: false,
+    exercises: [
+      {
+        index: "e2_1",
+        exercise: pushUpPrototype,
+        sets: "4",
+        reps: "15",
+        duration: "00:00",
+        break_between: "01:00",
+        break_after: "01:30",
+        order: 1
+      },
+      {
+        index: "e2_2",
+        exercise: bicepCurlPrototype,
+        sets: "3",
+        reps: "10",
+        duration: "00:00",
+        break_between: "00:45",
+        break_after: "01:30",
+        order: 2
+      }
+    ]
+  }
+];

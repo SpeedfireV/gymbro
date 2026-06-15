@@ -1,5 +1,15 @@
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../../App";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getApiUrl } from '../../../config/api';
+import { jwtDecode } from "jwt-decode";
 
-export  const handleLogin = (emailText: string, passwordText: string) => {
+export  const handleLogin = async (
+  emailText: string,
+  passwordText: string,
+  navigation: StackNavigationProp<RootStackParamList, "Login">) => {
+    
+  
     console.log("AttemptLogEmail: ", emailText);
     console.log("AttemptLogPass: ", passwordText);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,8 +42,46 @@ export  const handleLogin = (emailText: string, passwordText: string) => {
       return;
     }
 
-    console.log("Try login");
-    navigation.navigate("Home");
+    try {
 
-    console.log("Success");
-  };
+    const response = await fetch(getApiUrl('/api/login/'), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailText,
+        password: passwordText,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log("Success! Logged correctly", data);
+      const tokens = data.tokens;
+      const user = data.user;
+      
+      if (tokens && tokens.access) {
+        await AsyncStorage.setItem('userToken', tokens.access);
+        await AsyncStorage.setItem('refreshToken', tokens.refresh);
+        console.log("Into access");
+        
+        if (user && user.id) {
+          await AsyncStorage.setItem('userId', String(user.id));
+          console.log("Saved user id:", user.id);
+        }
+        navigation.navigate("Home");
+      } else{
+        console.log("Tokens not found");
+      }
+    } else {
+      console.log("Login Fail from Backend:", data);
+      alert(data.detail || "E-mail password error");
+    }
+  } catch (error) {
+    console.error("Network error:", error);
+    alert("Failed backend connection");
+  }
+
+};

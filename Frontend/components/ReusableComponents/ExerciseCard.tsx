@@ -8,9 +8,8 @@ import { colors } from "../../Colors";
 interface ExerciseInfo {
   mainImage?: ImageBitmap;
   title: string;
-  bodyParts: Array<string>;
+  bodyParts: string;
   desc: string;
-  isPublic: boolean;
   showIcon: boolean;
   onPress: () => void;
 }
@@ -20,7 +19,6 @@ export function ExerciseCard({
   title,
   bodyParts,
   desc,
-  isPublic,
   showIcon,
   onPress,
 }: ExerciseInfo) {
@@ -30,11 +28,7 @@ export function ExerciseCard({
         <View>
           {showIcon ? (
             <View style={styles.iconPosition}>
-              {isPublic ? (
-                <Public width={24} height={24} />
-              ) : (
-                <Personal width={24} height={24} />
-              )}
+              <Public width={24} height={24} />
             </View>
           ) : (
             <View style={styles.iconPosition} />
@@ -42,7 +36,7 @@ export function ExerciseCard({
           <View style={styles.contentPadding}>
             <Text style={[styles.excerciseTitle, styles.anyText]}>{title}</Text>
             <Text style={[styles.excerciseBodyParts, styles.anyText]}>
-              {bodyParts.join(" ")}
+              {bodyParts}
             </Text>
             <Text style={[styles.excerciseDesc, styles.anyText]}>{desc}</Text>
           </View>

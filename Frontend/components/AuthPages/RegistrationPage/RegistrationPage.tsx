@@ -76,7 +76,7 @@ export function RegistrationPage({
       </View>
       <RegisterButton
         handleRegistration={() =>
-          handleRegistration(emailText, passwrodText, passwrodRepText)
+          handleRegistration(emailText, passwrodText, passwrodRepText, nicknameText)
         }
       />
       <AlreadyHaveAccountRow handleLogin={handleLogin} />

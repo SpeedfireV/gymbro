@@ -14,7 +14,7 @@ export default function BreakTile({
   onDelete,
 }: BreakTileProps) {
   return (
-    <View style={editable ? styles.container : styles.containerWhite}>
+    <View style={styles.container}>
       <View style={editable ? styles.breakFrame : styles.breakFrameWhite}>
         <Ionicons
           name="time-outline"
@@ -87,16 +87,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-  },
-
-  containerWhite: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    width: "100%",
   },
   breakFrameWhite: {
     flex: 1,
