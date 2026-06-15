@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getApiUrl } from '../../../../config/api';
+import { getApiUrl } from '../../config/api';
 
 export const fetchUserWorkouts = async (): Promise<any[]> => {
   try {

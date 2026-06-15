@@ -61,6 +61,7 @@ class users(models.Model):
 class calendar_events(models.Model):
     user = models.ForeignKey('users', on_delete=models.CASCADE)
     workout = models.ForeignKey('workouts', on_delete=models.CASCADE, null=True, blank=True)
+    time_begin = models.TimeField(null=True, blank=True)
     utc_time = models.DateTimeField()
     event_type = models.CharField(max_length=50, choices=EventTypes.choices)
     title = models.TextField()

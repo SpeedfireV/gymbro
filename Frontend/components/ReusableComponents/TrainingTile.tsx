@@ -39,7 +39,7 @@ const TrainingTile = ({ item }: TrainingTileProps) => {
         {item.exercises.map((ex: any) => (
             <View key={ex.id} style={styles.exerciseItem}>
                 <Text style={styles.exerciseText}>{ex.order}. {ex.name}</Text>
-                <Text style={styles.exerciseTime}>{ex.detail}</Text>
+                <Text style={styles.exerciseTime}>{ex.type == "reps"? ex.setsAndReps: ex.duration}</Text>
             </View>
         ))}
     </View>

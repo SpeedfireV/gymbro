@@ -177,6 +177,14 @@ class CalendarEventSerializer(serializers.ModelSerializer):
             })
 
         return data
+    
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        if instance.workout:
+            representation['workout'] = WorkoutSerializer(instance.workout).data
+            
+        return representation
 
 
 class ExerciseHistorySerializer(serializers.ModelSerializer):

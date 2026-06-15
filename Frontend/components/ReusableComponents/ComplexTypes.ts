@@ -32,3 +32,13 @@ export interface TrainingItem {
   exercises: ExerciseItem[];
   isPublic: boolean;
 }
+
+export interface CalendarEventItem {
+  id: number;
+  workout: number | null;
+  utc_time: string;
+  event_type: string;
+  title: string;
+  description: string;
+  repeat: string;
+}

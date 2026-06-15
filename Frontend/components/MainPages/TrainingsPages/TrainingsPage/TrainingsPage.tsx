@@ -10,7 +10,7 @@ import TrainingsCategoryButtons from "./components/TrainingsCategoryButtons";
 import TrainingsList from "./components/TrainingsList";
 import { colors } from "../../../../Colors";
 import { dummyTrainings, dummyTrainings2 } from "./DummyTrainingsData";
-import { fetchUserWorkouts } from "./FetchWorkouts";
+import { fetchUserWorkouts } from "../../../ReusableComponents/FetchWorkouts";
 import { TrainingItem } from "../../../ReusableComponents/ComplexTypes"
 
 export function TrainingsPage({

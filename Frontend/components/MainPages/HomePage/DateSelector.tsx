@@ -13,6 +13,7 @@ import EditAddHeader from "../../ReusableComponents/EditAddHeader";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../../Colors";
 import { fonts } from "../../../Fonts";
+import { createCalendarEvent } from "./createNewCalendarEvent"
 
 export function DateSelector({
   route,
@@ -66,7 +67,7 @@ export function DateSelector({
     }
   };
 
-  const handleCreateTraining = () => {
+  const handleCreateTraining = async () => {
     if (date.length !== 10) {
       alert("Please enter a full date (DD.MM.YYYY)");
       return;
@@ -106,8 +107,38 @@ export function DateSelector({
       notes: notes,
     });
 
-    navigation.navigate("Home");
-  };
+    const formattedMonth = m < 10 ? `0${m}` : `${m}`;
+    const formattedDay = d < 10 ? `0${d}` : `${d}`;
+    const isoDbDate = `${y}-${formattedMonth}-${formattedDay}T12:00:00Z`;
+
+    let dbRepeat = "none";
+    if (repeat === "Every Day") dbRepeat = "daily";
+    if (repeat === "Every Week") dbRepeat = "weekly";
+    if (repeat === "Other") dbRepeat = "custom"; 
+
+    const payload = {
+      workout: parseInt(training.id),
+      utc_time: isoDbDate,
+      time_begin: "12:00:00",
+      event_type: "workout", 
+      title: training.title || "Planned Workout",
+      description: notes || training.description || "",
+      repeat: dbRepeat
+    };
+
+    console.log("Sending event to backend:", payload);
+
+    const success = await createCalendarEvent(payload);
+
+    if (success) {
+      alert("Training planned successfully!");
+      navigation.navigate("Home");
+    } else {
+      alert("Something went wrong while planning the training. Check console.");
+    }
+
+      navigation.navigate("Home");
+    };
 
   const toggleChoice = (choice: string) => {
     if (possibleRepeats.includes(choice)) {

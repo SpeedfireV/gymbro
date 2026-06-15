@@ -183,7 +183,8 @@ class CalendarEventListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        events = calendar_events.objects.filter(user=request.user)
+        current_user_id = request.user.id if hasattr(request.user, 'id') else request.user
+        events = calendar_events.objects.filter(user_id=current_user_id)
         
         start_date = request.query_params.get('start_date')
         end_date = request.query_params.get('end_date')
@@ -199,8 +200,19 @@ class CalendarEventListCreateView(APIView):
     def post(self, request):
         serializer = CalendarEventSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            try:
+                current_user_id = request.user.id if hasattr(request.user, 'id') else request.user
+                
+                user_profile = users.objects.get(id=current_user_id)
+
+                serializer.save(user=user_profile)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+            except users.DoesNotExist:
+                return Response(
+                    {"detail": "USER PROFILE NOT FOUND"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -209,7 +221,8 @@ class CalendarEventDetailView(APIView):
 
     def get(self, request, pk):
         try:
-            event = calendar_events.objects.get(pk=pk, user=request.user)
+            current_user_id = request.user.id if hasattr(request.user, 'id') else request.user
+            event = calendar_events.objects.get(pk=pk, user=current_user_id)
         except calendar_events.DoesNotExist:
             return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
         serializer = CalendarEventSerializer(event)
@@ -217,7 +230,8 @@ class CalendarEventDetailView(APIView):
 
     def patch(self, request, pk):
         try:
-            event = calendar_events.objects.get(pk=pk, user=request.user)
+            current_user_id = request.user.id if hasattr(request.user, 'id') else request.user
+            event = calendar_events.objects.get(pk=pk, user_id=current_user_id)
         except calendar_events.DoesNotExist:
             return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
 
