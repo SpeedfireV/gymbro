@@ -1,4 +1,5 @@
-import datetime
+from datetime import datetime, timedelta, time
+from django.utils import timezone as django_timezone
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -184,18 +185,54 @@ class CalendarEventListCreateView(APIView):
 
     def get(self, request):
         current_user_id = request.user.id if hasattr(request.user, 'id') else request.user
-        events = calendar_events.objects.filter(user_id=current_user_id)
         
-        start_date = request.query_params.get('start_date')
-        end_date = request.query_params.get('end_date')
-        if start_date:
-            events = events.filter(utc_time__gte=start_date)
-        if end_date:
-            events = events.filter(utc_time__lte=end_date)
-            
-        events = events.order_by('utc_time')
-        serializer = CalendarEventSerializer(events, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        target_date_str = request.query_params.get('date')
+
+        if not target_date_str:
+            return Response({"error": "Parameter 'date' (YYYY-MM-DD) is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            clean_date_str = target_date_str[:10]
+            target_date = datetime.strptime(clean_date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return Response({"error": "Invalid date format. Use YYYY-MM-DD or ISO string"}, status=status.HTTP_400_BAD_REQUEST)
+
+        single_events = calendar_events.objects.filter(
+            user_id=current_user_id,
+            repeat='none',
+            utc_time__date=target_date
+        )
+
+        recurring_events = calendar_events.objects.filter(
+            user_id=current_user_id,
+            utc_time__date__lte=target_date
+        ).exclude(repeat='none')
+
+        final_events_data = []
+
+        single_events_serialized = CalendarEventSerializer(single_events, many=True).data
+        final_events_data.extend(single_events_serialized)
+
+        for event in recurring_events:
+            event_start_date = event.utc_time.date()
+            interval = event.repeat_interval or 1
+
+            if interval <= 0:
+                interval = 1
+
+            days_difference = (target_date - event_start_date).days
+
+            if days_difference % interval == 0:
+                event_data = CalendarEventSerializer(event).data
+                
+                event_data['id'] = f"{event.id}-{target_date.strftime('%Y%m%d')}"
+                event_data['utc_time'] = datetime.combine(target_date, datetime.min.time()).isoformat()
+                
+                final_events_data.append(event_data)
+
+        final_events_data.sort(key=lambda x: x.get('time_begin') or '')
+
+        return Response(final_events_data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = CalendarEventSerializer(data=request.data)
@@ -243,11 +280,71 @@ class CalendarEventDetailView(APIView):
 
     def delete(self, request, pk):
         try:
-            event = calendar_events.objects.get(pk=pk, user=request.user)
+            current_user_id = request.user.id if hasattr(request.user, 'id') else request.user
+            event = calendar_events.objects.get(pk=pk, user_id=current_user_id)
             event.delete()
             return Response({"message": "Event deleted"}, status=status.HTTP_204_NO_CONTENT)
         except calendar_events.DoesNotExist:
             return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class CalendarEventOverviewView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        current_user_id = request.user.id if hasattr(request.user, 'id') else request.user
+        
+        now_datetime = django_timezone.now()
+        today_date = now_datetime.date()
+
+        user_events = calendar_events.objects.filter(user_id=current_user_id)
+        
+        final_overview_data = []
+
+        for event in user_events:
+            event_data = CalendarEventSerializer(event).data
+            
+            event_start_date = event.utc_time.date()
+            
+            if event.repeat == 'none':
+                if event.utc_time < now_datetime:
+                    event_data['next_occurrence'] = "never"
+                else:
+                    event_data['next_occurrence'] = event.utc_time.isoformat()
+
+            else:
+                interval = event.repeat_interval or 1
+                if interval <= 0:
+                    interval = 1
+
+                if event.utc_time >= now_datetime:
+                    event_data['next_occurrence'] = event.utc_time.isoformat()
+                else:
+                    days_diff = (today_date - event_start_date).days
+                    modulo_rem = days_diff % interval
+                    
+                    if modulo_rem == 0:
+                        event_today_time = datetime.combine(today_date, event.time_begin or datetime.min.time())
+                        event_today_time = django_timezone.make_aware(event_today_time, django_timezone.get_current_timezone())
+                        
+                        if event_today_time >= now_datetime:
+                            next_date = today_date
+                        else:
+                            next_date = today_date + timedelta(days=interval)
+                    else:
+                        days_to_next = interval - modulo_rem
+                        next_date = today_date + timedelta(days=days_to_next)
+                    
+                    next_occurrence_datetime = datetime.combine(next_date, event.time_begin or datetime.min.time())
+                    event_data['next_occurrence'] = next_occurrence_datetime.isoformat()
+
+            final_overview_data.append(event_data)
+
+        final_overview_data.sort(
+            key=lambda x: (x['next_occurrence'] == "never", x['next_occurrence'])
+        )
+
+        return Response(final_overview_data, status=status.HTTP_200_OK)
 
 class UserWorkoutsListView(APIView):
     def get(self, request, user_id):

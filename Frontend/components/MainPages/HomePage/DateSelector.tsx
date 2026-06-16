@@ -112,9 +112,25 @@ export function DateSelector({
     const isoDbDate = `${y}-${formattedMonth}-${formattedDay}T12:00:00Z`;
 
     let dbRepeat = "none";
-    if (repeat === "Every Day") dbRepeat = "daily";
-    if (repeat === "Every Week") dbRepeat = "weekly";
-    if (repeat === "Other") dbRepeat = "custom"; 
+    let repeatInterval = 1;
+
+    if (repeat === "Every Day") {
+      dbRepeat = "daily";
+      repeatInterval = 1;
+    } else if (repeat === "Every Week") {
+      dbRepeat = "weekly";
+      repeatInterval = 7;
+    } else if (repeat === "Other") {
+      dbRepeat = "custom";
+
+      console.log(customRepeat)
+
+      const parsedInterval = parseInt(customRepeat.replace(/\D/g, ""));
+
+      console.log(parsedInterval)
+      repeatInterval = isNaN(parsedInterval) ? 1 : parsedInterval;
+    }
+    console.log(repeatInterval)
 
     const payload = {
       workout: parseInt(training.id),
@@ -123,7 +139,8 @@ export function DateSelector({
       event_type: "workout", 
       title: training.title || "Planned Workout",
       description: notes || training.description || "",
-      repeat: dbRepeat
+      repeat: dbRepeat,
+      repeat_interval: repeatInterval
     };
 
     console.log("Sending event to backend:", payload);

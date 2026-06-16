@@ -7,7 +7,7 @@ from .views import PostRateView, CommentRateView
 from .views import ExerciseListCreateView, ExerciseDeleteView
 from .views import WorkoutHistoryAddView, WorkoutHistoryDeleteView, ExerciseHistoryDetailView
 from .views import PostListCreateView, PostDetailView, CommentListCreateView, CommentDetailView
-from .views import PostRateView, CommentRateView, WorkoutExerciseListView, UserWorkoutsListView
+from .views import PostRateView, CommentRateView, WorkoutExerciseListView, UserWorkoutsListView, CalendarEventOverviewView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -19,6 +19,7 @@ urlpatterns = [
     path('workouts/<int:pk>/', WorkoutDetailView.as_view(), name='workout-detail'),
     path('users/<int:user_id>/workouts/', UserWorkoutsListView.as_view(), name='user-workouts-list'),
     path('calendar-events/', CalendarEventListCreateView.as_view(), name='calendar-events-list-create'),
+    path('calendar-events/overview/', CalendarEventOverviewView.as_view(), name='calendar-events-overview'),
     path('calendar-events/<int:pk>/', CalendarEventDetailView.as_view(), name='calendar-events-detail'),
     path('exercises/', ExerciseListCreateView.as_view(), name='add-list-exercise'),
     path('exercises/<int:pk>/', ExerciseDeleteView.as_view(), name='delete-exercise'),

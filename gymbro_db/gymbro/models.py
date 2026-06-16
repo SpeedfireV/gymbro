@@ -15,6 +15,7 @@ class RepeatChoices(models.TextChoices):
     DAILY = 'daily'
     WEEKLY = 'weekly'
     MONTHLY = 'monthly'
+    CUSTOM = 'custom'
 
 
 class ExerciseTypes(models.TextChoices):
@@ -67,6 +68,7 @@ class calendar_events(models.Model):
     title = models.TextField()
     description = models.TextField()
     repeat = models.CharField(max_length=20, choices=RepeatChoices.choices, default=RepeatChoices.NONE)
+    repeat_interval = models.IntegerField(null=True, blank=True, default=1)
 
 
 class exercises(models.Model):

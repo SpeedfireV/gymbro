@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getApiUrl } from '../../../config/api';
 import { CalendarEventItem } from '../../ReusableComponents/ComplexTypes';
 
-export const fetchCalendarEvents = async (startDate?: string, endDate?: string): Promise<CalendarEventItem[]> => {
+export const fetchCalendarEvents = async (targetDate: string): Promise<CalendarEventItem[]> => {
   try {
     const token = await AsyncStorage.getItem('userToken');
 
@@ -11,15 +11,7 @@ export const fetchCalendarEvents = async (startDate?: string, endDate?: string):
       return [];
     }
 
-    let url = getApiUrl('/api/calendar-events/');
-    const params = new URLSearchParams();
-    
-    if (startDate) params.append('start_date', startDate);
-    if (endDate) params.append('end_date', endDate);
-    
-    if (params.toString()) {
-      url += `?${params.toString()}`;
-    }
+    const url = getApiUrl(`/api/calendar-events/?date=${targetDate}`);
 
     console.log(`Fetching calendar events from: ${url}`);
 

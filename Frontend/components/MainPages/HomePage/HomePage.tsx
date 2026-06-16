@@ -21,12 +21,21 @@ export function HomePage({ navigation }: StackScreenProps<RootStackParamList, 'H
       <View style={styles.content}>
         <TrainingsList selectedDate={selectedDate} />
       </View>
+      
+      <NewActivityButton
+        Title='CHECK ON YOUR ACTIVITIES'
+        onPress={() => {
+          navigation.navigate('ActivitiesInspector');
+        }}
+        diffrentIconName='calendar-outline'
+      />
 
       <NewActivityButton
         Title='PLAN NEW TRAINING'
         onPress={() => {
           navigation.navigate('TrainingSelector');
-        }} 
+        }}
+        absoluteHeight={160}
       />
 
       <NavigationBar activeTab={activeTab} />

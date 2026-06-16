@@ -31,6 +31,8 @@ export interface TrainingItem {
   duration: string;
   exercises: ExerciseItem[];
   isPublic: boolean;
+  dateFirstEvent?: string;
+  dateNextEvent?: string;
 }
 
 export interface CalendarEventItem {

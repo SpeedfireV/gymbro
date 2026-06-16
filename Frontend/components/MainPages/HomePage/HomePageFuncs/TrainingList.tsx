@@ -18,13 +18,11 @@ const TrainingsList = ({ selectedDate }: { selectedDate: Date }) => {
         const loadDayPlans = async () => {
             setIsLoading(true);
             try {
-                const start = new Date(selectedDate);
-                start.setHours(0, 0, 0, 0);
+                const chosenDate = new Date(selectedDate);
+                chosenDate.setHours(23, 59, 59, 999);
                 
-                const end = new Date(selectedDate);
-                end.setHours(23, 59, 59, 999);
 
-                const events = await fetchCalendarEvents(start.toISOString(), end.toISOString());
+                const events = await fetchCalendarEvents(chosenDate.toISOString());
 
                 
                 
@@ -51,7 +49,7 @@ const TrainingsList = ({ selectedDate }: { selectedDate: Date }) => {
                                 order: idx + 1,
                                 name: ex.exercise?.name || "Exercise",
                                 setsAndReps: `${ex.sets}x${ex.reps}`,
-                                duration: `${ex.duration}`,
+                                duration: `${ex.duration.substring(2, 8)}`,
                                 type: ex.exercise.type
                             })) : []
                         };

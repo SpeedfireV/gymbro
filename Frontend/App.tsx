@@ -20,6 +20,7 @@ import { DateSelector } from "./components/MainPages/HomePage/DateSelector";
 import { TrainingItem } from "./components/ReusableComponents/ComplexTypes";
 import { ExercisePage } from "./components/MainPages/ExcercisesPages/ExercisePage/ExercisePage";
 import { ExercisesPage } from "./components/MainPages/ExcercisesPages/ExercisesPage/ExercisesPage";
+import { ActivitiesInspector } from "./components/MainPages/HomePage/ActivitiesInspector"
 import ExerciseEditPage from "./components/MainPages/ExcercisesPages/EditExercise/EditExercisePage";
 import AddNewExercisePage from "./components/MainPages/ExcercisesPages/AddNewExercise/AddNewExercisePage";
 
@@ -35,6 +36,7 @@ export type RootStackParamList = {
   AddNewExercise: undefined;
   ExerciseEditPage: undefined;
   Home: undefined;
+  ActivitiesInspector: undefined;
   TrainingSelector: undefined;
   DateSelector: { training: TrainingItem };
   TrainingDetail: { training: TrainingItem };
@@ -109,6 +111,7 @@ function App() {
         />
         <Stack.Screen name="AddNewExercise" component={AddNewExercisePage} />
         <Stack.Screen name="ExerciseEditPage" component={ExerciseEditPage} />
+        <Stack.Screen name="ActivitiesInspector" component={ActivitiesInspector} />
       </Stack.Navigator>
     </NavigationContainer>
   );
