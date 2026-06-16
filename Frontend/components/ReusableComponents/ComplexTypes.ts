@@ -1,23 +1,24 @@
-export interface ExerciseItem {
-  id: string;
-  name: string;
-  type: string;
-  muscle: string[];
-  detail: string;
-  difficulty?: string;
-  instructions?: string;
-  safetyInfo?: string;
-  order: number;
-  innerBreakDuration: string;
-  isRepeating? : boolean;
-}
+
 
 export interface ExercisePrototype {
-  title: string;
-  bodyParts: string[];
-  desc: string;
-  isPublic: boolean
-  isRepeating : boolean;
+  id: number;
+  name: string;
+  type : string;
+  muscule: string;
+  difficulty: string;
+  instructions: string;
+  safety_info: string;
+}
+
+export interface ExerciseItem {
+  index: string;
+  exercise: ExercisePrototype;
+  sets: string;
+  reps: string;
+  duration: string;
+  break_between: string;
+  break_after: string;
+  order: number;
 }
 
 export interface TrainingItem {
@@ -30,4 +31,16 @@ export interface TrainingItem {
   duration: string;
   exercises: ExerciseItem[];
   isPublic: boolean;
+  dateFirstEvent?: string;
+  dateNextEvent?: string;
+}
+
+export interface CalendarEventItem {
+  id: number;
+  workout: number | null;
+  utc_time: string;
+  event_type: string;
+  title: string;
+  description: string;
+  repeat: string;
 }

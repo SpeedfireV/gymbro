@@ -2,12 +2,15 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TrainingItem } from './ComplexTypes'
+import CancelChangesButton from './CancelChangesButton'
 
 interface TrainingTileProps {
   item: TrainingItem;
+  extended?: boolean;
+  onDelete?: () => void;
 }
 
-const TrainingTile = ({ item }: TrainingTileProps) => {
+const TrainingTile = ({ item, extended = false, onDelete = (() => {})}: TrainingTileProps) => {
     return (
     <View style={styles.card}>
         <Text style={styles.cardTitle}>{item.title}</Text>
@@ -39,9 +42,37 @@ const TrainingTile = ({ item }: TrainingTileProps) => {
         {item.exercises.map((ex: any) => (
             <View key={ex.id} style={styles.exerciseItem}>
                 <Text style={styles.exerciseText}>{ex.order}. {ex.name}</Text>
-                <Text style={styles.exerciseTime}>{ex.detail}</Text>
+                <Text style={styles.exerciseTime}>{ex.type == "reps"? ex.setsAndReps: ex.duration}</Text>
             </View>
         ))}
+
+        {extended ? (
+        <View>
+            <Text style={styles.exercisesHeader}>EVENT DESCRIPTION</Text>
+            <Text style={styles.cardSubtitle}>{item.description}</Text>
+
+            <Text style={styles.exercisesHeader}>NEXT TIME THIS EVENT OCCURES</Text>
+            <View style={styles.infoRow}>
+                <View style={styles.infoFrame}>
+                    <Text style={styles.frameText}>
+                        <Ionicons 
+                            name="calendar-outline" 
+                            size={20} 
+                            color={'#000000'} 
+                        /> {item.dateNextEvent}
+                    </Text>
+                </View>
+            </View>
+            <CancelChangesButton
+                title='REMOVE EVENT'
+                onPress={onDelete}
+            />
+
+        </View>
+        ) : (
+        <View>
+        </View>
+        )}
     </View>
   );
 }

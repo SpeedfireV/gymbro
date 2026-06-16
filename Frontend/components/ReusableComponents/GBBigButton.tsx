@@ -7,6 +7,7 @@ interface GBBigButtonData {
   customWidth?: number;
   customHeight?: number;
   iconColor?: ColorValue;
+  disabled?: boolean;
   bgColor: ColorValue;
   onPress: () => void;
 }
@@ -17,11 +18,12 @@ export function GBBigButton({
   customHeight,
   iconColor,
   bgColor,
+  disabled,
   onPress,
 }: GBBigButtonData) {
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={disabled? ()=>{}: onPress}
       style={{
         backgroundColor: bgColor,
         borderRadius: 12,

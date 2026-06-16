@@ -7,25 +7,27 @@ import ExerciseBodyParts from "../components/ExerciseBodyParts";
 import ExerciseDescription from "../components/ExerciseDescription";
 import Spacer from "../../../ReusableComponents/Spacer";
 import ExerciseBottomBar from "../components/ExerciseBottomBar";
+import ExerciseDescriptionHeader from "../components/ExerciseDescriptionHeader"
 import { ExercisePrototype } from "../../../ReusableComponents/ComplexTypes";
 
 export function ExercisePage({
+  route,
   navigation,
 }: StackScreenProps<RootStackParamList, "Exercise">) {
-  const exercise: ExercisePrototype = {
-    title: "Pull Ups",
-    bodyParts: ["Back"],
-    desc: "Pull ups are a great exercise for building upper body strength, particularly targeting the back muscles. To perform a pull up, grip the bar with your hands slightly wider than shoulder-width apart, and pull your body up until your chin is above the bar. Lower yourself back down with control and repeat for the desired number of repetitions.",
-    isPublic: true,
-    isRepeating: false,
-  };
+  
+  const { exercise } = route.params;
 
   return (
     <View style={styles.container}>
-      <ExerciseTopBar exerciseName={exercise.title} />
+      <ExerciseTopBar exerciseName={exercise.name} />
       <ExerciseImageCarousel />
-      <ExerciseBodyParts bodyParts={exercise.bodyParts} />
-      <ExerciseDescription description={exercise.desc} />
+      <ExerciseBodyParts bodyParts={exercise.muscule} />
+      <ExerciseDescriptionHeader title = "INSTRUCTION"/>
+      <ExerciseDescription description={exercise.instructions} />
+      <ExerciseDescriptionHeader title = "SAFETY INFO"/>
+      <ExerciseDescription description={exercise.safety_info} />
+      <ExerciseDescriptionHeader title = "DIFICULTY"/>
+      <ExerciseDescription description={exercise.difficulty} />
       <Spacer />
       <ExerciseBottomBar />
     </View>

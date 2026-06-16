@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, ActivityIndicator, Text, StyleSheet } from "react-native";
 import NavigationBar from "../../../ReusableComponents/NavigationBar";
 import { StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../../App";
@@ -10,6 +10,8 @@ import TrainingsCategoryButtons from "./components/TrainingsCategoryButtons";
 import TrainingsList from "./components/TrainingsList";
 import { colors } from "../../../../Colors";
 import { dummyTrainings, dummyTrainings2 } from "./DummyTrainingsData";
+import { fetchUserWorkouts } from "../../../ReusableComponents/FetchWorkouts";
+import { TrainingItem } from "../../../ReusableComponents/ComplexTypes"
 
 export function TrainingsPage({
   navigation,
@@ -18,6 +20,62 @@ export function TrainingsPage({
   const [activeTab, setActiveTab] =
     useState<keyof RootStackParamList>("Training");
   const [PersonalActive, setPersonalActive] = useState(true);
+  const [realTrainings, setRealTrainings] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadWorkouts = async () => {
+      setIsLoading(true);
+      const rawWorkouts = await fetchUserWorkouts();
+      console.log("RAW DATA:", rawWorkouts);
+
+      const mappedTrainings: TrainingItem[] = rawWorkouts.map((workout: any) => ({
+        id: String(workout.id),
+        title: workout.name || "No name training",
+        description: workout.description || "",
+        
+        muscles: workout.muscles && workout.muscles.length > 0 
+          ? workout.muscles.map((m: string) => m.charAt(0).toUpperCase() + m.slice(1)).join(", ")
+          : "Ogólnorozwojowy",
+          
+        time: workout.total_duration || "00:00:00",
+        exercisesCount: workout.exercises_count || 0,
+        duration: workout.total_duration || "00:00:00",
+        exercises: workout.exercises || [],
+        isPublic: workout.is_public || false,
+      }));
+
+      console.log("ITS OPERATIONAL!", mappedTrainings);
+      setRealTrainings(mappedTrainings);
+      setIsLoading(false);
+    };
+
+    loadWorkouts();
+  }, []);
+
+  const newTraining = {
+      id: "nt",
+      title: "New AWESOME Training",
+      description: "",
+      muscles: "",
+      time: "00:00",
+      exercisesCount: 0,
+      duration: "",
+      isPublic: false,
+      exercises: []
+    }
+
+  const filteredTrainings = realTrainings.filter((training) => {
+    const query = searchQuery.toLowerCase().trim();
+    
+    if (!query) return true;
+
+    const matchesTitle = training.title?.toLowerCase().includes(query);
+    const matchesDescription = training.description?.toLowerCase().includes(query);
+    const matchesMuscles = training.muscles?.toLowerCase().includes(query);
+
+    return matchesTitle || matchesDescription || matchesMuscles;
+  });
 
   return (
     <View style={styles.container}>
@@ -36,15 +94,31 @@ export function TrainingsPage({
             setPersonalActive={setPersonalActive}
           />
         </View>
-        <TrainingsList
-          trainings={PersonalActive ? dummyTrainings : dummyTrainings2}
-          navigation={navigation}
-        />
+        {isLoading ? (
+          <View style={styles.centerContainer}>
+            <ActivityIndicator size="large" color="#00ff00" /> 
+            <Text style={styles.infoText}>Loading your workouts...</Text>
+          </View>
+        ) : PersonalActive && filteredTrainings.length === 0 ? (
+            <View style={styles.centerContainer}>
+              <Text style={styles.infoText}>
+                {searchQuery ? "No matching workouts found." : "No personal workouts found."}
+              </Text>
+              <Text style={styles.subInfoText}>
+                {searchQuery ? "Try checking for typos or clear search box." : "Tap below to create your first routine!"}
+              </Text>
+            </View>
+          ) : (
+          <TrainingsList
+            trainings={PersonalActive ? realTrainings : dummyTrainings2}
+            navigation={navigation}
+          />
+        )}
       </View>
       <NewActivityButton
         Title="ADD NEW TRAINING"
         onPress={() => {
-          navigation.navigate("TrainingSelector");
+          navigation.navigate("NewTrainingDetail", { training: newTraining });
         }}
       />
 
@@ -61,4 +135,21 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
+  centerContainer: { 
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20
+  },
+  infoText: { 
+    color: "#fff",
+    fontSize: 16,
+    marginTop: 10,
+    fontWeight: "600"
+  },
+  subInfoText: { 
+    color: "#aaa",
+    fontSize: 14,
+    marginTop: 5
+  }
 });

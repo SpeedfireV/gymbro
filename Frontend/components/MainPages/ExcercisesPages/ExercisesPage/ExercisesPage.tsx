@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { StyleSheet, View, Text, FlatList, ScrollView } from "react-native";
 import NavigationBar from "../../../ReusableComponents/NavigationBar";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -9,46 +9,39 @@ import { ExerciseCard } from "../../../ReusableComponents/ExerciseCard";
 import { PageTitle } from "../../../ReusableComponents/PageTitle";
 import { GBSearchBar } from "../../../ReusableComponents/GBSearchBar";
 import { colors } from "../../../../Colors";
+import {ExercisePrototype} from "../../../ReusableComponents/ComplexTypes";
+import { fetchExercisesDictionary } from "../../../ReusableComponents/getExercises";
 
 export function ExercisesPage({
   navigation,
 }: StackScreenProps<RootStackParamList, "Exercises">) {
   const [activeTab] = useState<keyof RootStackParamList>("Exercises");
   const [PersonalActive, setPersonalActive] = useState(true);
-
-  const EXERCISES = [
-    {
-      title: "Pull Ups",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-    },
-    {
-      title: "Pull Ups",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-    },
-    {
-      title: "Pull Ups",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-    },
-    {
-      title: "Pull Ups",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: false,
-    },
-    {
-      title: "Pull Ups",
-      bodyParts: ["Triceps"],
-      desc: "Pull ups are one of the most effective training techniques that enchance...",
-      isPublic: true,
-    },
-  ];
+  const [exercisesDictionary, setExercisesDictionary] = useState<ExercisePrototype[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+      const loadExercises = async () => {
+        setIsLoading(true);
+        const data = await fetchExercisesDictionary();
+        setExercisesDictionary(data);
+        setIsLoading(false);
+      };
+      loadExercises();
+  }, []);
+
+  const filteredExercises = exercisesDictionary.filter((exercise) => {
+    const query = searchQuery.toLowerCase().trim();
+    
+    if (!query) return true;
+
+    const matchesTitle = exercise.name.toLowerCase().includes(query);
+    const matchesDescription = exercise.instructions.toLowerCase().includes(query);
+    const matchesMuscles = exercise.muscule.toLowerCase().includes(query);
+
+    return matchesTitle || matchesDescription || matchesMuscles;
+  });
 
   return (
     <View style={styles.container}>
@@ -74,19 +67,18 @@ export function ExercisesPage({
       </View>
       <View style={{ flex: 1 }}>
         <FlatList
-          data={EXERCISES}
+          data={filteredExercises}
           contentContainerStyle={{ paddingBottom: 100, paddingTop: 16 }}
           ItemSeparatorComponent={() => <View style={{ height: 32 }} />}
           renderItem={({ item }) => (
             <View style={{ paddingHorizontal: 24 }}>
               <ExerciseCard
-                title={item.title}
-                bodyParts={item.bodyParts}
-                desc={item.desc}
-                isPublic={item.isPublic}
+                title={item.name}
+                bodyParts={item.muscule}
+                desc={item.instructions}
                 showIcon={true}
                 onPress={() => {
-                  navigation.navigate("Exercise");
+                  navigation.navigate("Exercise", { exercise: item });
                 }}
               />
             </View>

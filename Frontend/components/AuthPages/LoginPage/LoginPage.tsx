@@ -51,21 +51,8 @@ export function LoginScreen({
           suffixIconOnPress={changePassVis}
         />
       </View>
-      <LoginButton handleLogin={() => handleLogin(emailText, passwrodText)} />
-      {/* TODO: DELETE INSTA LOGIN! */}
-      <TouchableOpacity
-        style={{
-          height: 120,
-          width: "100%",
-          backgroundColor: colors.activeYellow,
-        }}
-        onPress={() => {
-          navigation.navigate("Home");
-        }}
-        activeOpacity={0.7}
-      >
-        <Text style={{ fontSize: 48 }}>INSTA LOGIN [CLICK]</Text>
-      </TouchableOpacity>
+      <LoginButton handleLogin={() => handleLogin(emailText, passwrodText, navigation)} />
+      
       <BottomAuthBar
         hintText="Don't have an account?"
         buttonText="Register"

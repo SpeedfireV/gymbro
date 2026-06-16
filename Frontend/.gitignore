@@ -192,3 +192,6 @@ node_modules/
 # Ignore native directories if using Expo Managed Workflow (CNG)
 android/ 
 ios/
+
+# ignore .env
+.env

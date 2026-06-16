@@ -4,10 +4,11 @@ import React from "react";
 
 interface CancelChangesButtonData {
   onPress?: () => void;
+  title?: string;
 }
 
 export default function CancelChangesButton({
-  onPress,
+  onPress, title = "CANCEL CHANGES"
 }: CancelChangesButtonData) {
   return (
     <TouchableOpacity style={styles.publishButton} onPress={onPress}>
@@ -17,7 +18,7 @@ export default function CancelChangesButton({
         fill={"#EFF1F3"}
         style={styles.cancelIcon}
       />
-      <Text style={styles.publishPrefix}>CANCEL CHANGES</Text>
+      <Text style={styles.publishPrefix}>{title}</Text>
     </TouchableOpacity>
   );
 }

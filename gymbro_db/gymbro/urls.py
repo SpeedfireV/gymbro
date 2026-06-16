@@ -1,18 +1,27 @@
 from django.urls import path
 from .views import RegisterView, LoginView, WorkoutExerciseAddView, WorkoutExerciseDeleteView
-from .views import WorkoutAddView, WorkoutDeleteView, ExerciseListCreateView, ExerciseDeleteView
+from .views import WorkoutListCreateView, WorkoutDetailView, ExerciseDeleteView
+from .views import CalendarEventListCreateView, WorkoutHistoryAddView, WorkoutHistoryDeleteView, ExerciseHistoryDetailView
+from .views import CalendarEventDetailView, PostListCreateView, PostDetailView, CommentListCreateView, CommentDetailView
+from .views import PostRateView, CommentRateView
+from .views import ExerciseListCreateView, ExerciseDeleteView
 from .views import WorkoutHistoryAddView, WorkoutHistoryDeleteView, ExerciseHistoryDetailView
 from .views import PostListCreateView, PostDetailView, CommentListCreateView, CommentDetailView
-from .views import PostRateView, CommentRateView
+from .views import PostRateView, CommentRateView, WorkoutExerciseListView, UserWorkoutsListView, CalendarEventOverviewView
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('workout-exercises/', WorkoutExerciseAddView.as_view(), name='add-workout-exercise'),
     path('workout-exercises/<int:pk>/', WorkoutExerciseDeleteView.as_view(), name='delete-workout-exercise'),
-    path('workouts/', WorkoutAddView.as_view(), name='add-workout'),
-    path('workouts/<int:pk>/', WorkoutDeleteView.as_view(), name='delete-workout'),
-    path('exercises/', ExerciseListCreateView.as_view(), name='exercises-list-create'),
+    path('workouts/<int:workout_id>/exercises/', WorkoutExerciseListView.as_view(), name='workout-exercises-list'),
+    path('workouts/', WorkoutListCreateView.as_view(), name='workouts-list-create'),
+    path('workouts/<int:pk>/', WorkoutDetailView.as_view(), name='workout-detail'),
+    path('users/<int:user_id>/workouts/', UserWorkoutsListView.as_view(), name='user-workouts-list'),
+    path('calendar-events/', CalendarEventListCreateView.as_view(), name='calendar-events-list-create'),
+    path('calendar-events/overview/', CalendarEventOverviewView.as_view(), name='calendar-events-overview'),
+    path('calendar-events/<int:pk>/', CalendarEventDetailView.as_view(), name='calendar-events-detail'),
+    path('exercises/', ExerciseListCreateView.as_view(), name='add-list-exercise'),
     path('exercises/<int:pk>/', ExerciseDeleteView.as_view(), name='delete-exercise'),
     path('workout-history/', WorkoutHistoryAddView.as_view(), name='add-workout-history'),
     path('workout-history/<int:pk>/', WorkoutHistoryDeleteView.as_view(), name='delete-workout-history'),

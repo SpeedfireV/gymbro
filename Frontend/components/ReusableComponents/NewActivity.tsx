@@ -5,16 +5,18 @@ import { Ionicons } from '@expo/vector-icons';
 interface NewActivityButtonProps {
   Title: string,
   onPress: () => void;
+  absoluteHeight?: number;
+  diffrentIconName?: string;
 }
 
-const NewActivityButton = ({ Title, onPress }: NewActivityButtonProps) => {
+const NewActivityButton = ({ Title, onPress, absoluteHeight = 90, diffrentIconName = "add-circle" }: NewActivityButtonProps) => {
   return (
     <TouchableOpacity 
-      style={styles.button} 
+      style={[styles.button, { bottom: absoluteHeight }]} 
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Ionicons name="add-circle" size={30} color="#000" />
+      <Ionicons name={diffrentIconName as any} size={30} color="#000" />
       <Text style={styles.text}>{Title}</Text>
     </TouchableOpacity>
   );
@@ -23,7 +25,6 @@ const NewActivityButton = ({ Title, onPress }: NewActivityButtonProps) => {
 const styles = StyleSheet.create({
   button: {
     position: 'absolute',
-    bottom: 90,
     right: 0,
     backgroundColor: '#FFA500',
     flexDirection: 'row',

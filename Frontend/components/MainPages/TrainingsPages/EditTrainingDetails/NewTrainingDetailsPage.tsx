@@ -15,12 +15,12 @@ import EditTrainingDescription from "./components/EditTrainingDescription";
 import { fonts } from "../../../../Fonts";
 import { colors } from "../../../../Colors";
 import AddExerciseOrBreak from "./components/AddExerciseOrBreak";
-import {updateFullTraining} from "./components/editExistingTraining";
+import {saveFullTraining} from "./components/saveNewTraining";
 
-export function EditTrainingDetailsPage({
+export function NewTrainingDetailsPage({
   route,
   navigation,
-}: StackScreenProps<RootStackParamList, "EditTrainingDetail">) {
+}: StackScreenProps<RootStackParamList, "NewTrainingDetail">) {
   const { training } = route.params;
 
   const [titleText, setTitleText] = useState(training.title);
@@ -29,10 +29,11 @@ export function EditTrainingDetailsPage({
     training.exercises,
   );
   const [nextTempId, setNextTempId] = useState<number>(1000000000);
-  const [isSaving, setIsSaving] = useState(false);
 
   const [isAddExerciseVisible, setIsAddExerciseVisible] = useState(false);
   const [isAddBreakVisible, setIsAddBreakVisible] = useState(false);
+
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleAddBreak = (minutes: number, seconds: number) => {
     const totalDurationString =
@@ -174,7 +175,7 @@ export function EditTrainingDetailsPage({
         <View style={styles.CancelChangesContainer}>
           <CancelChangesButton
             onPress={() => {
-              navigation.navigate("TrainingDetail", { training });
+              navigation.navigate("Training");
             }}
           />
         </View>
@@ -184,7 +185,7 @@ export function EditTrainingDetailsPage({
           disabled = {isSaving}
           onPress={async () => {
             setIsSaving(true);
-            const success = await updateFullTraining(training.id, titleText, descriptionText, exercisesList);
+            const success = await saveFullTraining(titleText, descriptionText, exercisesList);
             setIsSaving(false);
             if (success) {
               navigation.navigate("Training");

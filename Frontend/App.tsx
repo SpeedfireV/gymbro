@@ -13,12 +13,14 @@ import { RegistrationPage } from "./components/AuthPages/RegistrationPage/Regist
 import { TrainingsPage } from "./components/MainPages/TrainingsPages/TrainingsPage/TrainingsPage";
 import { TrainingDetailsPage } from "./components/MainPages/TrainingsPages/TrainingDetails/TrainingDetailsPage";
 import { EditTrainingDetailsPage } from "./components/MainPages/TrainingsPages/EditTrainingDetails/EditTrainingDetailsPage";
+import { NewTrainingDetailsPage } from "./components/MainPages/TrainingsPages/EditTrainingDetails/NewTrainingDetailsPage";
 import { HomePage } from "./components/MainPages/HomePage/HomePage";
 import { TrainingSelector } from "./components/MainPages/HomePage/TrainingSelector";
 import { DateSelector } from "./components/MainPages/HomePage/DateSelector";
-import { TrainingItem } from "./components/ReusableComponents/ComplexTypes";
+import { ExerciseItem, TrainingItem } from "./components/ReusableComponents/ComplexTypes";
 import { ExercisePage } from "./components/MainPages/ExcercisesPages/ExercisePage/ExercisePage";
 import { ExercisesPage } from "./components/MainPages/ExcercisesPages/ExercisesPage/ExercisesPage";
+import { ActivitiesInspector } from "./components/MainPages/HomePage/ActivitiesInspector"
 import ExerciseEditPage from "./components/MainPages/ExcercisesPages/EditExercise/EditExercisePage";
 import AddNewExercisePage from "./components/MainPages/ExcercisesPages/AddNewExercise/AddNewExercisePage";
 
@@ -30,14 +32,16 @@ export type RootStackParamList = {
   Registration: undefined;
   Training: undefined;
   Exercises: undefined;
-  Exercise: undefined;
+  Exercise: { exercise: any };
   AddNewExercise: undefined;
   ExerciseEditPage: undefined;
   Home: undefined;
+  ActivitiesInspector: undefined;
   TrainingSelector: undefined;
   DateSelector: { training: TrainingItem };
   TrainingDetail: { training: TrainingItem };
   EditTrainingDetail: { training: TrainingItem };
+  NewTrainingDetail: { training: TrainingItem };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -101,8 +105,13 @@ function App() {
           name="EditTrainingDetail"
           component={EditTrainingDetailsPage}
         />
+        <Stack.Screen
+          name="NewTrainingDetail"
+          component={NewTrainingDetailsPage}
+        />
         <Stack.Screen name="AddNewExercise" component={AddNewExercisePage} />
         <Stack.Screen name="ExerciseEditPage" component={ExerciseEditPage} />
+        <Stack.Screen name="ActivitiesInspector" component={ActivitiesInspector} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -11,6 +11,7 @@ import BreakTile from "../components/BreakTile";
 import TrainingDetailsInfo from "./components/TrainingDetailsInfo";
 import { colors } from "../../../../Colors";
 import { fonts } from "../../../../Fonts";
+import { deleteUserWorkout } from "./deleteWorkout"
 
 export function TrainingDetailsPage({
   route,
@@ -18,19 +19,48 @@ export function TrainingDetailsPage({
 }: StackScreenProps<RootStackParamList, "TrainingDetail">) {
   const { training } = route.params;
 
+  const handleDelete = async () => {
+    console.log("Trying to delete");
+    if (!training?.id) return;
+
+    const success = await deleteUserWorkout(training.id);
+
+    if (success) {
+      console.log("Delete SUCCESS");
+    } else {
+      console.error("Delete ERROR");
+    }
+
+    navigation.navigate("Training");
+  };
+
   const renderItem = ({ item }: { item: ExerciseItem }) =>
-    item.type === "exercise" ? (
-      <ExerciseCard
-        name={item.name}
-        muscle={item.muscle}
-        detail={item.detail}
-        order={item.order}
-        editable={false}
-        innerBreakDuration={item.innerBreakDuration}
-        isRepeating={item.isRepeating}
-      />
+    (/[1-9]/.test(item.break_after)) ? (
+      <View>
+        <ExerciseCard
+          name={item.exercise.name}
+          muscle={item.exercise.muscule}
+          sitsreps={item.sets + "x" + item.reps}
+          duration={item.duration}
+          order={item.order}
+          editable={false}
+          innerBreakDuration={item.break_between}
+          isRepeating={item.exercise.type == "reps"}
+        />
+
+        <BreakTile editable={false} duration={item.break_after} />
+      </View>
     ) : (
-      <BreakTile editable={false} duration={item.detail} />
+      <ExerciseCard
+          name={item.exercise.name}
+          muscle={item.exercise.muscule}
+          sitsreps={item.sets + "x" + item.reps}
+          duration={item.duration}
+          order={item.order}
+          editable={false}
+          innerBreakDuration={item.break_between}
+          isRepeating={item.exercise.type == "reps"}
+        />
     );
 
   return (
@@ -38,7 +68,7 @@ export function TrainingDetailsPage({
       <FlatList
         data={training.exercises}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.index}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ marginHorizontal: 24 }}
         ListHeaderComponent={
@@ -47,7 +77,7 @@ export function TrainingDetailsPage({
               <EditAddHeader
                 title={training.title}
                 onBack={() => navigation.navigate("Training")}
-                onDelete={() => {}}
+                onDelete={() => {handleDelete()}}
                 showDelete={true}
               />
             </View>

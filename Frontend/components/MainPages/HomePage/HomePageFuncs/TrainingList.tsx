@@ -1,63 +1,70 @@
 
-import React from 'react';
+import React, { useEffect, useState }  from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import TrainingTile from '../../../ReusableComponents/TrainingTile'
 import { TrainingItem } from '../../../ReusableComponents/ComplexTypes'
 import { Ionicons } from '@expo/vector-icons';
+import { fetchCalendarEvents } from '../fetchCalendarEvents'
 
 const TrainingsList = ({ selectedDate }: { selectedDate: Date }) => {
-    const dummyTrainings : TrainingItem[] = [
-        {
-        id: '1',
-        title: 'Leg Day',
-        description : '',
-        muscles: 'Leg, Triceps, Biceps',
-        time: '14:30-18:50',
-        exercisesCount: 8,
-        duration: '4 h 20 min',
-        exercises: [
-            { id: 'e1', name: 'Cardio', muscle: ["Heart"], detail: '45 min', order: 1, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: false},
-            { id: 'e2', name: 'Incline Bench Press', muscle: ["Biceps"], detail: '4x12', order: 2, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: true},
-            { id: 'e3', name: 'Cardio', muscle: ["Heart"], detail: '45 min', order: 3, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: false},
-            { id: 'e4', name: 'Incline Bench Press', muscle: ["Biceps"], detail: '4x12', order: 4, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: true},
-        ],
-        isPublic: true,
-        },
-        {
-        id: '2',
-        title: 'abscdefghijk',
-        description : '',
-        muscles: 'Leg, Triceps, Biceps',
-        time: '14:30-18:50',
-        exercisesCount: 8,
-        duration: '4 h 20 min',
-        exercises: [
-            { id: 'x1', name: 'Cardio', muscle: ["Heart"], detail: '45 min', order: 3, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: false},
-            { id: 'x2', name: 'Incline Bench Press', muscle: ["Biceps"], detail: '4x12', order: 4, type: "exercise" , innerBreakDuration : "1 min 30 sec", isRepeating: true},
-        ],
-        isPublic: true,
-        },
-        {
-        id: '3',
-        title: 'Leg Day',
-        muscles: 'Leg, Triceps, Biceps',
-        description : '',
-        time: '14:30-18:50',
-        exercisesCount: 8,
-        duration: '4 h 20 min',
-        exercises: [
-            { id: 'c1', name: 'Cardio', muscle: ["Biceps"], detail: '45 min', order: 3, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: false},
-            { id: 'c2', name: 'Incline Bench Press', muscle: ["Biceps"], detail: '4x12', order: 4, type: "exercise", innerBreakDuration : "1 min 30 sec", isRepeating: true},
-        ],
-        isPublic: true,
-        },
-    ];
-
-    const dummyTrainingsEmpty : TrainingItem[] = []
+    const [dayEvents, setDayEvents] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const renderTrainingCard = ({ item }: { item: any }) => (
         <TrainingTile item={item} />
     );
+
+    useEffect(() => {
+        const loadDayPlans = async () => {
+            setIsLoading(true);
+            try {
+                const chosenDate = new Date(selectedDate);
+                chosenDate.setHours(23, 59, 59, 999);
+                
+
+                const events = await fetchCalendarEvents(chosenDate.toISOString());
+
+                
+                
+                const mappedTrainings = events
+                    .filter(event => event.event_type === "workout" && event.workout)
+                    .map((event: any) => {
+                        const workout = event.workout;
+
+                        const formattedStartTime = event.time_begin 
+                            ? event.time_begin.substring(0, 5) 
+                            : "Formless";
+                        return {
+                            id: String(event.id),
+                            title: workout?.name,
+                            description: "",
+                            muscles: workout?.muscles && workout.muscles.length > 0 
+                                ? workout.muscles.map((m: string) => m.charAt(0).toUpperCase() + m.slice(1)).join(", ")
+                                : "Overall Development",
+                            time: formattedStartTime,
+                            exercisesCount: workout?.exercises_count || 0,
+                            duration: workout?.total_duration || "00:00:00",
+                            exercises: workout?.exercises ? workout.exercises.map((ex: any, idx: number) => ({
+                                id: String(ex.index),
+                                order: idx + 1,
+                                name: ex.exercise?.name || "Exercise",
+                                setsAndReps: `${ex.sets}x${ex.reps}`,
+                                duration: `${ex.duration.substring(2, 8)}`,
+                                type: ex.exercise.type
+                            })) : []
+                        };
+                    });
+
+                setDayEvents(mappedTrainings);
+            } catch (error) {
+                console.error("Error loading day plans:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadDayPlans();
+    }, [selectedDate]);
 
     return (
         <View style={styles.container}>
@@ -65,7 +72,7 @@ const TrainingsList = ({ selectedDate }: { selectedDate: Date }) => {
                 ListHeaderComponent={
                     <Text style={styles.sectionTitle}>TRAININGS PLANNED</Text>
                 }
-                data={dummyTrainings}
+                data={dayEvents}
                 renderItem={renderTrainingCard}
                 keyExtractor={(item) => item.id}
                 showsVerticalScrollIndicator={false}
