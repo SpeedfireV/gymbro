@@ -78,7 +78,7 @@ export function ExercisesPage({
                 desc={item.instructions}
                 showIcon={true}
                 onPress={() => {
-                  navigation.navigate("Exercise");
+                  navigation.navigate("Exercise", { exercise: item });
                 }}
               />
             </View>

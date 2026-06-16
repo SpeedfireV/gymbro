@@ -17,7 +17,7 @@ import { NewTrainingDetailsPage } from "./components/MainPages/TrainingsPages/Ed
 import { HomePage } from "./components/MainPages/HomePage/HomePage";
 import { TrainingSelector } from "./components/MainPages/HomePage/TrainingSelector";
 import { DateSelector } from "./components/MainPages/HomePage/DateSelector";
-import { TrainingItem } from "./components/ReusableComponents/ComplexTypes";
+import { ExerciseItem, TrainingItem } from "./components/ReusableComponents/ComplexTypes";
 import { ExercisePage } from "./components/MainPages/ExcercisesPages/ExercisePage/ExercisePage";
 import { ExercisesPage } from "./components/MainPages/ExcercisesPages/ExercisesPage/ExercisesPage";
 import { ActivitiesInspector } from "./components/MainPages/HomePage/ActivitiesInspector"
@@ -32,7 +32,7 @@ export type RootStackParamList = {
   Registration: undefined;
   Training: undefined;
   Exercises: undefined;
-  Exercise: undefined;
+  Exercise: { exercise: any };
   AddNewExercise: undefined;
   ExerciseEditPage: undefined;
   Home: undefined;
