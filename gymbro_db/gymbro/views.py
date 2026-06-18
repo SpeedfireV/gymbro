@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from django.db import transaction
+from django.contrib.auth.models import User
 
 from .models import users, workout_exercises, workouts, calendar_events, exercises, workout_history, exercises_history
 from .models import posts, comments, ratings, comments_ratings
@@ -27,6 +28,14 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
 
         if serializer.is_valid():
+            django_user = User.objects.create_user(
+                username=serializer.validated_data["nickname"],
+                email=serializer.validated_data["email"],
+                password=serializer.validated_data[
+                    "password"
+                ],
+            )
+
             user = users.objects.create(
                 username=serializer.validated_data['nickname'],
                 email=serializer.validated_data['email'],

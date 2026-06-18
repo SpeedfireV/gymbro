@@ -75,8 +75,12 @@ export function RegistrationPage({
         />
       </View>
       <RegisterButton
-        handleRegistration={() =>
-          handleRegistration(emailText, passwrodText, passwrodRepText, nicknameText)
+        handleRegistration={async () =>{
+          const didSucced = handleRegistration(emailText, passwrodText, passwrodRepText, nicknameText);
+          if(await didSucced){
+            navigation.navigate("Login");
+          }
+          }
         }
       />
       <AlreadyHaveAccountRow handleLogin={handleLogin} />

@@ -14,34 +14,34 @@ export const handleRegistration = async (
   if (!emailRegex.test(emailText)) {
     console.log("Email Fail");
     alert("Wrong Email");
-    return;
+    return false;
   }
 
   // PassCap
   if (!/[A-Z]/.test(passwordText)) {
     console.log("Pass capitalization Fail");
     alert("Wrong password(No capitalized letter)");
-    return;
+    return false;
   }
 
   // PassSmall
   if (!/[a-z]/.test(passwordText)) {
     console.log("Pass small letter Fail");
     alert("Wrong password(No small letter)");
-    return;
+    return false;
   }
 
   // PassLength
   if (passwordText.length < 8) {
     console.log("Pass length fail");
     alert("Wrong password, too short. Must be longer than eight characters");
-    return;
+    return false;
   }
 
   if (passwordText != passwordRepText) {
     console.log("Pass length fail");
     alert("Repeated password is diffrent, than provided password.");
-    return;
+    return false;
   }
 
   console.log("Registration attempt");
@@ -65,13 +65,17 @@ export const handleRegistration = async (
     if (response.ok) {
       console.log("Registration Success", data);
       alert("Konto założone pomyślnie! Możesz się zalogować.");
+      return true;
     } else {
       console.log("Registration Fail from Backend:", data);
 
       alert(JSON.stringify(data)); 
+      return false;
     }
   } catch (error) {
     console.error("Network error:", error);
     alert("Brak połączenia z serwerem backendu.");
+    return false;
   }
+  return false;
 };
