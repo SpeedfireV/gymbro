@@ -82,8 +82,12 @@ WSGI_APPLICATION = 'gymbro_db.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'gymbro',
+        'USER': 'gymbro',
+        'PASSWORD': 'gymbro',
+        'HOST': 'localhost',  # or your server host
+        'PORT': '5432',
     }
 }
 
